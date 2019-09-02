@@ -84,8 +84,8 @@
     self.service = appDelegate.service;
     
    // work around, allows you to manually login to the google account
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+    //NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];
+   // [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
     // end workaround
     
     // observe orientation change notification, to reload table view when device rotated
@@ -122,12 +122,7 @@
     self.temps.delegate = self;
     [self.temps getDevices];
     
-    /*
-    // login to the google sheets
-    if (!self.service.authorizer.canAuthorize) {
-        [self presentViewController:[self createAuthController] animated:YES completion:nil];
-    } else {
-        */
+    // Google sign-in; if not signed in, sign-in, else silently signin.
     [GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;
     if ([GIDSignIn sharedInstance].currentUser == nil) {
         [[GIDSignIn sharedInstance] signIn];
@@ -357,6 +352,12 @@
                 [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
                 [self.tableView reloadData];
                 [self.tableView.refreshControl endRefreshing];
+                // scroll to top of tableview
+                if (@available(iOS 11.0, *)) {
+                    [self.tableView setContentOffset:CGPointMake(0, -self.tableView.adjustedContentInset.top) animated:YES];
+                } else {
+                    [self.tableView setContentOffset:CGPointMake(0, -self.tableView.contentInset.top) animated:YES];
+                }
 //                NSDictionary *failures = batchResult.failures;
 //                for (NSString *requestID in failures) {
 //                    GTLRErrorObject *errorObj = [failures objectForKey:requestID];
@@ -466,22 +467,6 @@
     return valueArray;
 }
 
-/*
-// Handle completion of the authorization process, and update the Google Sheets API
-// with the new credentials.
-- (void)viewController:(GTMOAuth2ViewControllerTouch *)viewController
-      finishedWithAuth:(GTMOAuth2Authentication *)authResult
-                 error:(NSError *)error {
-    if (error != nil) {
-        [self showAlert:@"Authentication Error" message:error.localizedDescription];
-        self.service.authorizer = nil;
-    }
-    else {
-        self.service.authorizer = authResult;
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
-}
-*/
 // Helper for showing an alert
 - (void)showAlert:(NSString *)title message:(NSString *)message {
     UIAlertController *alert =
@@ -499,25 +484,6 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-/*
-// Creates the auth controller for authorizing access to Google Sheets API.
-- (GTMOAuth2ViewControllerTouch *)createAuthController
-{
-    GTMOAuth2ViewControllerTouch *authController;
-    // If modifying these scopes, delete your previously saved credentials by
-    // resetting the iOS simulator or uninstall the app.
-    //NSArray *scopes = [NSArray arrayWithObjects:kGTLRAuthScopeSheetsSpreadsheetsReadonly, nil];
-    NSArray *scopes = [NSArray arrayWithObjects:kGTLRAuthScopeSheetsSpreadsheets, nil];
-    authController = [[GTMOAuth2ViewControllerTouch alloc]
-                      initWithScope:[scopes componentsJoinedByString:@" "]
-                      clientID:kClientID
-                      clientSecret:nil
-                      keychainItemName:kKeychainItemName
-                      delegate:self
-                      finishedSelector:@selector(viewController:finishedWithAuth:error:)];
-    return authController;
-}
-*/
 #pragma mark - Table view data source
 // 1st section is for temperatures
 // 2nd section is form members checked-in
@@ -734,7 +700,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     FamilyRec *member = self.families[indexPath.row];
     
     
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@(%@) Family", member.lastName, member.memberID]
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@(%@) Family",
+                                                                            member.lastName, member.memberID]
                                                                    message:@"How many members and guests are you checking in?"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
@@ -958,10 +925,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     return rec;
 }
 
-
  #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"ShowCheckedIn"]) {
         NSIndexPath *path = [self.tableView indexPathForSelectedRow];
@@ -974,10 +938,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 }
 
+// This is a notification executed after successful signIn
 - (void) receiveGuestAuthUINotification:(NSNotification *) notification {
     if ([notification.name isEqualToString:@"authUINotification"]) {
-        NSLog(@"-Guest- AuthUINotification");
-        
         if (self.recToUpdate) {
             if (self.recToUpdate.updated) {
                 [self updateRecord:self.recToUpdate];
@@ -1009,5 +972,4 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     [[GIDSignIn sharedInstance] signOut];
     [[GIDSignIn sharedInstance] signIn];
 }
-
 @end

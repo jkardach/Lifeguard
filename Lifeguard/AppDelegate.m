@@ -63,7 +63,8 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     } else {
         
     }
-    [GIDSignIn sharedInstance].clientID = @"488077888352-kn6td47na6g1lkf2epr7clu9tcbmv4vs.apps.googleusercontent.com";
+    //[GIDSignIn sharedInstance].clientID = @"488077888352-kn6td47na6g1lkf2epr7clu9tcbmv4vs.apps.googleusercontent.com";
+    [GIDSignIn sharedInstance].clientID = @"229185246988-tdt93711nfb3t3cvrn8ooet4ibspnhe9.apps.googleusercontent.com";
     [GIDSignIn sharedInstance].delegate = (id<GIDSignInDelegate>) self;
     [GIDSignIn sharedInstance].scopes = [NSArray arrayWithObjects:kGTLRAuthScopeSheetsSpreadsheets, nil];
     

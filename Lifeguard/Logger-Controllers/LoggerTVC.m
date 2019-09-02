@@ -26,9 +26,6 @@
 
 #pragma clang diagnostic pop
 
-//static NSString *const kKeychainItemName = @"Google Sheets API";
-//static NSString *const kClientID = @"488077888352-kn6td47na6g1lkf2epr7clu9tcbmv4vs.apps.googleusercontent.com";
-
 @interface LoggerTVC () <UISearchBarDelegate, UISearchResultsUpdating, getTempsDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *configButton;
 
@@ -91,8 +88,8 @@
     self.service = appDelegate.service;
 
     // work around, allows you to manually login to the google account
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+   //NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];
+    //[[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
     // end workaround
     
     // Initialize the Google Sheets API service & load existing credentials from the keychain if available.
@@ -491,9 +488,7 @@ viewForHeaderInSection:(NSInteger)section
                                                              font:cell.detailTextLabel.font
                                                           poolTxt:poolTxt
                                                            spaTxt:spaTxt];
-        //cell.detailTextLabel.text = [NSString stringWithFormat:@"pH:%@/CL:%@ppm, pH:%@/CL:%@ppm", record.poolPh, record.poolCl, record.spaPh, record.spaCl];
-        //cell.imageView.image = [UIImage imageNamed:@"SwimClub10mm"];
-        
+
         // make odd rows light blue
         UIColor *lightBlue = [UIColor colorWithRed: 131.0/255.0 green: 241.0/255.0 blue:255.0/255.0 alpha: 1.0];
         if (![self even:(int)indexPath.row]) {

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,16 +12,13 @@
 		3D07208A1EBA3B5600B083EF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D0720891EBA3B5600B083EF /* AppDelegate.m */; };
 		3D0720921EBA3B5600B083EF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D0720911EBA3B5600B083EF /* Assets.xcassets */; };
 		3D0720951EBA3B5700B083EF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D0720931EBA3B5700B083EF /* LaunchScreen.storyboard */; };
-		3D0720A01EBCE04B00B083EF /* MemberTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D07209F1EBCE04B00B083EF /* MemberTVC.m */; };
 		3D0720A81EBCFAD300B083EF /* GuestTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D0720A71EBCFAD300B083EF /* GuestTVC.m */; };
 		3D0720AB1EBD239300B083EF /* PartyTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D0720AA1EBD239300B083EF /* PartyTVC.m */; };
-		3D0720B21EBE2FC900B083EF /* BudgetTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D0720B11EBE2FC900B083EF /* BudgetTVC.m */; };
 		3D11BA3F1ED793DF00DB66FF /* FCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D11BA3E1ED793DF00DB66FF /* FCell.m */; };
 		3D1CE7A522E6136D00F9CA67 /* CheckInTVCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1CE7A422E6136D00F9CA67 /* CheckInTVCellTableViewCell.m */; };
 		3D3531AD22C65862005A3C64 /* PartyRec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3531AC22C65862005A3C64 /* PartyRec.m */; };
 		3D3531B022C6935D005A3C64 /* FamilyRec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3531AF22C6935D005A3C64 /* FamilyRec.m */; };
 		3D3531B322CC225D005A3C64 /* PartyDetailTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3531B222CC225D005A3C64 /* PartyDetailTVC.m */; };
-		3D4F7A4822C3ED7F00365D81 /* checker.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D4F7A4722C3ED7F00365D81 /* checker.m */; };
 		3D4F7A4F22C416CD00365D81 /* RulesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4F7A4E22C416CD00365D81 /* RulesVC.swift */; };
 		3D65A42422C5455500BA0BF9 /* CalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A42322C5455500BA0BF9 /* CalVC.swift */; };
 		3D65A42D22C5536F00BA0BF9 /* GoogleSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A42822C5536F00BA0BF9 /* GoogleSheet.m */; };
@@ -47,14 +44,10 @@
 		3D0720911EBA3B5600B083EF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D0720941EBA3B5700B083EF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3D0720961EBA3B5700B083EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3D07209E1EBCE04B00B083EF /* MemberTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemberTVC.h; sourceTree = "<group>"; };
-		3D07209F1EBCE04B00B083EF /* MemberTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemberTVC.m; sourceTree = "<group>"; };
 		3D0720A61EBCFAD300B083EF /* GuestTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuestTVC.h; sourceTree = "<group>"; };
 		3D0720A71EBCFAD300B083EF /* GuestTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuestTVC.m; sourceTree = "<group>"; };
 		3D0720A91EBD239300B083EF /* PartyTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PartyTVC.h; sourceTree = "<group>"; };
 		3D0720AA1EBD239300B083EF /* PartyTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PartyTVC.m; sourceTree = "<group>"; };
-		3D0720B01EBE2FC900B083EF /* BudgetTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BudgetTVC.h; sourceTree = "<group>"; };
-		3D0720B11EBE2FC900B083EF /* BudgetTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BudgetTVC.m; sourceTree = "<group>"; };
 		3D11BA0C1ED68A4600DB66FF /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		3D11BA3D1ED793DF00DB66FF /* FCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCell.h; sourceTree = "<group>"; };
 		3D11BA3E1ED793DF00DB66FF /* FCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCell.m; sourceTree = "<group>"; };
@@ -66,8 +59,6 @@
 		3D3531AF22C6935D005A3C64 /* FamilyRec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FamilyRec.m; sourceTree = "<group>"; };
 		3D3531B122CC225D005A3C64 /* PartyDetailTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartyDetailTVC.h; sourceTree = "<group>"; };
 		3D3531B222CC225D005A3C64 /* PartyDetailTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PartyDetailTVC.m; sourceTree = "<group>"; };
-		3D4F7A4622C3ED7F00365D81 /* checker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = checker.h; sourceTree = "<group>"; };
-		3D4F7A4722C3ED7F00365D81 /* checker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = checker.m; sourceTree = "<group>"; };
 		3D4F7A4E22C416CD00365D81 /* RulesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesVC.swift; sourceTree = "<group>"; };
 		3D65A42322C5455500BA0BF9 /* CalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalVC.swift; sourceTree = "<group>"; };
 		3D65A42722C5536F00BA0BF9 /* GoogleSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleSheet.h; sourceTree = "<group>"; };
@@ -163,16 +154,12 @@
 				3D4F7A4E22C416CD00365D81 /* RulesVC.swift */,
 				3D65A42322C5455500BA0BF9 /* CalVC.swift */,
 				3D11BA0C1ED68A4600DB66FF /* Constants.h */,
-				3D07209E1EBCE04B00B083EF /* MemberTVC.h */,
-				3D07209F1EBCE04B00B083EF /* MemberTVC.m */,
 				3D0720A61EBCFAD300B083EF /* GuestTVC.h */,
 				3D0720A71EBCFAD300B083EF /* GuestTVC.m */,
 				3D0720A91EBD239300B083EF /* PartyTVC.h */,
 				3D0720AA1EBD239300B083EF /* PartyTVC.m */,
 				3D91A9EC1ED3A55C003348ED /* NannyTVC.h */,
 				3D91A9ED1ED3A55C003348ED /* NannyTVC.m */,
-				3D0720B01EBE2FC900B083EF /* BudgetTVC.h */,
-				3D0720B11EBE2FC900B083EF /* BudgetTVC.m */,
 				3D11BA3D1ED793DF00DB66FF /* FCell.h */,
 				3D11BA3E1ED793DF00DB66FF /* FCell.m */,
 				3D3531B122CC225D005A3C64 /* PartyDetailTVC.h */,
@@ -194,8 +181,6 @@
 				3D65A42822C5536F00BA0BF9 /* GoogleSheet.m */,
 				3D65A42B22C5536F00BA0BF9 /* poolRecord.h */,
 				3D65A42922C5536F00BA0BF9 /* poolRecord.m */,
-				3D4F7A4622C3ED7F00365D81 /* checker.h */,
-				3D4F7A4722C3ED7F00365D81 /* checker.m */,
 				3D3531AB22C65862005A3C64 /* PartyRec.h */,
 				3D3531AC22C65862005A3C64 /* PartyRec.m */,
 				3D3531AE22C6935D005A3C64 /* FamilyRec.h */,
@@ -284,7 +269,7 @@
 				};
 			};
 			buildConfigurationList = 3D07207D1EBA3B5600B083EF /* Build configuration list for PBXProject "Lifeguard" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -358,7 +343,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D4F7A4822C3ED7F00365D81 /* checker.m in Sources */,
 				3D3531B322CC225D005A3C64 /* PartyDetailTVC.m in Sources */,
 				3D4F7A4F22C416CD00365D81 /* RulesVC.swift in Sources */,
 				3D65A42E22C5536F00BA0BF9 /* poolRecord.m in Sources */,
@@ -370,10 +354,8 @@
 				3D65A43F22C553F800BA0BF9 /* ConfigTVC.m in Sources */,
 				3D65A43E22C553F800BA0BF9 /* LoggerTVC.m in Sources */,
 				3D6DBCC622E4FB1F00430264 /* ShowCheckedInTVC.m in Sources */,
-				3D0720A01EBCE04B00B083EF /* MemberTVC.m in Sources */,
 				3D65A42D22C5536F00BA0BF9 /* GoogleSheet.m in Sources */,
 				3D65A42F22C5536F00BA0BF9 /* FileRoutines.m in Sources */,
-				3D0720B21EBE2FC900B083EF /* BudgetTVC.m in Sources */,
 				3D11BA3F1ED793DF00DB66FF /* FCell.m in Sources */,
 				3D1CE7A522E6136D00F9CA67 /* CheckInTVCellTableViewCell.m in Sources */,
 				3D91A9EE1ED3A55C003348ED /* NannyTVC.m in Sources */,
@@ -527,7 +509,10 @@
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -542,7 +527,10 @@
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

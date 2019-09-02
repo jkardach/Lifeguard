@@ -38,8 +38,8 @@
     self.service = appDelegate.service;
     
     // work around, allows you to manually login to the google account
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+    //NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];
+    //[[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
     // end workaround
 
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
@@ -80,10 +80,7 @@
              finishedWithObject:(GTLRSheets_ValueRange *)result
                           error:(NSError *)error {
     if (error == nil) {
-        //        NSString *output = @"";
         NSArray *rows = result.values;
-        //        printf("Rows: %lu", (unsigned long)rows.count);
-        //        NSInteger rowIndex = 0;
         if (rows.count > 0) {
             self.nanny = nil;
             int counter = 0;
@@ -102,11 +99,8 @@
                     break;
                 }
             }
-        } else {
-            //output = [output stringByAppendingFormat:@"No data found."];
         }
         [self.tableView reloadData];
-        //self.output.text = output;
     } else {
         NSString *message = [NSString stringWithFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
         [self showAlert:@"Error" message:message];
@@ -179,7 +173,6 @@ heightForHeaderInSection:(NSInteger)section
     [headerView addSubview:famTxt];
     [headerView addSubview:fee];
     [headerView addSubview:payment];
-    //[self.tableView updateConstraintsIfNeeded];
     self.tableView.tableHeaderView = self.tableView.tableHeaderView;
     
     return headerView;

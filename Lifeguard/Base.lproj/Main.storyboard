@@ -113,7 +113,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Sign-In" id="DtI-Po-xh7">
-                        <barButtonItem key="rightBarButtonItem" title="ReLogin" id="ZMK-xD-Saq">
+                        <barButtonItem key="rightBarButtonItem" title="Sign-in" id="ZMK-xD-Saq">
                             <connections>
                                 <action selector="reLogin:" destination="nuG-CA-Wg4" id="sid-1U-1Fz"/>
                             </connections>
