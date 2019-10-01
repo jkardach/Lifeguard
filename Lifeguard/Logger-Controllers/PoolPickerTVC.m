@@ -88,6 +88,7 @@
     // Configure the cell...
     GoogleSheet *sheet = self.poolSheets[indexPath.row];
     cell.textLabel.text = sheet.name;
+    cell.textLabel.textColor = [UIColor blackColor];
     // make odd rows light blue
     UIColor *lightBlue = [UIColor colorWithRed: 131.0/255.0 green: 241.0/255.0 blue:255.0/255.0 alpha: 1.0];
     if (![self even:(int)indexPath.row]) {

@@ -482,7 +482,7 @@ viewForHeaderInSection:(NSInteger)section
         
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         poolRecord *record = self.displayedPoolLogArray[indexPath.row];
         NSString *poolTxt;
         NSString *spaTxt;
