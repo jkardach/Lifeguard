@@ -102,6 +102,13 @@
         }
         [self.tableView reloadData];
     } else {
+        // Google sign-in; if not signed in, sign-in, else silently signin.
+        [GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;
+        if ([GIDSignIn sharedInstance].currentUser == nil) {
+            [[GIDSignIn sharedInstance] signIn];
+        } else {
+            [[GIDSignIn sharedInstance] signInSilently];
+        }
         NSString *message = [NSString stringWithFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
         [self showAlert:@"Error" message:message];
     }
@@ -184,6 +191,8 @@ heightForHeaderInSection:(NSInteger)section
     FCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FCell" forIndexPath:indexPath];
     NSArray *nannyItem = self.nanny[indexPath.row];
     cell.icon.image = [UIImage imageNamed:@"SwimClub10mm"];    // logo
+
+    cell.title.textColor = [UIColor blackColor];
     cell.title.text = [NSString stringWithFormat:@"%@(%@)",nannyItem[1], nannyItem[0]];
     NSString *nannyFeePaid = @"$0.00";
     if (nannyItem.count >=29) {

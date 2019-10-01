@@ -6,7 +6,8 @@
   "data" : [
     {
       "idiom" : "universal",
-      "filename" : "Thumbnail.tiff"
+      "filename" : "Lifeguard-Logo.png",
+      "universal-type-identifier" : "public.png"
     }
   ]
 }

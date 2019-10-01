@@ -83,11 +83,6 @@
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.service = appDelegate.service;
     
-   // work around, allows you to manually login to the google account
-    //NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];
-   // [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
-    // end workaround
-    
     // observe orientation change notification, to reload table view when device rotated
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter]
@@ -122,6 +117,11 @@
     self.temps.delegate = self;
     [self.temps getDevices];
     
+    // Google sign-in; if not signed in, sign-in, else silently signin.
+    [self signInToGoogle];
+}
+
+- (void)signInToGoogle {
     // Google sign-in; if not signed in, sign-in, else silently signin.
     [GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;
     if ([GIDSignIn sharedInstance].currentUser == nil) {
@@ -729,8 +729,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         NSLog(@"%@",guests.text);
         member.members = [members.text intValue];
         member.guests = [guests.text intValue];
+        [self.checkedInToday addObject:member];
+        [tableView reloadData];
+        [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
         
-        [self writeGuest:(FamilyRec *)member];
+        [self writeGuest:(FamilyRec *)member];   // update database
         [tableView reloadData];
     }]];
     

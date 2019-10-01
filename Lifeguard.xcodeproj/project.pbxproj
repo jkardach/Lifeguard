@@ -153,7 +153,6 @@
 			children = (
 				3D4F7A4E22C416CD00365D81 /* RulesVC.swift */,
 				3D65A42322C5455500BA0BF9 /* CalVC.swift */,
-				3D11BA0C1ED68A4600DB66FF /* Constants.h */,
 				3D0720A61EBCFAD300B083EF /* GuestTVC.h */,
 				3D0720A71EBCFAD300B083EF /* GuestTVC.m */,
 				3D0720A91EBD239300B083EF /* PartyTVC.h */,
@@ -194,6 +193,7 @@
 		3D65A43022C553CC00BA0BF9 /* Logger-Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3D11BA0C1ED68A4600DB66FF /* Constants.h */,
 				3D65A43222C553F700BA0BF9 /* ConfigTVC.h */,
 				3D65A43A22C553F800BA0BF9 /* ConfigTVC.m */,
 				3D65A43622C553F700BA0BF9 /* editRecordTVC.h */,
@@ -513,6 +513,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -531,6 +532,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

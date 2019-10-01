@@ -117,6 +117,13 @@
         [self.tableView reloadData];
         //self.output.text = output;
     } else {
+        // Google sign-in; if not signed in, sign-in, else silently signin.
+        [GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;
+        if ([GIDSignIn sharedInstance].currentUser == nil) {
+            [[GIDSignIn sharedInstance] signIn];
+        } else {
+            [[GIDSignIn sharedInstance] signInSilently];
+        }
         NSString *message = [NSString stringWithFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
         [self showAlert:@"Error" message:message];
     }
@@ -228,6 +235,8 @@ heightForHeaderInSection:(NSInteger)section
         party = self.parties[indexPath.row];
     }
     //cell.icon.image = [UIImage imageNamed:@"SwimClub10mm"];    // logo
+
+    cell.title.textColor = [UIColor blackColor];
     cell.title.text = [NSString stringWithFormat:@"%@: %@/%@ hrs/%@", party.name, party.start, party.duration, party.partyType];
     cell.top.text = party.fees;
     cell.bottom.text = party.payment;

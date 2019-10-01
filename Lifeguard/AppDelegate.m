@@ -57,13 +57,10 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
                                                 postfix:@""
                                                     ext:@"Data"];
     if ([self.fileH fileExists:filename]) {
-        // if exists, then load into model (self.poolSheets) and then delete file
         self.poolSheets = [self.fileH restoreObjectFromFilename:filename];
-        //[self.fileH deleteDocFile:filename];
     } else {
         
     }
-    //[GIDSignIn sharedInstance].clientID = @"488077888352-kn6td47na6g1lkf2epr7clu9tcbmv4vs.apps.googleusercontent.com";
     [GIDSignIn sharedInstance].clientID = @"229185246988-tdt93711nfb3t3cvrn8ooet4ibspnhe9.apps.googleusercontent.com";
     [GIDSignIn sharedInstance].delegate = (id<GIDSignInDelegate>) self;
     [GIDSignIn sharedInstance].scopes = [NSArray arrayWithObjects:kGTLRAuthScopeSheetsSpreadsheets, nil];
@@ -108,7 +105,7 @@ didSignInForUser:(GIDGoogleUser *)user
 - (void)signIn:(GIDSignIn *)signIn
 didDisconnectWithUser:(GIDGoogleUser *)user
      withError:(NSError *)error {
-    NSLog(@"Did execute the googe did disconnect with user delegate");
+    NSLog(@"Did execute the google did disconnect with user delegate");
     // Perform any operations when the user disconnects from app here.
     // ...
 }

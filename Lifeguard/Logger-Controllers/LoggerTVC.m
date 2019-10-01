@@ -10,7 +10,7 @@
 */
 
 #import "LoggerTVC.h"
-#import "Constants.h"
+//#import "Constants.h"
 #import "FileRoutines.h"
 #import "getTemps.h"
 #import "AppDelegate.h"
@@ -259,9 +259,17 @@
         [self.tableView.refreshControl endRefreshing];
         [self.tableView reloadData];
     } else {
+        //*** put in relogin here
         //[self presentViewController:[self createAuthController] animated:YES completion:nil];
         NSString *message = [NSString stringWithFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
         [self showAlert:@"Error" message:message];
+        // Google sign-in; if not signed in, sign-in, else silently signin.
+        [GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;
+        if ([GIDSignIn sharedInstance].currentUser == nil) {
+            [[GIDSignIn sharedInstance] signIn];
+        } else {
+            [[GIDSignIn sharedInstance] signInSilently];
+        }
     }
     
 }
@@ -446,6 +454,8 @@ viewForHeaderInSection:(NSInteger)section
     if (indexPath.section == 0) {
         cell = [tableView dequeueReusableCellWithIdentifier:@"Cell2" forIndexPath:indexPath];
         cell.backgroundColor = [UIColor yellowColor];
+        cell.textLabel.textColor = [UIColor blackColor];
+        cell.detailTextLabel.textColor = [UIColor blackColor];
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         switch (indexPath.row)
@@ -477,6 +487,8 @@ viewForHeaderInSection:(NSInteger)section
         NSString *poolTxt;
         NSString *spaTxt;
         cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", record.date, record.time];
+        cell.textLabel.textColor = [UIColor blackColor];
+        
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             poolTxt = [NSString stringWithFormat:@"pH:%@/CL:%@ppm", record.poolPh, record.poolCl];
             spaTxt = [NSString stringWithFormat:@"pH:%@/CL:%@ppm", record.spaPh, record.spaCl];
