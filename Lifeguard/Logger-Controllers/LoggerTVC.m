@@ -35,6 +35,7 @@
 @property (nonatomic, strong) FileRoutines *tools;
 @property (nonatomic, strong) GTLRSheetsService *service;
 
+// 
 @property (nonatomic, strong) UISearchController *searchController;
 @property (nonatomic, strong) getTemps *temps;
 @end
@@ -104,7 +105,7 @@
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
     self.searchController.searchBar.delegate = self;
-    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.obscuresBackgroundDuringPresentation = YES;
     [self.searchController.searchBar sizeToFit];
     self.tableView.tableHeaderView = self.searchController.searchBar;
     [self.tableView setContentOffset:CGPointMake(0,
