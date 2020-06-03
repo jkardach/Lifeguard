@@ -61,6 +61,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     } else {
         
     }
+    // project ID:  229185246988
     [GIDSignIn sharedInstance].clientID = @"229185246988-tdt93711nfb3t3cvrn8ooet4ibspnhe9.apps.googleusercontent.com";
     [GIDSignIn sharedInstance].delegate = (id<GIDSignInDelegate>) self;
     [GIDSignIn sharedInstance].scopes = [NSArray arrayWithObjects:kGTLRAuthScopeSheetsSpreadsheets, nil];

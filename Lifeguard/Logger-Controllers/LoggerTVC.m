@@ -490,6 +490,14 @@ viewForHeaderInSection:(NSInteger)section
         cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", record.date, record.time];
         cell.textLabel.textColor = [UIColor blackColor];
         
+        if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+                poolTxt = [NSString stringWithFormat:@"pH:%@/CL:%@ppm", record.poolPh, record.poolCl];
+                spaTxt = [NSString stringWithFormat:@"pH:%@/CL:%@ppm", record.spaPh, record.spaCl];
+            } else {
+                poolTxt = [NSString stringWithFormat:@"pH:%@/CL:%@", record.poolPh, record.poolCl];
+                spaTxt = [NSString stringWithFormat:@"pH:%@/CL:%@", record.spaPh, record.spaCl];
+        }
+        /*
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             poolTxt = [NSString stringWithFormat:@"pH:%@/CL:%@ppm", record.poolPh, record.poolCl];
             spaTxt = [NSString stringWithFormat:@"pH:%@/CL:%@ppm", record.spaPh, record.spaCl];
@@ -497,6 +505,7 @@ viewForHeaderInSection:(NSInteger)section
             poolTxt = [NSString stringWithFormat:@"pH:%@/CL:%@", record.poolPh, record.poolCl];
             spaTxt = [NSString stringWithFormat:@"pH:%@/CL:%@", record.spaPh, record.spaCl];
         }
+         */
         cell.detailTextLabel.attributedText = [self createAttrTxt:cell.detailTextLabel.textColor
                                                              font:cell.detailTextLabel.font
                                                           poolTxt:poolTxt

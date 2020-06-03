@@ -1,9 +1,9 @@
-platform :ios, '8.0'
+platform :ios, '13.0'
 
 target 'Lifeguard' do
     pod 'GoogleAPIClientForREST/Sheets', '~> 1.1.1'
     pod 'Particle-SDK'
-    pod 'GoogleSignIn'
+    pod 'GoogleSignIn', '< 5.0.0'
 end
 post_install do |installer|
     installer.pods_project.targets.each do |target|
