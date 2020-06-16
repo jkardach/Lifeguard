@@ -33,6 +33,7 @@ MFMailComposeViewControllerDelegate>
         _signOut = @"";
         _optPhone = @"";
         _signInRow = 0;
+        _eligable = NO;
         _checked = NO;
         _droppedOff = NO;
         _updated = NO;      // determines if the record was updated and needs to be written back

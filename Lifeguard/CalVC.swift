@@ -14,7 +14,7 @@ class CalVC: UIViewController, WKUIDelegate  {
     var webView: WKWebView!
     
     override func loadView() {
-        self.title = "Calendar"
+        self.title = "uiwebCalendar"
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.uiDelegate = self

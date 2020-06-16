@@ -148,7 +148,7 @@
     self.recToDelete = rec;
     // get the Accounts tab of the SSC sheet;
     NSString *spreadsheetId = ACT_SHEET_ID;
-    NSString *range = @"SignIn!A2:L";
+    NSString *range = @"SignIn!A2:N";
     
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetId
@@ -182,10 +182,9 @@
         
         // now clear this record in the sign-in sheet
         NSString *spreadsheetId = ACT_SHEET_ID;
-       // NSString *range = @"SignIn!A2:H";
         
         GTLRSheets_ClearValuesRequest *object = [[GTLRSheets_ClearValuesRequest alloc] init];
-        NSString *clearRange = [NSString stringWithFormat:@"SignIn!A%D:M%D", rowOfRec, rowOfRec];
+        NSString *clearRange = [NSString stringWithFormat:@"SignIn!A%D:M%N", rowOfRec, rowOfRec];
         
         GTLRSheetsQuery_SpreadsheetsValuesClear *query =
         [GTLRSheetsQuery_SpreadsheetsValuesClear queryWithObject:object
@@ -224,12 +223,15 @@
     
     NSDate *currentDate = [NSDate date];
     NSString *dateString = [formatter stringFromDate:currentDate];
-    
+    NSString *elg = @"NO";
+    if (member.eligable) {
+        elg = @"YES";
+    }
     NSArray *valueArray = @[@[dateString, member.lastName, member.memberID,
                               memberNum, guestNum, member.kidsDroppedOff,
                               member.familyMembers, member.memType, member.phone,
                               member.email, member.phone2, member.email2,
-                              member.optPhone]];
+                              member.optPhone, elg]];
     value.values = valueArray;
 
     GTLRSheetsQuery_SpreadsheetsValuesAppend *query =
@@ -258,7 +260,7 @@
 // this reads the record from the SignIn sheet on the account spreadsheet
 - (void)readLog {
     NSString *spreadsheetId = ACT_SHEET_ID;
-    NSString *range = @"SignIn!A2:M";
+    NSString *range = @"SignIn!A2:N";
     
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetId
@@ -296,13 +298,13 @@
 }
 
 // defined in Constants.h: ACT_SHEET_ID = 1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ
-// get values from Members sheet
+// get values from Members sheet (PM, Lease, Trial)
 - (void)readbatchSheet {
     // get the Members tab of the SSC sheet;
     NSString *spreadsheetId = ACT_SHEET_ID;
-    NSString *range1 = @"Members!A2:Q77";       // PM
-    NSString *range2 = @"Members!A89:Q100";     // Lease
-    NSString *range3 = @"Members!A127:Q140";    // Trial
+    NSString *range1 = @"Members!A2:R86";       // PM
+    NSString *range2 = @"Members!A89:R99";     // Lease
+    NSString *range3 = @"Members!A127:R139";    // Trial
     
     GTLRSheetsQuery_SpreadsheetsValuesGet *query1 =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetId
@@ -372,7 +374,7 @@
 - (void)readSheet {
     // get the Accounts tab of the SSC sheet;
     NSString *spreadsheetId = ACT_SHEET_ID;
-    NSString *range = @"Accounts!A3:Z";
+    NSString *range = @"Accounts!A3:AQ";
     
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetId
@@ -392,7 +394,7 @@
             self.families = nil;
             for (NSArray *row in rows) {
                 if (row.count > 1) {
-                    FamilyRec *rec = [self convertToFamObj: row];
+                    FamilyRec *rec = [self convertToFamObj: row];  // converts to family object
                     if (rec)
                         [self.families addObject:rec];  // add to famalies Array
                 } else {
@@ -613,7 +615,11 @@ viewForHeaderInSection:(NSInteger)section
         // make odd rows light blue
 
     } else {
-        cell.imageView.image = [UIImage imageNamed:@"SwimClub10mm"];
+        if (member.eligable) {
+            cell.imageView.image = [UIImage imageNamed:@"SwimClub10mm"];
+        } else {
+            cell.imageView.image = [UIImage imageNamed:@"xSwimClub10mm"];
+        }
         if (member.checked) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         } else {
@@ -847,6 +853,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     if (input.count > 12) {     // member number
         rec.optPhone = input[12];
     }
+    if (input.count > 13) {     // member number
+        
+        if ([input[13] isEqualToString:@"YES"]) {
+            rec.eligable = YES;
+        } else {
+            rec.eligable = NO;
+        }
+    }
     rec.checked = YES;
     if (![rec.kidsDroppedOff isEqualToString:@""]) {
         rec.droppedOff = YES;
@@ -884,10 +898,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 // converts memberSheet record to family object
 - (FamilyRec *) convertToFamObj: (NSArray *)member {
     FamilyRec *rec;
-    if ([member[0] isEqualToString: @"Certificate Number"]) {
-        return nil;      // this is the header, remove
-    } else {
-        rec = [[FamilyRec alloc] init];
+    if (member[0]) {
+        if (([member[0] isEqualToString: @"Certificate Number"]) ||
+            [member[2] isEqualToString:@"CL"]) {
+            return nil;      // this is the header, remove
+        } else {
+            rec = [[FamilyRec alloc] init];
+        }
     }
     
     if (member.count > 1) {     // member ID
@@ -895,6 +912,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     }
     if (member.count > 0) {     // member last name
         rec.lastName = member[0];
+        if ([rec.lastName isEqualToString:@""]) {
+            return nil;
+        }
     }
     if (member.count > 2) {     // membership type
         rec.memType = member[2];
@@ -914,7 +934,20 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     if (member.count > 16) {
         rec.familyMembers = member[16];
     }
-    
+    // indicates if member is eligable to swim
+    rec.eligable = YES;
+    if (member.count > 17) {
+        NSString *owesMoney = member[17];
+        if ([owesMoney isEqualToString:@"x"] ||
+            [rec.memType isEqualToString:@"PL"]) {
+            rec.eligable = NO;
+        }
+        if ([rec.memType isEqualToString:@"BD"] ||
+            [rec.memType isEqualToString:@"BE"] ) {
+            rec.eligable = YES;
+        }
+
+    }
     // if record is in checkedInToday, then use this record
     return [self isCheckedInToday: rec];  // if checked in today, then replaces record
 }

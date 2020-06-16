@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSString *signOut;
 @property(nonatomic, strong) NSString *optPhone;
 @property(nonatomic) int signInRow;                       // row of record in signIn sheet
+@property(nonatomic) BOOL eligable;
 
 @property(nonatomic) BOOL droppedOff;
 @property(nonatomic) BOOL checked;
