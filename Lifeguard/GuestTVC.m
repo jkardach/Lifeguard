@@ -19,8 +19,12 @@
 #import "ParticleCloud.h"
 #pragma clang diagnostic pop
 
-@interface GuestTVC () <getTempsDelegate, GIDSignInUIDelegate>
-@property (nonatomic, strong) GTLRSheetsService *service;
+//@interface GuestTVC () <getTempsDelegate, GIDSignInUIDelegate>  // pre 5.0 google sign-in
+@interface GuestTVC () <getTempsDelegate>  // post 5.0 google sign-in
+@property (nonatomic, strong) GTLRSheetsService *service;  // to contain the shared auth
+@property (nonatomic, strong) GIDGoogleUser *theUser;   // to contain the shared user var
+@property (nonatomic, strong) AppDelegate *appDelegate;  // var for appDelegate
+
 @property (nonatomic, strong) NSMutableArray *families;
 @property (nonatomic, strong) NSMutableArray *checkedInToday;
 @property (nonatomic) int guestRow;
@@ -32,7 +36,7 @@
 @property (nonatomic) int maxSections;
 @property (nonatomic, strong) getTemps *temps;
 @property (nonatomic, strong) FamilyRec *recToUpdate;
-@property (nonatomic, strong) UIApplication *appDelegate;
+//@property (nonatomic, strong) UIApplication *appDelegate;
 @end
 
 @implementation GuestTVC
@@ -80,8 +84,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.service = appDelegate.service;
+    self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.service = self.appDelegate.service;
+    self.theUser = self.appDelegate.theUser;  // added post 5.0 google sign-in to have user data
     
     // observe orientation change notification, to reload table view when device rotated
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
@@ -118,18 +123,23 @@
     [self.temps getDevices];
     
     // Google sign-in; if not signed in, sign-in, else silently signin.
-    [self signInToGoogle];
+    [self.appDelegate signInToGoogle:self];
 }
 
+//  This no longer needed, moved to AppDelegate
 - (void)signInToGoogle {
     // Google sign-in; if not signed in, sign-in, else silently signin.
-    [GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;
+    //[GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;  // pre 5.0 google sign-in
+    //[GIDSignIn sharedInstance].delegate = (id<GIDSignInDelegate>) self;
+    [GIDSignIn sharedInstance].presentingViewController = self;
     if ([GIDSignIn sharedInstance].currentUser == nil) {
         [[GIDSignIn sharedInstance] signIn];
     } else {
-        [[GIDSignIn sharedInstance] signInSilently];
+        // [[GIDSignIn sharedInstance] signInSilently];  // pre 5.0 google sign-in
+         [[GIDSignIn sharedInstance] restorePreviousSignIn];
     }
 }
+ 
 
 
 - (void)viewWillAppear:(BOOL)animated {

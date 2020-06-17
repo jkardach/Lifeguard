@@ -34,6 +34,7 @@
 @property (nonatomic, weak) NSMutableArray *displayedPoolLogArray;
 @property (nonatomic, strong) FileRoutines *tools;
 @property (nonatomic, strong) GTLRSheetsService *service;
+@property (nonatomic, strong) AppDelegate *appDelegate;
 
 // 
 @property (nonatomic, strong) UISearchController *searchController;
@@ -85,8 +86,8 @@
     self.temps.delegate = self;
     [self.temps getDevices];
     
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.service = appDelegate.service;
+    self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.service = self.appDelegate.service;
 
     // work around, allows you to manually login to the google account
    //NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];
@@ -260,7 +261,9 @@
         [self.tableView.refreshControl endRefreshing];
         [self.tableView reloadData];
     } else {
-        //*** put in relogin here
+        [self.appDelegate signInToGoogle:self];
+        /*
+        // put in relogin here
         //[self presentViewController:[self createAuthController] animated:YES completion:nil];
         NSString *message = [NSString stringWithFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
         [self showAlert:@"Error" message:message];
@@ -271,6 +274,7 @@
         } else {
             [[GIDSignIn sharedInstance] signInSilently];
         }
+         */
     }
     
 }

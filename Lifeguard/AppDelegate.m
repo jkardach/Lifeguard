@@ -13,6 +13,7 @@
 
 @interface AppDelegate ()
 @property (nonatomic, strong) FileRoutines *fileH;
+
 @end
 
 @implementation AppDelegate
@@ -61,7 +62,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     } else {
         
     }
-    // project ID:  229185246988
+    // project ID:  229185246988, sets the google sign-in's clintID, delegate and scope
     [GIDSignIn sharedInstance].clientID = @"229185246988-tdt93711nfb3t3cvrn8ooet4ibspnhe9.apps.googleusercontent.com";
     [GIDSignIn sharedInstance].delegate = (id<GIDSignInDelegate>) self;
     [GIDSignIn sharedInstance].scopes = [NSArray arrayWithObjects:kGTLRAuthScopeSheetsSpreadsheets, nil];
@@ -75,24 +76,32 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
             openURL:(NSURL *)url
             options:(NSDictionary<NSString *, id> *)options {
     NSLog(@"Did execute the google sign-in openURL delegate");
+    /*  // pre 5.0 googleSignin
     return [[GIDSignIn sharedInstance] handleURL:url
                                sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
                                       annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
-    
+     */
+    return [[GIDSignIn sharedInstance] handleURL:url];   // post
 }
 
+// The sign-in flow has finished and was successful if 'error' is 'nil'
 - (void)signIn:(GIDSignIn *)signIn
 didSignInForUser:(GIDGoogleUser *)user
      withError:(NSError *)error {
-    NSLog(@"Did execute the google sign-in -didSignInForUser- delegate");
-    
+
     if (error != nil) {
-        NSLog(@"Authentication Error");
-        //[self showAlert:@"Authentication Error" message:error.localizedDescription];
-        self.service.authorizer = nil;
-    } else {
-        self.service.authorizer = user.authentication.fetcherAuthorizer;
+        if (error.code == kGIDSignInErrorCodeHasNoAuthInKeychain) {
+          NSLog(@"The user has not signed in before or they have since signed out.");
+        } else {
+            NSLog(@"%@", error.localizedDescription);
+            self.service.authorizer = nil;
+            return;
+        }
     }
+        
+    self.service.authorizer = user.authentication.fetcherAuthorizer;
+    self.theUser = user;  // make a copy of the user, so can use elsewhere
+
 
     NSDictionary *statusText = @{@"statusText":
                                      [NSString stringWithFormat:@"Signed in user: %@",
@@ -111,9 +120,23 @@ didDisconnectWithUser:(GIDGoogleUser *)user
     // ...
 }
 
+// this executes a common sign-in for google sign-in using the calling classes domain
+- (void)signInToGoogle: (id) delegate {
+    // Google sign-in; if prviously signed in, do restore.
+    
+    GIDSignIn *signIn = [GIDSignIn sharedInstance];
+    signIn.presentingViewController = delegate;
+    
+    if ([signIn hasPreviousSignIn]) {
+        [signIn restorePreviousSignIn];
+    } else {
+        [signIn signIn];
+    }
+    
+}
+
 - (void)saveModel
 {
-    
     NSString *filename = [self.fileH filenameWithPrefix:@"Pool"
                                                eventKey:@""
                                                 postfix:@""

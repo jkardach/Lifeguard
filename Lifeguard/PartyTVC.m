@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSMutableArray *partySheetArray;
 @property (nonatomic, strong) NSMutableArray *parties;
 @property (nonatomic, strong) NSMutableArray *upcomingParties;
+@property (nonatomic, strong) AppDelegate *appDelegate;
 
 @end
 
@@ -60,8 +61,8 @@
     // end workaround
     
     // Initialize the Google Sheets API service & load existing credentials from the keychain if available.
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.service = appDelegate.service;
+    self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.service = self.appDelegate.service;
     
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter]
@@ -117,6 +118,8 @@
         [self.tableView reloadData];
         //self.output.text = output;
     } else {
+        [self.appDelegate signInToGoogle:self];  // moved to common signin code in app delegate
+        /*
         // Google sign-in; if not signed in, sign-in, else silently signin.
         [GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;
         if ([GIDSignIn sharedInstance].currentUser == nil) {
@@ -126,6 +129,7 @@
         }
         NSString *message = [NSString stringWithFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
         [self showAlert:@"Error" message:message];
+         */
     }
 }
 

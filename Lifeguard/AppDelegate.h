@@ -18,6 +18,9 @@
 @property (nonatomic, strong) GIDAuthentication *authentication;
 @property (nonatomic, strong) GTLRSheetsService *service;
 
+@property (nonatomic, strong) GIDGoogleUser *theUser;
+
+- (void)signInToGoogle: (id) delegate;
 - (void)saveModel;
 
 

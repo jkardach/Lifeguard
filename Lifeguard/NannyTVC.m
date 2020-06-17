@@ -19,6 +19,7 @@
 @interface NannyTVC ()
 @property (nonatomic, strong) GTLRSheetsService *service;
 @property (nonatomic, strong) NSMutableArray *nanny;
+@property (nonatomic, strong) AppDelegate *appDelegate;
 @end
 
 @implementation NannyTVC
@@ -34,8 +35,8 @@
     [super viewDidLoad];
     
     self.title = @"Nanny";
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.service = appDelegate.service;
+    self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.service = self.appDelegate.service;
     
     // work around, allows you to manually login to the google account
     //NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];
@@ -102,8 +103,12 @@
         }
         [self.tableView reloadData];
     } else {
+        [self.appDelegate signInToGoogle:self];
+        /*
         // Google sign-in; if not signed in, sign-in, else silently signin.
-        [GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;
+  //[GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self; // pre 5.0 code
+        GIDSignIn *signIn = [GIDSignIn sharedInstance];  // post 5.0 code
+        [signIn setDelegate:self];
         if ([GIDSignIn sharedInstance].currentUser == nil) {
             [[GIDSignIn sharedInstance] signIn];
         } else {
@@ -111,11 +116,14 @@
         }
         NSString *message = [NSString stringWithFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
         [self showAlert:@"Error" message:message];
+         */
     }
 }
 
 // Helper for showing an alert
-- (void)showAlert:(NSString *)title message:(NSString *)message {
+- (void) showAlert:(NSString *)title
+           message:(NSString *)message {
+    
     UIAlertController *alert =
     [UIAlertController alertControllerWithTitle:title
                                         message:message
