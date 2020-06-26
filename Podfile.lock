@@ -19,6 +19,9 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
+  - GoogleAPIClientForREST/Calendar (1.1.1):
+    - GoogleAPIClientForREST/Core
+    - GTMSessionFetcher (>= 1.1.7)
   - GoogleAPIClientForREST/Core (1.1.1):
     - GTMSessionFetcher (>= 1.1.7)
   - GoogleAPIClientForREST/Sheets (1.1.1):
@@ -46,6 +49,7 @@ PODS:
     - Particle-SDK/Helpers
 
 DEPENDENCIES:
+  - GoogleAPIClientForREST/Calendar
   - GoogleAPIClientForREST/Sheets (~> 1.1.1)
   - GoogleSignIn
   - Particle-SDK
@@ -69,6 +73,6 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   Particle-SDK: cdda539eeb1e5464950657dff46e22ffc42c9525
 
-PODFILE CHECKSUM: 8b4c417303ad199b5dba57ce3231df56c50b3788
+PODFILE CHECKSUM: b73c63d889a8f5d692b291963f418acbca0ae094
 
 COCOAPODS: 1.9.3

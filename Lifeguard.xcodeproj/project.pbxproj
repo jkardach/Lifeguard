@@ -16,10 +16,12 @@
 		3D0720AB1EBD239300B083EF /* PartyTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D0720AA1EBD239300B083EF /* PartyTVC.m */; };
 		3D11BA3F1ED793DF00DB66FF /* FCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D11BA3E1ED793DF00DB66FF /* FCell.m */; };
 		3D1CE7A522E6136D00F9CA67 /* CheckInTVCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1CE7A422E6136D00F9CA67 /* CheckInTVCellTableViewCell.m */; };
+		3D1DCD9824A3F051002E1667 /* calObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1DCD9724A3F051002E1667 /* calObj.m */; };
 		3D3531AD22C65862005A3C64 /* PartyRec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3531AC22C65862005A3C64 /* PartyRec.m */; };
 		3D3531B022C6935D005A3C64 /* FamilyRec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3531AF22C6935D005A3C64 /* FamilyRec.m */; };
 		3D3531B322CC225D005A3C64 /* PartyDetailTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3531B222CC225D005A3C64 /* PartyDetailTVC.m */; };
 		3D4F7A4F22C416CD00365D81 /* RulesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4F7A4E22C416CD00365D81 /* RulesVC.swift */; };
+		3D5B0E1C249AED8A0005B48E /* CheckListTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B0E1B249AED8A0005B48E /* CheckListTVC.m */; };
 		3D65A42422C5455500BA0BF9 /* CalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A42322C5455500BA0BF9 /* CalVC.swift */; };
 		3D65A42D22C5536F00BA0BF9 /* GoogleSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A42822C5536F00BA0BF9 /* GoogleSheet.m */; };
 		3D65A42E22C5536F00BA0BF9 /* poolRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A42922C5536F00BA0BF9 /* poolRecord.m */; };
@@ -53,6 +55,8 @@
 		3D11BA3E1ED793DF00DB66FF /* FCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCell.m; sourceTree = "<group>"; };
 		3D1CE7A322E6136D00F9CA67 /* CheckInTVCellTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckInTVCellTableViewCell.h; sourceTree = "<group>"; };
 		3D1CE7A422E6136D00F9CA67 /* CheckInTVCellTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckInTVCellTableViewCell.m; sourceTree = "<group>"; };
+		3D1DCD9624A3F051002E1667 /* calObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = calObj.h; sourceTree = "<group>"; };
+		3D1DCD9724A3F051002E1667 /* calObj.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = calObj.m; sourceTree = "<group>"; };
 		3D3531AB22C65862005A3C64 /* PartyRec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartyRec.h; sourceTree = "<group>"; };
 		3D3531AC22C65862005A3C64 /* PartyRec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PartyRec.m; sourceTree = "<group>"; };
 		3D3531AE22C6935D005A3C64 /* FamilyRec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FamilyRec.h; sourceTree = "<group>"; };
@@ -60,6 +64,8 @@
 		3D3531B122CC225D005A3C64 /* PartyDetailTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartyDetailTVC.h; sourceTree = "<group>"; };
 		3D3531B222CC225D005A3C64 /* PartyDetailTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PartyDetailTVC.m; sourceTree = "<group>"; };
 		3D4F7A4E22C416CD00365D81 /* RulesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesVC.swift; sourceTree = "<group>"; };
+		3D5B0E1A249AED8A0005B48E /* CheckListTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckListTVC.h; sourceTree = "<group>"; };
+		3D5B0E1B249AED8A0005B48E /* CheckListTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckListTVC.m; sourceTree = "<group>"; };
 		3D65A42322C5455500BA0BF9 /* CalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalVC.swift; sourceTree = "<group>"; };
 		3D65A42722C5536F00BA0BF9 /* GoogleSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleSheet.h; sourceTree = "<group>"; };
 		3D65A42822C5536F00BA0BF9 /* GoogleSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleSheet.m; sourceTree = "<group>"; };
@@ -151,6 +157,7 @@
 		3D0720A11EBCE06300B083EF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3D11BA0C1ED68A4600DB66FF /* Constants.h */,
 				3D4F7A4E22C416CD00365D81 /* RulesVC.swift */,
 				3D65A42322C5455500BA0BF9 /* CalVC.swift */,
 				3D0720A61EBCFAD300B083EF /* GuestTVC.h */,
@@ -167,6 +174,8 @@
 				3D6DBCC522E4FB1F00430264 /* ShowCheckedInTVC.m */,
 				3D1CE7A322E6136D00F9CA67 /* CheckInTVCellTableViewCell.h */,
 				3D1CE7A422E6136D00F9CA67 /* CheckInTVCellTableViewCell.m */,
+				3D5B0E1A249AED8A0005B48E /* CheckListTVC.h */,
+				3D5B0E1B249AED8A0005B48E /* CheckListTVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -186,6 +195,8 @@
 				3D3531AF22C6935D005A3C64 /* FamilyRec.m */,
 				3D91431722F337020081672A /* getTemps.h */,
 				3D91431822F337020081672A /* getTemps.m */,
+				3D1DCD9624A3F051002E1667 /* calObj.h */,
+				3D1DCD9724A3F051002E1667 /* calObj.m */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -193,7 +204,6 @@
 		3D65A43022C553CC00BA0BF9 /* Logger-Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				3D11BA0C1ED68A4600DB66FF /* Constants.h */,
 				3D65A43222C553F700BA0BF9 /* ConfigTVC.h */,
 				3D65A43A22C553F800BA0BF9 /* ConfigTVC.m */,
 				3D65A43622C553F700BA0BF9 /* editRecordTVC.h */,
@@ -342,6 +352,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D5B0E1C249AED8A0005B48E /* CheckListTVC.m in Sources */,
 				3D3531B322CC225D005A3C64 /* PartyDetailTVC.m in Sources */,
 				3D4F7A4F22C416CD00365D81 /* RulesVC.swift in Sources */,
 				3D65A42E22C5536F00BA0BF9 /* poolRecord.m in Sources */,
@@ -355,6 +366,7 @@
 				3D6DBCC622E4FB1F00430264 /* ShowCheckedInTVC.m in Sources */,
 				3D65A42D22C5536F00BA0BF9 /* GoogleSheet.m in Sources */,
 				3D65A42F22C5536F00BA0BF9 /* FileRoutines.m in Sources */,
+				3D1DCD9824A3F051002E1667 /* calObj.m in Sources */,
 				3D11BA3F1ED793DF00DB66FF /* FCell.m in Sources */,
 				3D1CE7A522E6136D00F9CA67 /* CheckInTVCellTableViewCell.m in Sources */,
 				3D91A9EE1ED3A55C003348ED /* NannyTVC.m in Sources */,
@@ -505,7 +517,7 @@
 			baseConfigurationReference = 969D46FFDED5A033E1A1E77F /* Pods-Lifeguard.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1.45;
+				CURRENT_PROJECT_VERSION = 1.8;
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -513,7 +525,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.99;
+				MARKETING_VERSION = 2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -525,7 +537,7 @@
 			baseConfigurationReference = 9DC5F724CBE550B0F016FE14 /* Pods-Lifeguard.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1.45;
+				CURRENT_PROJECT_VERSION = 1.8;
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -533,7 +545,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.99;
+				MARKETING_VERSION = 2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

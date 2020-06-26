@@ -36,12 +36,7 @@
     
     self.title = @"Nanny";
     self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.service = self.appDelegate.service;
-    
-    // work around, allows you to manually login to the google account
-    //NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];
-    //[[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
-    // end workaround
+    self.service = self.appDelegate.sheetService;
 
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter]
@@ -57,67 +52,33 @@
     [self readSheet];  // go read spreadsheet
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 // Get the id for the SSC budget sheet
 - (void)readSheet {
-    // get the Accounts tab of the SSC  budget sheet;
-    NSString *spreadsheetId = ACT_SHEET_ID;
-    NSString *range = @"Accounts!A4:AC";
-    
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetId
-                                                            range:range];
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+                                                            range:@"Accounts!A4:AQ130"];
     [self.service executeQuery:query
-                      delegate:self
-             didFinishSelector:@selector(displayResultWithTicket:finishedWithObject:error:)];
-}
-
-
-- (void)displayResultWithTicket:(GTLRServiceTicket *)ticket
-             finishedWithObject:(GTLRSheets_ValueRange *)result
-                          error:(NSError *)error {
-    if (error == nil) {
-        NSArray *rows = result.values;
-        if (rows.count > 0) {
-            self.nanny = nil;
-            int counter = 0;
-            int counterMax = 85;
-            if (rows.count < 85) {
-                counterMax = (int)rows.count;
-            }
-            for (NSArray *row in rows) {
-                if (row.count >= 27) {
+             completionHandler:^(GTLRServiceTicket *ticket,
+                                 GTLRSheets_ValueRange *result,
+                                 NSError *error) {
+        if (error == nil) {
+            NSArray *rows = result.values;
+            if (rows.count > 0) {
+                self.nanny = nil;
+                for (NSArray *row in rows) {
+                    if (row.count < 29)
+                        continue;
                     if (![row[27] isEqualToString: @""]) {
+                       
                         [self.nanny addObject:row];
                     }
                 }
-                counter++;
-                if (counter >= counterMax) {
-                    break;
-                }
             }
-        }
-        [self.tableView reloadData];
-    } else {
-        [self.appDelegate signInToGoogle:self];
-        /*
-        // Google sign-in; if not signed in, sign-in, else silently signin.
-  //[GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self; // pre 5.0 code
-        GIDSignIn *signIn = [GIDSignIn sharedInstance];  // post 5.0 code
-        [signIn setDelegate:self];
-        if ([GIDSignIn sharedInstance].currentUser == nil) {
-            [[GIDSignIn sharedInstance] signIn];
+            [self.tableView reloadData];
         } else {
-            [[GIDSignIn sharedInstance] signInSilently];
+            [self.appDelegate signInToGoogle:self];
         }
-        NSString *message = [NSString stringWithFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
-        [self showAlert:@"Error" message:message];
-         */
-    }
+    }];
 }
 
 // Helper for showing an alert
@@ -137,7 +98,6 @@
      }];
     [alert addAction:ok];
     [self presentViewController:alert animated:YES completion:nil];
-    
 }
 
 #pragma mark - Table view data source

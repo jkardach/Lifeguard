@@ -14,13 +14,7 @@
 
 @implementation PartyDetailTVC
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-}
-
 #pragma mark - Table view data source
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -28,7 +22,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 6;
+    return 10;
 }
 
 
@@ -54,6 +48,18 @@
         case 5:
             cell.textLabel.text = [NSString stringWithFormat:@"Duration: %@ hrs", self.rec.duration];
             break;
+        case 6:
+            cell.textLabel.text = [NSString stringWithFormat:@"Fees: %@ ", self.rec.fees];
+            break;
+        case 7:
+            cell.textLabel.text = [NSString stringWithFormat:@"Party Fee: %@ ", self.rec.partyFee];
+            break;
+        case 8:
+            cell.textLabel.text = [NSString stringWithFormat:@"Late Fee: %@ ", self.rec.lateFee];
+            break;
+        case 9:
+            cell.textLabel.text = [NSString stringWithFormat:@"Payment: %@ ", self.rec.payment];
+            break;
             
         default:
             break;
@@ -61,9 +67,6 @@
     if (indexPath.row == 0) {
         cell.textLabel.text = [NSString stringWithFormat:@"Name(memberID): %@(%@)", self.rec.name, self.rec.memberID];
     }
-    // Configure the cell...
-    
     return cell;
 }
-
 @end

@@ -181,7 +181,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 4;
 }
-
+// sec1=date, sec2/3=pool/spa, sec4 notes/button
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     int rows = 1;   // default sections 0, 3 have 1 row
@@ -191,6 +191,8 @@
         } else {
             rows = 2;
         }
+    } else if (section == 3) {
+        rows = 2;
     }
     return rows;
 }
@@ -331,5 +333,8 @@
     [self.tableView reloadData];
 }
 
+- (IBAction)EnterRecord:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end

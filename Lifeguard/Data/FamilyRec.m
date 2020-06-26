@@ -37,6 +37,9 @@ MFMailComposeViewControllerDelegate>
         _checked = NO;
         _droppedOff = NO;
         _updated = NO;      // determines if the record was updated and needs to be written back
+        _hasRes = NO;
+        _resStart = @"";
+        _resStop = @"";
     }
     return self;
 }

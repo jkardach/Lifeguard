@@ -35,11 +35,18 @@
     return _poolSheets;
 }
 
-- (GTLRSheetsService *)service {
-    if (!_service) {
-        _service = [[GTLRSheetsService alloc] init];
+- (GTLRSheetsService *) sheetService {
+    if (!_sheetService) {
+        _sheetService = [[GTLRSheetsService alloc] init];
     }
-    return _service;
+    return _sheetService;
+}
+
+- (GTLRCalendarService *) calendarService {
+    if (!_calendarService) {
+        _calendarService = [[GTLRCalendarService alloc] init];
+    }
+    return _calendarService;
 }
 
 // file save/restore routines
@@ -64,8 +71,9 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     }
     // project ID:  229185246988, sets the google sign-in's clintID, delegate and scope
     [GIDSignIn sharedInstance].clientID = @"229185246988-tdt93711nfb3t3cvrn8ooet4ibspnhe9.apps.googleusercontent.com";
-    [GIDSignIn sharedInstance].delegate = (id<GIDSignInDelegate>) self;
-    [GIDSignIn sharedInstance].scopes = [NSArray arrayWithObjects:kGTLRAuthScopeSheetsSpreadsheets, nil];
+    [GIDSignIn sharedInstance].scopes = [NSArray arrayWithObjects:kGTLRAuthScopeSheetsSpreadsheets,
+                                         kGTLRAuthScopeCalendar, @"https://www.googleapis.com/auth/calendar.events", nil];
+    [GIDSignIn sharedInstance].delegate = self;
     
     return YES;
 }
@@ -76,11 +84,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
             openURL:(NSURL *)url
             options:(NSDictionary<NSString *, id> *)options {
     NSLog(@"Did execute the google sign-in openURL delegate");
-    /*  // pre 5.0 googleSignin
-    return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                                      annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
-     */
+
     return [[GIDSignIn sharedInstance] handleURL:url];   // post
 }
 
@@ -94,12 +98,20 @@ didSignInForUser:(GIDGoogleUser *)user
           NSLog(@"The user has not signed in before or they have since signed out.");
         } else {
             NSLog(@"%@", error.localizedDescription);
-            self.service.authorizer = nil;
+            self.sheetService.authorizer = nil;
+            self.calendarService.authorizer = nil;
             return;
         }
     }
         
-    self.service.authorizer = user.authentication.fetcherAuthorizer;
+    self.sheetService.authorizer = user.authentication.fetcherAuthorizer;
+    
+    self.calendarService.shouldFetchNextPages = @YES;
+    self.calendarService.retryEnabled = @YES;
+    self.calendarService.maxRetryInterval = 15;
+    self.calendarService.APIKey = @"AIzaSyCIeQ4TEkWibnqemsXhR0xuedmrMfpZhFU";
+    self.calendarService.authorizer = user.authentication.fetcherAuthorizer;
+    
     self.theUser = user;  // make a copy of the user, so can use elsewhere
 
 

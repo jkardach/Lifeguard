@@ -54,15 +54,9 @@
     [super viewDidLoad];
     
     self.title = @"Parties";
-    
-    // work around, allows you to manually login to the google account
-  //  NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];
-   // [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
-    // end workaround
-    
-    // Initialize the Google Sheets API service & load existing credentials from the keychain if available.
+
     self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.service = self.appDelegate.service;
+    self.service = self.appDelegate.sheetService;
     
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter]
@@ -78,59 +72,36 @@
     [self readSheet];  // go read spreadsheet
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)readSheet {
-    NSString *spreadsheetId = ACT_SHEET_ID;
-    NSString *range = @"Parties!A2:O";  // get the parties sheet, range A2:J
-    
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetId
-                                                            range:range];
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+                                                            range:@"Parties!A2:V"];
     [self.service executeQuery:query
-                      delegate:self
-             didFinishSelector:@selector(displayResultWithTicket:finishedWithObject:error:)];
-}
-
-// take the sheet cells and put them into an array
-- (void)displayResultWithTicket:(GTLRServiceTicket *)ticket
-             finishedWithObject:(GTLRSheets_ValueRange *)result
-                          error:(NSError *)error
-{
-    if (error == nil) {
-        NSArray *rows = result.values;
-        if (rows.count > 0) {
-            self.partySheetArray = nil;
-            for (NSArray *row in rows) {
-                if (row.count > 1) {
-                    [self.partySheetArray addObject:row];  // add to membersOverDue Array
-                } else {
-                    break;
+             completionHandler:^(GTLRServiceTicket *ticket,
+                                 GTLRSheets_ValueRange *result,
+                                 NSError *error) {
+        if (error == nil) {
+            NSArray *rows = result.values;
+            if (rows.count > 0) {
+                self.parties = nil;
+                for (NSArray *row in rows) {
+                    if ((row.count > 1)) {
+                        PartyRec *member = [self convertToPartyObjects:row];
+                        if (member) {
+                            [self.parties addObject:member];
+                        }
+                    } else {
+                        break;
+                    }
                 }
             }
-        }
-        [self convertToPartyObjects];
-        [self.parties sortUsingSelector:@selector(compareDates:)];  // sort array by start Date
-        [self seperateParties];    // seperates into upcoming and past parties
-        [self.tableView reloadData];
-        //self.output.text = output;
-    } else {
-        [self.appDelegate signInToGoogle:self];  // moved to common signin code in app delegate
-        /*
-        // Google sign-in; if not signed in, sign-in, else silently signin.
-        [GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;
-        if ([GIDSignIn sharedInstance].currentUser == nil) {
-            [[GIDSignIn sharedInstance] signIn];
+            [self.parties sortUsingSelector:@selector(compareDates:)];
+            [self seperateParties];    // seperates into
+            [self.tableView reloadData];
         } else {
-            [[GIDSignIn sharedInstance] signInSilently];
+            [self.appDelegate signInToGoogle:self];
         }
-        NSString *message = [NSString stringWithFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
-        [self showAlert:@"Error" message:message];
-         */
-    }
+    }];
 }
 
 // Helper for showing an alert
@@ -256,74 +227,113 @@ heightForHeaderInSection:(NSInteger)section
     return cell;
 }
 
-- (void)convertToPartyObjects {
-    self.parties = nil; // clear out parties array records
-    for (NSArray *member in self.partySheetArray) {
-        if ([member[0] isEqualToString: @"Name"]) {
-            continue;      // this is the header, remove
-        }
-        PartyRec *rec = [[PartyRec alloc] init];
-        if (member.count > 0) {     // date
-            rec.name = member[0];
-        }
-        
-        if (member.count > 1) {     // member number
-            rec.memberID = member[1];
-            if ([rec.memberID isEqualToString:@""] || [rec.memberID isEqualToString:@"0"]) {
-                rec.memberID = @"NM";
-            } else {
-                rec.memberID = [NSString stringWithFormat:@"%@", rec.memberID];
-            }
-        }
-        if (member.count > 2) {
-            rec.invoiceDate = member[2];
-        }
-        if (member.count > 3) {
-            rec.partyOccassion = member[3];
-        }
-        if (member.count > 4) {
-            rec.partyDate = member[4];
-        }
-        if (member.count > 5) {     // date
-            rec.start = member[5];
-        }
-        if (member.count > 6) {     // date
-            rec.stop = member[6];
-        }
-        if (member.count > 7) {     // date
-            rec.partyTime = member[7];
-        }
-        
-        if (member.count > 8) {
-            rec.duration = member[8];
-        }
-        if (member.count > 9) {
-            rec.partyType = member[9];
-        }
-        if (member.count > 10) {     // type
-            rec.memberType = member[10];
-        }
-        
-        if (member.count > 11) {     // fees
-            rec.fees = member[11];
-        }
-        
-        if (member.count > 12) {     // email
-            rec.email = member[12];
-        }
-        
-        if (member.count > 13) {     // phone
-            rec.phone = member[13];
-        }
-        
-        if (member.count > 14) {     // payment
-            rec.payment = member[14];
-            if ([rec.payment isEqualToString: @""]) {
-                rec.payment = @"$0.00";
-            }
-        }
-        [self.parties addObject:rec];
+- (PartyRec *)convertToPartyObjects:(NSArray *) member {
+
+    if ([member[0] isEqualToString: @"Name"] || [member[0] isEqualToString:@""]) {
+        return nil;      // this is the header, remove
     }
+    
+    PartyRec *rec = [[PartyRec alloc] init];
+    if (member.count > 0) {     // date
+        rec.name = member[0];
+    }
+
+    if (member.count > 1) {     // member number
+        rec.memberID = member[1];
+        if ([rec.memberID isEqualToString:@""] || [rec.memberID isEqualToString:@"0"]) {
+            rec.memberID = @"NM";
+        } else {
+            rec.memberID = [NSString stringWithFormat:@"%@", rec.memberID];
+        }
+    }
+    if (member.count > 2) {
+        rec.invoiceDate = member[2];
+    }
+    if (member.count > 3) {
+        rec.partyOccassion = member[3];
+    }
+    if (member.count > 4) {
+        rec.partyDate = member[4];
+    }
+    if (member.count > 5) {     // date
+        rec.start = member[5];
+    }
+    if (member.count > 6) {     // date
+        rec.stop = member[6];
+    }
+    if (member.count > 7) {     // date
+        rec.partyTime = member[7];
+    }
+
+    if (member.count > 8) {
+        rec.duration = member[8];
+    }
+    if (member.count > 9) {
+        rec.partyType = member[9];
+    }
+    if (member.count > 10) {     // type
+        rec.memberType = member[10];
+    }
+
+    if (member.count > 11) {     // fees
+        
+        if ([member[11] isEqualToString: @""]) {
+          rec.fees = @"$0.00";
+        } else {
+            rec.fees = [NSString stringWithFormat:@"$%@", member[11]];
+        }
+    }
+    if (member.count > 12) {     // fees
+        if ([member[12] isEqualToString: @""]) {
+            rec.partyFee = @"$0.00";
+        } else {
+            rec.partyFee = [NSString stringWithFormat:@"$%@", member[12]];
+        }
+    }
+    if (member.count > 13) {     // fees
+        
+        if ([member[13] isEqualToString: @""]) {
+            rec.lateFee = @"$0.00";
+        } else {
+            rec.lateFee = [NSString stringWithFormat:@"$%@", member[13]];
+        }
+    }
+
+
+    if (member.count > 14) {     // email
+        rec.email = member[14];
+    }
+
+    if (member.count > 15) {     // phone
+        rec.phone = member[15];
+    }
+
+    if (member.count > 16) {     // payment
+        if ([member[16] isEqualToString: @""]) {
+            rec.payment = @"$0.00";
+        } else {
+            rec.payment = [NSString stringWithFormat:@"$%@", member[16]];
+        }
+    }
+
+    if (member.count > 17) {     // phone
+        rec.check = member[17];
+    }
+    if (member.count > 18) {     // phone
+        rec.received = member[18];
+    }
+    if (member.count > 19) {     // phone
+        rec.deposited = member[19];
+    }
+    if (member.count > 20) {     // phone
+        
+        if ([member[20] isEqualToString: @""]) {
+            rec.refund = @"$0.00";
+        } else {
+            rec.refund = member[20];
+        }
+    }
+    return rec;
 }
 
 - (BOOL)even:(int)value
@@ -345,15 +355,16 @@ heightForHeaderInSection:(NSInteger)section
 - (BOOL) isInFuture:(NSString *)partyDate {
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"yyyy/MM/dd HH:mm";
+    formatter.dateFormat = @"MM/dd/yyyy HH:mm:ss";
     NSDate *partyNSDate = [formatter dateFromString:partyDate];
     
     NSDate *now = [NSDate date];
     
     if ([now compare: partyNSDate] == NSOrderedAscending) {
         return YES;
+    } else {
+        return NO;
     }
-    return NO;
 }
 
  #pragma mark - Navigation

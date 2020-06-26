@@ -23,9 +23,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSString *partyType;
 @property(nonatomic, strong) NSString *memberType;
 @property(nonatomic, strong) NSString *fees;
+@property(nonatomic, strong) NSString *partyFee;
+@property(nonatomic, strong) NSString *lateFee;
 @property(nonatomic, strong) NSString *email;
 @property(nonatomic, strong) NSString *phone;
 @property(nonatomic, strong) NSString *payment;
+@property(nonatomic, strong) NSString *check;
+@property(nonatomic, strong) NSString *received;
+@property(nonatomic, strong) NSString *deposited;
+@property(nonatomic, strong) NSString *refund;
 @property(nonatomic) BOOL checked;
 
 - (NSComparisonResult)compareDates:(PartyRec *)record;

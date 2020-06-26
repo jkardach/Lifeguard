@@ -87,7 +87,7 @@
     [self.temps getDevices];
     
     self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.service = self.appDelegate.service;
+    self.service = self.appDelegate.sheetService;
 
     // work around, allows you to manually login to the google account
    //NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];

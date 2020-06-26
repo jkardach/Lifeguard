@@ -12,6 +12,7 @@
 #import "ShowCheckedInTVC.h"
 #import "getTemps.h"
 #import "AppDelegate.h"
+#import "calObj.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-w documentation"
@@ -19,9 +20,9 @@
 #import "ParticleCloud.h"
 #pragma clang diagnostic pop
 
-//@interface GuestTVC () <getTempsDelegate, GIDSignInUIDelegate>  // pre 5.0 google sign-in
 @interface GuestTVC () <getTempsDelegate>  // post 5.0 google sign-in
-@property (nonatomic, strong) GTLRSheetsService *service;  // to contain the shared auth
+@property (nonatomic, strong) GTLRSheetsService *sheetService;  // to contain the shared auth
+@property (nonatomic, strong) GTLRCalendarService *calendarService;  // to contain the shared auth
 @property (nonatomic, strong) GIDGoogleUser *theUser;   // to contain the shared user var
 @property (nonatomic, strong) AppDelegate *appDelegate;  // var for appDelegate
 
@@ -30,13 +31,14 @@
 @property (nonatomic) int guestRow;
 @property (nonatomic) int guestValue;
 @property (nonatomic, strong) NSDate *currentDate;
+@property (nonatomic, strong) NSMutableArray *todayCalEvents;
+@property (nonatomic, strong) NSMutableArray *calArray;
 
 @property (nonatomic, strong) FileRoutines *tools;
 @property (nonatomic, strong) FamilyRec *recToDelete;
 @property (nonatomic) int maxSections;
 @property (nonatomic, strong) getTemps *temps;
 @property (nonatomic, strong) FamilyRec *recToUpdate;
-//@property (nonatomic, strong) UIApplication *appDelegate;
 @end
 
 @implementation GuestTVC
@@ -56,6 +58,14 @@
         _checkedInToday = [[NSMutableArray alloc] init];
     }
     return _checkedInToday;
+}
+
+// array of today's calendar events
+- (NSMutableArray *)calArray {
+    if (!_calArray) {
+        _calArray = [[NSMutableArray alloc] init];
+    }
+    return _calArray;
 }
 
 - (FileRoutines *)tools {
@@ -85,7 +95,9 @@
     [super viewDidLoad];
     
     self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.service = self.appDelegate.service;
+    self.sheetService = self.appDelegate.sheetService;
+    self.calendarService = self.appDelegate.calendarService;
+    
     self.theUser = self.appDelegate.theUser;  // added post 5.0 google sign-in to have user data
     
     // observe orientation change notification, to reload table view when device rotated
@@ -108,9 +120,7 @@
     self.tableView.refreshControl = refreshControl;
     
     NSString *appVersionString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-    //self.title = @"Sign-in";
     [self.navigationItem setTitle:[NSString stringWithFormat:@"Saratoga Swim Club - SignIn, V%@", appVersionString]];
-                
 }
 
 // When the view appears, ensure that the Google Sheets API service is authorized, and perform API calls.
@@ -122,108 +132,70 @@
     self.temps.delegate = self;
     [self.temps getDevices];
     
-    // Google sign-in; if not signed in, sign-in, else silently signin.
     [self.appDelegate signInToGoogle:self];
 }
 
-//  This no longer needed, moved to AppDelegate
-- (void)signInToGoogle {
-    // Google sign-in; if not signed in, sign-in, else silently signin.
-    //[GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;  // pre 5.0 google sign-in
-    //[GIDSignIn sharedInstance].delegate = (id<GIDSignInDelegate>) self;
-    [GIDSignIn sharedInstance].presentingViewController = self;
-    if ([GIDSignIn sharedInstance].currentUser == nil) {
-        [[GIDSignIn sharedInstance] signIn];
-    } else {
-        // [[GIDSignIn sharedInstance] signInSilently];  // pre 5.0 google sign-in
-         [[GIDSignIn sharedInstance] restorePreviousSignIn];
-    }
-}
- 
-
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear: animated];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-// this either deletes (del = YES) or sign's out (del = NO) the record from the signIn sheet
-// must first get sign-in records, find row/record, then write back.
-// results is in callback "displayDelSignIn"
+// removes the record (FamilyRec) from the Accounts.SignIn spreadsheet
 - (void) removeRecFromSignIn:(FamilyRec *)rec
 {
     self.recToDelete = rec;
-    // get the Accounts tab of the SSC sheet;
-    NSString *spreadsheetId = ACT_SHEET_ID;
-    NSString *range = @"SignIn!A2:N";
-    
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetId
-                                                            range:range];
-    [self.service executeQuery:query
-                      delegate:self
-             didFinishSelector:@selector(displaySignInResult:finishedWithObject:error:)];
-}
-
-// callback routine for removeRecFromSignIn
-- (void)displaySignInResult:(GTLRServiceTicket *)ticket
-      finishedWithObject:(GTLRSheets_ValueRange *)result
-                   error:(NSError *)error {
-    int rowOfRec = 0;
-    if (error == nil) {
-        NSArray *rows = result.values;
-        if (rows.count > 0) {
-            for (NSArray *row in rows) {
-                if (row.count > 1) {
-                    FamilyRec *rec = [self convertToSignIn:row];
-                    if ((rec.memberID == self.recToDelete.memberID) && (rec.lastName == self.recToDelete.lastName)) {
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+                                                            range:@"SignIn!A2:N"];
+    
+    [self.sheetService executeQuery:query
+                  completionHandler:^(GTLRServiceTicket *ticket,
+                                      GTLRSheets_ValueRange *result,
+                                      NSError *error) {
+        int rowOfRec = 0;
+        if (error == nil) {
+            NSArray *rows = result.values;
+            if (rows.count > 0) {
+                for (NSArray *row in rows) {
+                    if (row.count > 1) {
+                        FamilyRec *rec = [self convertToSignIn:row];
+                        if ((rec.memberID == self.recToDelete.memberID) && (rec.lastName == self.recToDelete.lastName)) {
+                            break;
+                        }
+                    } else {
                         break;
                     }
-                } else {
-                    break;
+                    rowOfRec++;
                 }
-                rowOfRec++;
             }
+            rowOfRec += 2;
+            
+            // now clear this record in the sign-in sheet
+            GTLRSheets_ClearValuesRequest *clear = [[GTLRSheets_ClearValuesRequest alloc] init];
+            NSString *clearRange = [NSString stringWithFormat:@"SignIn!A%D:M%D", rowOfRec, rowOfRec];
+            
+            GTLRSheetsQuery_SpreadsheetsValuesClear *query =
+            [GTLRSheetsQuery_SpreadsheetsValuesClear queryWithObject:clear
+                                                       spreadsheetId:ACT_SHEET_ID
+                                                               range:clearRange];
+            
+            [self.sheetService executeQuery:query completionHandler:^(GTLRServiceTicket *ticket,
+                                                                      GTLRSheets_ValueRange *result,
+                                                                      NSError *error) {
+                if (error == nil) {
+                    [self readLog];
+                } else {
+                    NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
+                    [self showAlert:@"Error" message:message];
+                }
+            }];
+
+        } else {
+            NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
+            [self showAlert:@"Error" message:message];
         }
-        rowOfRec += 2;
-        
-        // now clear this record in the sign-in sheet
-        NSString *spreadsheetId = ACT_SHEET_ID;
-        
-        GTLRSheets_ClearValuesRequest *object = [[GTLRSheets_ClearValuesRequest alloc] init];
-        NSString *clearRange = [NSString stringWithFormat:@"SignIn!A%D:M%N", rowOfRec, rowOfRec];
-        
-        GTLRSheetsQuery_SpreadsheetsValuesClear *query =
-        [GTLRSheetsQuery_SpreadsheetsValuesClear queryWithObject:object
-                                                   spreadsheetId:spreadsheetId
-                                                           range:clearRange];
-        [self.service executeQuery:query
-                          delegate:self
-                 didFinishSelector:@selector(displayClearResult:finishedWithObject:error:)];
-
-    } else {
-        NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
-        [self showAlert:@"Error" message:message];
-    }
-}
-
-- (void)displayClearResult:(GTLRServiceTicket *)ticket
-         finishedWithObject:(GTLRSheets_ValueRange *)result
-                      error:(NSError *)error
-{
-    NSLog(@"clear Result: %@", error);
-    [self readLog];
+    }];
 }
 
 // this writes family record to the signIn tab
 // results is in callback "displayUpdateResultWithWriteGuest"
 - (void)writeGuest:(FamilyRec *)member
 {
-    NSString *spreadsheetId = ACT_SHEET_ID;
-    NSString *range = [NSString stringWithFormat:@"SignIn!A1"];
     GTLRSheets_ValueRange *value = [[GTLRSheets_ValueRange alloc] init];
     NSNumber *guestNum = [NSNumber numberWithInt:member.guests];
     NSNumber *memberNum = [NSNumber numberWithInt:member.members];
@@ -246,95 +218,79 @@
 
     GTLRSheetsQuery_SpreadsheetsValuesAppend *query =
     [GTLRSheetsQuery_SpreadsheetsValuesAppend queryWithObject:value
-                                                spreadsheetId:spreadsheetId
-                                                        range:range];
+                                                spreadsheetId:ACT_SHEET_ID
+                                                        range:@"SignIn!A1"];
     query.valueInputOption = @"USER_ENTERED";
-    
-    [self.service executeQuery:query
-                      delegate:self
-             didFinishSelector:@selector(displayUpdateResultWithWriteGuest:finishedWithObject:error:)];
+
+    [self.sheetService executeQuery:query
+                  completionHandler:^(GTLRServiceTicket *ticket,
+                                      GTLRSheets_ValueRange *result,
+                                      NSError *error) {
+        if (error != nil) {
+            NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
+            [self showAlert:@"Error" message:message];
+        } else {
+            [self readLog];
+        }
+    }];
 }
 
-// callback routine for writing family rec to signIn sheet
-- (void)displayUpdateResultWithWriteGuest:(GTLRServiceTicket *)ticket
-                   finishedWithObject:(GTLRSheets_ValueRange *)result
-                                error:(NSError *)error {
-    if (error != nil) {
-        NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
-        [self showAlert:@"Error" message:message];
-    } else {
-        [self readLog];
-    }
-}
 
 // this reads the record from the SignIn sheet on the account spreadsheet
 - (void)readLog {
-    NSString *spreadsheetId = ACT_SHEET_ID;
-    NSString *range = @"SignIn!A2:N";
-    
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetId
-                                                            range:range];
-    [self.service executeQuery:query
-                      delegate:self
-             didFinishSelector:@selector(displayResultWithLog:finishedWithObject:error:)];
-}
-
-// call back for reading the sign-in records from "SignIn" tab
-- (void)displayResultWithLog:(GTLRServiceTicket *)ticket
-                finishedWithObject:(GTLRSheets_ValueRange *)result
-                             error:(NSError *)error {
-    if (error == nil) {
-        NSArray *rows = result.values;
-        if (rows.count > 0) {
-            self.checkedInToday = nil;
-            int arrayRow = 0;
-            for (NSArray *row in rows) {
-                if (row.count > 1) {
-                    FamilyRec *rec = [self convertToSignIn:row];
-                    if (rec) {
-                        rec.signInRow = arrayRow+2;                 // zero based row
-                        [self.checkedInToday addObject:rec];  // add to checkedInToday Array
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+                                                            range:@"SignIn!A2:N"];
+    [self.sheetService executeQuery:query
+                  completionHandler:^(GTLRServiceTicket *ticket,
+                                      GTLRSheets_ValueRange *result,
+                                      NSError *error) {
+        if (error == nil) {
+            NSArray *rows = result.values;
+            if (rows.count > 0) {
+                self.checkedInToday = nil;
+                int arrayRow = 0;
+                for (NSArray *row in rows) {
+                    if (row.count > 1) {
+                        FamilyRec *rec = [self convertToSignIn:row];
+                        if (rec) {
+                            rec.signInRow = arrayRow+2;                 // zero based row
+                            [self.checkedInToday addObject:rec];  // add to checkedInToday Array
+                        }
                     }
+                    arrayRow++;
                 }
-                arrayRow++;
             }
+            [self readbatchSheet];
+        } else {
+            NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
+            [self showAlert:@"Error" message:message];
         }
-        [self readbatchSheet];
-    } else {
-        NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
-        [self showAlert:@"Error" message:message];
-    }
+    }];
 }
 
 // defined in Constants.h: ACT_SHEET_ID = 1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ
 // get values from Members sheet (PM, Lease, Trial)
 - (void)readbatchSheet {
-    // get the Members tab of the SSC sheet;
-    NSString *spreadsheetId = ACT_SHEET_ID;
-    NSString *range1 = @"Members!A2:R86";       // PM
-    NSString *range2 = @"Members!A89:R99";     // Lease
-    NSString *range3 = @"Members!A127:R139";    // Trial
-    
     GTLRSheetsQuery_SpreadsheetsValuesGet *query1 =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetId
-                                                            range:range1];
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+                                                            range:@"Members!A2:R86"];  // PM
     GTLRSheetsQuery_SpreadsheetsValuesGet *query2 =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetId
-                                                            range:range2];
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+                                                            range:@"Members!A89:R99"];  // Lease
     GTLRSheetsQuery_SpreadsheetsValuesGet *query3 =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetId
-                                                            range:range3];
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+                                                            range:@"Members!A127:R139"];  // Trial
     GTLRBatchQuery *batchQuery = [GTLRBatchQuery batchQuery];
     [batchQuery addQuery:query1];
     [batchQuery addQuery:query2];
     [batchQuery addQuery:query3];
     
-    [self.service executeQuery:batchQuery
+    [self.sheetService executeQuery:batchQuery
         completionHandler:^(GTLRServiceTicket *callbackTicket,
                             GTLRBatchResult *batchResult,
-                            NSError *callbackError) {
-            if (callbackError == nil) {
+                            NSError *error) {
+            if (error == nil) {
                 NSDictionary *successes = batchResult.successes;
                 self.families = nil;  // clear out array
                 for (NSString *requestID in successes) {
@@ -362,106 +318,185 @@
                 // Sort your array
                 self.families = [NSMutableArray arrayWithArray:[self.families sortedArrayUsingDescriptors:sortDescriptors]];
                 [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+                
+                [self readTodaysResCal];
+
+            } else {
+                NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
+                [self showAlert:@"Error" message:message];
+            }
+        }];
+}
+
+- (void)readSheet {
+    GTLRSheetsQuery_SpreadsheetsValuesGet *query =
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+                                                            range:@"Accounts!A3:AQ"];
+    [self.sheetService executeQuery:query
+                  completionHandler:^(GTLRServiceTicket *ticket,
+                                      GTLRSheets_ValueRange *result,
+                                      NSError *error) {
+        if (error == nil) {
+            NSArray *rows = result.values;
+            if (rows.count > 0) {
+                self.families = nil;
+                for (NSArray *row in rows) {
+                    if (row.count > 1) {
+                        FamilyRec *rec = [self convertToFamObj: row];  // converts to family object
+                        if (rec)
+                            [self.families addObject:rec];  // add to famalies Array
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            [self readTodaysResCal];
+            //[self.tableView reloadData];
+            //self.output.text = output;
+        } else {
+            NSString *message = [NSString stringWithFormat:@"Error getting display result sheet data: %@\n", error.localizedDescription];
+            [self showAlert:@"Error" message:message];
+        }
+    }];
+}
+
+
+- (void)readTodaysResCal {
+    // get the Accounts tab of the SSC sheet;
+    NSString *calId = @"lssmnscr8a49bcg51knvtgo234@group.calendar.google.com";
+    
+    // create events list query
+    GTLRCalendarQuery_EventsList *query = [GTLRCalendarQuery_EventsList queryWithCalendarId:calId];
+    query.maxResults = 40;
+    NSArray *times = [self getDateTime];
+    query.timeMin = times[0];   // add today at 8AM
+    query.timeMax = times[1];  // to today at 11PM
+    
+    query.executionParameters.shouldFetchNextPages = @YES;
+    query.executionParameters.retryEnabled = @YES;
+    query.executionParameters.maxRetryInterval = @15;
+    query.singleEvents = YES;
+    query.orderBy = kGTLRCalendarOrderByStartTime;
+    
+    [self.calendarService executeQuery:query completionHandler:^(GTLRServiceTicket *ticket,
+                                                                 GTLRCalendar_Events *events,
+                                                                 NSError *error) {
+        if (error == nil) {
+            if (events.items.count > 0) {
+                self.calArray = nil;
+                calObj *cal;
+                for (GTLRCalendar_Event *item in events) {
+                    cal = [[calObj alloc] init];
+                    cal.memberId = [item.summary stringByReplacingOccurrencesOfString:@"#" withString:(@"")];
+                    cal.end = [self stringFromDateTime: [item.end valueForKey:@"dateTime"]];
+                    cal.start = [self stringFromDateTime: [item.start valueForKey:@"dateTime"]];
+                    [self.calArray addObject:cal];
+                }
+                [self addResToFamiles];
+                
+                // sort the families array such that (checked in on top and alphabetical, then rest alphabetical)
+                // Set ascending:NO so that "YES" would appear ahead of "NO"
+                NSSortDescriptor *boolDescr = [[NSSortDescriptor alloc] initWithKey:@"checked" ascending:NO];
+                // String are alphabetized in ascending order
+                NSSortDescriptor *strDescr = [[NSSortDescriptor alloc] initWithKey:@"lastName" ascending:YES];
+                // set assending:No so that "YES" would appear ahead of "NO"
+                NSSortDescriptor *boolDesc2 = [[NSSortDescriptor alloc] initWithKey:@"hasRes" ascending:NO];
+                // Combine the two
+                NSArray *sortDescriptors = @[boolDesc2, boolDescr, strDescr];
+                // Sort your array
+                self.families = [NSMutableArray arrayWithArray:[self.families sortedArrayUsingDescriptors:sortDescriptors]];
+                self.checkedInToday = [NSMutableArray arrayWithArray:[self.checkedInToday sortedArrayUsingDescriptors:sortDescriptors]];
+                
                 [self.tableView reloadData];
                 [self.tableView.refreshControl endRefreshing];
+                
                 // scroll to top of tableview
                 if (@available(iOS 11.0, *)) {
                     [self.tableView setContentOffset:CGPointMake(0, -self.tableView.adjustedContentInset.top) animated:YES];
                 } else {
                     [self.tableView setContentOffset:CGPointMake(0, -self.tableView.contentInset.top) animated:YES];
                 }
-//                NSDictionary *failures = batchResult.failures;
-//                for (NSString *requestID in failures) {
-//                    GTLRErrorObject *errorObj = [failures objectForKey:requestID];
-//                }
-            } else {
-                // Here, callbackError is non-nil so the execute failed:
-                // no success or failure results were obtained from the server.
             }
-        }];
+        } else {
+            NSString *message = [NSString stringWithFormat:@"Error getting display result sheet data: %@\n", error.localizedDescription];
+            [self showAlert:@"Error" message:message];
+        }
+    }];
 }
 
-- (void)readSheet {
-    // get the Accounts tab of the SSC sheet;
-    NSString *spreadsheetId = ACT_SHEET_ID;
-    NSString *range = @"Accounts!A3:AQ";
+- (NSString *) stringFromDateTime:(GTLRDateTime *) date {
     
-    GTLRSheetsQuery_SpreadsheetsValuesGet *query =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:spreadsheetId
-                                                            range:range];
-    [self.service executeQuery:query
-                      delegate:self
-             didFinishSelector:@selector(displayResultWithReadSheet:finishedWithObject:error:)];
+    NSString *dateStr = @"";
+    NSDateComponents *dateComp = date.dateComponents;
+     dateStr = (NSString *)[NSString stringWithFormat:@"%ld/%lD/%lD %lD:%lD:%lD",
+               dateComp.month, dateComp.day, dateComp.year, dateComp.hour, dateComp.minute, dateComp.second];
+    return (NSString *)dateStr;
 }
 
-// call back for reading the account sheet
-- (void)displayResultWithReadSheet:(GTLRServiceTicket *)ticket
-             finishedWithObject:(GTLRSheets_ValueRange *)result
-                          error:(NSError *)error {
-    if (error == nil) {
-        NSArray *rows = result.values;
-        if (rows.count > 0) {
-            self.families = nil;
-            for (NSArray *row in rows) {
-                if (row.count > 1) {
-                    FamilyRec *rec = [self convertToFamObj: row];  // converts to family object
-                    if (rec)
-                        [self.families addObject:rec];  // add to famalies Array
-                } else {
-                    break;
-                }
+// helper function to add time to date and put in GTLRDateTime format
+// Utility routine to make a GTLRDateTime object for sometime today
+- (NSArray *)getDateTime {
+    
+    NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat: @"yyyy-MM-dd"];
+    NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
+    
+    NSString *startDate = [NSString stringWithFormat:@"%@T00:00:00-07:00", dateString];
+    NSString *stopDate = [NSString stringWithFormat:@"%@T23:00:00-07:00", dateString];
+    
+    GTLRDateTime *startDateTime = [GTLRDateTime dateTimeWithRFC3339String:startDate];
+    GTLRDateTime *endDateTime = [GTLRDateTime dateTimeWithRFC3339String:stopDate];
+    return @[startDateTime, endDateTime];
+}
+
+// add reservation values to Family and checked-in arrays
+- (void)addResToFamiles {
+    for (int i = 0; i < self.families.count; i++) {
+        FamilyRec *rec = self.families[i];
+        for (calObj *cal in self.calArray) {
+            if ([cal.memberId isEqualToString:rec.memberID]) {
+                rec.hasRes = YES;
+                rec.resStart = cal.start;
+                rec.resStop = cal.end;
             }
         }
-        // sort the families array such that (checked in on top and alphabetical, then rest alphabetical)
-        // Set ascending:NO so that "YES" would appear ahead of "NO"
-        NSSortDescriptor *boolDescr = [[NSSortDescriptor alloc] initWithKey:@"checked" ascending:NO];
-        // String are alphabetized in ascending order
-        NSSortDescriptor *strDescr = [[NSSortDescriptor alloc] initWithKey:@"lastName" ascending:YES];
-        // Combine the two
-        NSArray *sortDescriptors = @[boolDescr, strDescr];
-        // Sort your array
-        self.families = [NSMutableArray arrayWithArray:[self.families sortedArrayUsingDescriptors:sortDescriptors]];
-            
-        [self.tableView reloadData];
-        //self.output.text = output;
-    } else {
-        NSString *message = [NSString stringWithFormat:@"Error getting display result sheet data: %@\n", error.localizedDescription];
-        [self showAlert:@"Error" message:message];
     }
+    for (int i = 0; i < self.checkedInToday.count; i++) {
+        FamilyRec *rec = self.checkedInToday[i];
+        for (calObj *cal in self.calArray) {
+            if ([cal.memberId isEqualToString:rec.memberID]) {
+                rec.hasRes = YES;
+                rec.resStart = cal.start;
+                rec.resStop = cal.end;
+            }
+        }
+    }
+    self.calArray = nil;
 }
 
 // this creates an array which updates the specified row
 - (void)updateRecord:(FamilyRec *)recordToUpdate
 {
-    
-    NSString *spreadsheetId = ACT_SHEET_ID;
-    NSString *range = [NSString stringWithFormat:@"SignIn!A%d", recordToUpdate.signInRow];
-    
     GTLRSheets_ValueRange *value = [[GTLRSheets_ValueRange alloc] init];
     value.values = [self createValueArrayFromFamilyRecord:recordToUpdate];
     
     GTLRSheetsQuery_SpreadsheetsValuesUpdate *query =
     [GTLRSheetsQuery_SpreadsheetsValuesUpdate queryWithObject:value
-                                                spreadsheetId:spreadsheetId
-                                                        range:range];
+                                                spreadsheetId:ACT_SHEET_ID
+                                                        range:[NSString stringWithFormat:@"SignIn!A%d", recordToUpdate.signInRow]];
     query.valueInputOption = @"USER_ENTERED";
-    
-    [self.service executeQuery:query
-                      delegate:self
-             didFinishSelector:@selector(displayUpdateRecordResultWithTicket:finishedWithObject:error:)];
-}
-
-
-// callback routine for writing the value to the given row, indicates an error (if one)
-- (void)displayUpdateRecordResultWithTicket:(GTLRServiceTicket *)ticket
-                   finishedWithObject:(GTLRSheets_ValueRange *)result
-                                error:(NSError *)error {
-    if (error != nil) {
-        NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
-        [self showAlert:@"Error" message:message];
-    } else {
-        [self readSheet];
-    }
+    [self.sheetService executeQuery:query
+                  completionHandler:^(GTLRServiceTicket *ticket,
+                                      GTLRSheets_ValueRange *result,
+                                      NSError *error) {
+        if (error == nil) {
+            [self readSheet];
+        } else {
+            NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
+            [self showAlert:@"Error" message:message];
+        }
+    }];
 }
 
 - (NSArray *) createValueArrayFromFamilyRecord:(FamilyRec *)record
@@ -625,11 +660,16 @@ viewForHeaderInSection:(NSInteger)section
         // make odd rows light blue
 
     } else {
-        if (member.eligable) {
-            cell.imageView.image = [UIImage imageNamed:@"SwimClub10mm"];
-        } else {
+        if (!member.eligable) {
             cell.imageView.image = [UIImage imageNamed:@"xSwimClub10mm"];
+        } else {
+            if (member.hasRes) {
+                cell.imageView.image = [UIImage imageNamed:@"gSwimClub10mm"];
+            } else {
+                cell.imageView.image = [UIImage imageNamed:@"SwimClub10mm"];
+            }
         }
+        
         if (member.checked) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         } else {
@@ -714,8 +754,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     if((indexPath.section == 0) || ((indexPath.section == 1)&&(self.maxSections==3)))
         return;
     FamilyRec *member = self.families[indexPath.row];
-    
-    
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@(%@) Family",
                                                                             member.lastName, member.memberID]
                                                                    message:@"How many members and guests are you checking in?"
@@ -742,7 +780,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         UITextField *members = textfields[0];
         UITextField *guests = textfields[1];
         member.checked = YES;
-        NSLog(@"%@",guests.text);
+        //NSLog(@"%@",guests.text);
         member.members = [members.text intValue];
         member.guests = [guests.text intValue];
         [self.checkedInToday addObject:member];
@@ -758,7 +796,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         UITextField *members = textfields[0];
         UITextField *guests = textfields[1];
         member.checked = YES;
-        NSLog(@"%@",guests.text);
+        //NSLog(@"%@",guests.text);
         member.members = [members.text intValue];
         member.guests = [guests.text intValue];
         [self getNamesOfKids:(FamilyRec *) member];
@@ -804,7 +842,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         member.optPhone = optPhone.text;
         member.checked = YES;
         member.droppedOff = YES;
-        NSLog(@"%@",kids.text);
+        //NSLog(@"%@",kids.text);
         [self writeGuest: member];
         [self.tableView reloadData];
     }]];
@@ -824,46 +862,46 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         }
     }
     FamilyRec *rec = [[FamilyRec alloc] init];  // create a record
-    if (input.count > 0) {
+    if (input.count > 0) {      // date
         rec.date = input[0];
     }
-    if (input.count > 1) {     // member number
+    if (input.count > 1) {     // lastname
         rec.lastName = input[1];
     }
-    if (input.count > 2) {     // member number
+    if (input.count > 2) {     // member id
         rec.memberID = input[2];
     }
-    if (input.count > 3) {
+    if (input.count > 3) {      //
         rec.members = [(NSString *)input[3] intValue];
     }
-    if (input.count > 4) {     // member number
+    if (input.count > 4) {     // number of guests
         rec.guests = [(NSString *)input[4] intValue];
     }
-    if (input.count > 5) {     // member number
+    if (input.count > 5) {     // number of kids dropped off
         rec.kidsDroppedOff = input[5];
     }
-    if (input.count > 6) {     // member number
+    if (input.count > 6) {     // number of family members
         rec.familyMembers = input[6];
     }
-    if (input.count > 7) {     // member number
+    if (input.count > 7) {     // membership type
         rec.memType = input[7];
     }
-    if (input.count > 8) {     // member number
+    if (input.count > 8) {     // member phone number
         rec.phone = input[8];
     }
-    if (input.count > 9) {     // member number
+    if (input.count > 9) {     // member email
         rec.email = input[9];
     }
-    if (input.count > 10) {     // member number
+    if (input.count > 10) {     // member phone number 2
         rec.phone2 = input[10];
     }
-    if (input.count > 11) {     // member number
+    if (input.count > 11) {     // member email 2
         rec.email2 = input[11];
     }
-    if (input.count > 12) {     // member number
+    if (input.count > 12) {     // member optional phone
         rec.optPhone = input[12];
     }
-    if (input.count > 13) {     // member number
+    if (input.count > 13) {     // member eligible for reservations
         
         if ([input[13] isEqualToString:@"YES"]) {
             rec.eligable = YES;
@@ -872,12 +910,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         }
     }
     rec.checked = YES;
-    if (![rec.kidsDroppedOff isEqualToString:@""]) {
+    if (![rec.kidsDroppedOff isEqualToString:@""]) {  // kids dropped off?
         rec.droppedOff = YES;
     }
     return rec;
 }
 
+// indicates if this record is from today (current date)
 -(BOOL) isToday:(NSDate *)aDate {
     NSCalendar *cal = [NSCalendar currentCalendar];
     NSDateComponents *components = [cal components:(NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
@@ -889,6 +928,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     return isToday;
 }
 
+// converts a string date to the yyyy-MM-dd HH:mm format
 - (NSDate *)stringToDate:(NSString *)dateStr {
     // Convert string to date object
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -896,6 +936,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     return [dateFormat dateFromString:dateStr];
 }
 
+// clear the checked-in checkmarks fromthe records
 - (void) clearCheckmarks {
     for (FamilyRec *rec in self.families) {
         rec.checked = NO;
@@ -905,12 +946,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 }
 
-// converts memberSheet record to family object
+// converts memberSheet record to family object, remove CL, PL records
 - (FamilyRec *) convertToFamObj: (NSArray *)member {
     FamilyRec *rec;
     if (member[0]) {
         if (([member[0] isEqualToString: @"Certificate Number"]) ||
-            [member[2] isEqualToString:@"CL"]) {
+            [member[2] isEqualToString:@"CL"] || [member[2] isEqualToString:@"PL"]) {
             return nil;      // this is the header, remove
         } else {
             rec = [[FamilyRec alloc] init];
@@ -978,10 +1019,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         self.recToUpdate = (FamilyRec *) self.checkedInToday[path.row];  // grab the record being updated
         
         ShowCheckedInTVC *sciTVC = [segue destinationViewController];
-        sciTVC.title = self.recToUpdate.lastName;
+        sciTVC.title = [NSString stringWithFormat:@"%@(%@, %@)", self.recToUpdate.lastName, self.recToUpdate.memType, self.recToUpdate.memberID];
         sciTVC.member = self.recToUpdate;
     }
-
 }
 
 // This is a notification executed after successful signIn
@@ -1011,6 +1051,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.temps refreshTemps];  // refresh the particle.io temperatures
     [self readLog]; //call function you want
+    [refreshControl endRefreshing];
 }
 
 - (IBAction)reLogin:(UIBarButtonItem *)sender

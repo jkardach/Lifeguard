@@ -2,6 +2,7 @@ platform :ios, '13.0'
 
 target 'Lifeguard' do
     pod 'GoogleAPIClientForREST/Sheets', '~> 1.1.1'
+    pod 'GoogleAPIClientForREST/Calendar'
     pod 'Particle-SDK'
     pod 'GoogleSignIn'
 end

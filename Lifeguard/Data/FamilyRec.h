@@ -32,6 +32,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic) BOOL checked;
 @property(nonatomic) BOOL updated;
 
+@property(nonatomic) BOOL hasRes;
+@property(nonatomic, strong) NSString *resStart;
+@property(nonatomic, strong) NSString *resStop;
+
+
 - (void)sendSMS:(id)viewController phone1:(int)phone1;
 - (void)call:(id)viewController phone1:(BOOL)phone1;
 - (void)sendEmail:(id)viewController subject:(NSString *)subject email1:(BOOL)email1;

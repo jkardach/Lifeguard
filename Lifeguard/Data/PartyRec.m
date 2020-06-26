@@ -24,9 +24,15 @@
         _partyType = @"";
         _memberType = @"";
         _fees = @"";
+        _partyFee = @"";
+        _lateFee = @"";
         _email = @"";
         _phone = @"";
         _payment = @"";
+        _check = @"";
+        _received = @"";
+        _deposited = @"";
+        _refund = @"";
     }
     return self;
 }

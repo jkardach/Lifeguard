@@ -38,7 +38,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *button2;
 @property (weak, nonatomic) IBOutlet UIButton *button3;
 @property (weak, nonatomic) IBOutlet UIButton *button4;
-
+@property (weak, nonatomic) IBOutlet UILabel *famOrRes;
 @end
 
 @implementation ShowCheckedInTVC
@@ -85,10 +85,17 @@
     self.kidsDroppedOffTF.text = self.member.kidsDroppedOff;
     
     self.dateTimeCheckedIn.text = self.member.date;
-    self.familyTypeId.text = [NSString stringWithFormat:@"%@(%@, %@)",
-                              self.member.lastName,
-                              self.member.memType,
-                              self.member.memberID];
+    if (self.member.hasRes) {
+        self.familyTypeId.text = [NSString stringWithFormat:@"%@",
+                                  self.member.resStart];
+        self.famOrRes.text = @"Reservation";
+    } else {
+        self.familyTypeId.text = [NSString stringWithFormat:@"%@(%@, %@)",
+                                  self.member.resStart,
+                                  self.member.memType,
+                                  self.member.memberID];
+        self.famOrRes.text = @"Family(memType, id)";
+    }
     self.totalFamilyMembers.text = self.member.familyMembers;
     self.membersAttending.delegate = self;
     self.guestsAttending.delegate = self;
@@ -205,5 +212,4 @@
         [self.member sendSMS:self phone1:3];
     }
 }
-
 @end
