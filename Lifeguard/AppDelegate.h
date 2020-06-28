@@ -22,6 +22,7 @@
 @property (nonatomic, strong) GIDGoogleUser *theUser;
 
 - (void)signInToGoogle: (id) delegate;
+- (void)reSignInToGoogle: (id) delegate;
 - (void)saveModel;
 
 @end

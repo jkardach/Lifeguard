@@ -144,7 +144,15 @@ didDisconnectWithUser:(GIDGoogleUser *)user
     } else {
         [signIn signIn];
     }
+}
+
+- (void)reSignInToGoogle: (id) delegate {
+    // Google sign-in; if prviously signed in, do restore.
     
+    GIDSignIn *signIn = [GIDSignIn sharedInstance];
+    signIn.presentingViewController = delegate;
+    [signIn signOut];
+    [signIn signIn];
 }
 
 - (void)saveModel

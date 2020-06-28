@@ -17,7 +17,6 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-w documentation"
 #import "GTLRSheets.h"
-#import "ParticleCloud.h"
 #pragma clang diagnostic pop
 
 @interface GuestTVC () <getTempsDelegate>  // post 5.0 google sign-in
@@ -296,7 +295,6 @@
                 for (NSString *requestID in successes) {
                     GTLRSheets_ValueRange  *result = [successes objectForKey:requestID];
                     NSArray *rows = result.values;
-                    ///
                     if (rows.count > 0) {
                         
                         for (NSArray *row in rows) {
@@ -310,15 +308,6 @@
                         }
                     }
                 }
-                NSSortDescriptor *boolDescr = [[NSSortDescriptor alloc] initWithKey:@"checked" ascending:NO];
-                // String are alphabetized in ascending order
-                NSSortDescriptor *strDescr = [[NSSortDescriptor alloc] initWithKey:@"lastName" ascending:YES];
-                // Combine the two
-                NSArray *sortDescriptors = @[boolDescr, strDescr];
-                // Sort your array
-                self.families = [NSMutableArray arrayWithArray:[self.families sortedArrayUsingDescriptors:sortDescriptors]];
-                [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
-                
                 [self readTodaysResCal];
 
             } else {
@@ -397,13 +386,15 @@
                 
                 // sort the families array such that (checked in on top and alphabetical, then rest alphabetical)
                 // Set ascending:NO so that "YES" would appear ahead of "NO"
-                NSSortDescriptor *boolDescr = [[NSSortDescriptor alloc] initWithKey:@"checked" ascending:NO];
+                NSSortDescriptor *checkedBool = [[NSSortDescriptor alloc] initWithKey:@"checked" ascending:NO];
+                
+                NSSortDescriptor *resStart = [[NSSortDescriptor alloc] initWithKey:@"resStart" ascending:YES];
                 // String are alphabetized in ascending order
-                NSSortDescriptor *strDescr = [[NSSortDescriptor alloc] initWithKey:@"lastName" ascending:YES];
+                NSSortDescriptor *lastName = [[NSSortDescriptor alloc] initWithKey:@"lastName" ascending:YES];
                 // set assending:No so that "YES" would appear ahead of "NO"
-                NSSortDescriptor *boolDesc2 = [[NSSortDescriptor alloc] initWithKey:@"hasRes" ascending:NO];
+                NSSortDescriptor *hasResBool = [[NSSortDescriptor alloc] initWithKey:@"hasRes" ascending:NO];
                 // Combine the two
-                NSArray *sortDescriptors = @[boolDesc2, boolDescr, strDescr];
+                NSArray *sortDescriptors = @[hasResBool, resStart, checkedBool, lastName];
                 // Sort your array
                 self.families = [NSMutableArray arrayWithArray:[self.families sortedArrayUsingDescriptors:sortDescriptors]];
                 self.checkedInToday = [NSMutableArray arrayWithArray:[self.checkedInToday sortedArrayUsingDescriptors:sortDescriptors]];
@@ -426,12 +417,14 @@
 }
 
 - (NSString *) stringFromDateTime:(GTLRDateTime *) date {
+    NSDate *today = date.date;
+    NSDateFormatter* pstDf = [[NSDateFormatter alloc] init];
+    [pstDf setTimeZone:[NSTimeZone timeZoneWithName:@"PST"]];
+    [pstDf setDateFormat:@"HH:mm"];
+    NSString *dateStr = [pstDf stringFromDate:today];
     
-    NSString *dateStr = @"";
-    NSDateComponents *dateComp = date.dateComponents;
-     dateStr = (NSString *)[NSString stringWithFormat:@"%ld/%lD/%lD %lD:%lD:%lD",
-               dateComp.month, dateComp.day, dateComp.year, dateComp.hour, dateComp.minute, dateComp.second];
-    return (NSString *)dateStr;
+
+    return dateStr;
 }
 
 // helper function to add time to date and put in GTLRDateTime format
@@ -677,8 +670,10 @@ viewForHeaderInSection:(NSInteger)section
         }
         if (member.droppedOff) {
             cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@): Dropped Off: %@", member.lastName, member.memType, member.memberID, member.kidsDroppedOff];
-        }else {
-            
+        } else if (member.hasRes){
+            cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@), R:%@", member.lastName, member.memType,
+                                   member.memberID, member.resStart];
+        } else {
             cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@)", member.lastName, member.memType, member.memberID];
         }
         
@@ -695,6 +690,14 @@ viewForHeaderInSection:(NSInteger)section
         }
     }
     return cell;
+}
+
+- (NSString *)formatRes:(NSString *) start {
+    NSArray *strings = [start componentsSeparatedByString:@" "];
+    NSString *tempString = strings[1];
+    tempString = [tempString substringToIndex:tempString.length-2];
+    tempString = [NSString stringWithFormat: @"%@0", tempString];
+    return tempString;
 }
 
 - (BOOL)sameDay:(NSDate *) currentDate {
@@ -943,7 +946,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         rec.droppedOff = NO;
         rec.kidsDroppedOff = @"";
     }
-
 }
 
 // converts memberSheet record to family object, remove CL, PL records
@@ -1056,7 +1058,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (IBAction)reLogin:(UIBarButtonItem *)sender
 {
-    [[GIDSignIn sharedInstance] signOut];
-    [[GIDSignIn sharedInstance] signIn];
+    [self.appDelegate reSignInToGoogle:self];
 }
 @end

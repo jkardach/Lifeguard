@@ -37,7 +37,9 @@
     //Archive using iOS 12 compliant coding:
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:&error];
     [data writeToFile:databasePath options:NSDataWritingAtomic error:&error];
-    NSLog(@"Write returned error: %@", [error localizedDescription]);
+    if (error == nil) {
+        NSLog(@"Write returned error: %@", [error localizedDescription]);
+    }
 }
 
 - (void)saveTxtFile:(NSString *)txtString filename:(NSString *)filename
@@ -49,7 +51,7 @@
     BOOL succeed = [filename writeToFile:[documentsDirectory stringByAppendingPathComponent:@"DataCVS.txt"]
                               atomically:YES encoding:NSUTF8StringEncoding error:&error];
     if (!succeed){
-        // Handle error here
+        NSLog(@"Write returned error: %@", [error localizedDescription]);
     }
 }
 // this un-archieves the file "filename" from the doc directory and returns the objec
@@ -105,7 +107,6 @@
         NSString *file = directoryContent[count];
         dirContents = [dirContents stringByAppendingFormat:@"%@\n", file];
     }
-    //printf("%s", [dirContents UTF8String]);
     return dirContents;
 }
 
