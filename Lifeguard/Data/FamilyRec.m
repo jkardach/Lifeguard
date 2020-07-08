@@ -40,6 +40,8 @@ MFMailComposeViewControllerDelegate>
         _hasRes = NO;
         _resStart = @"";
         _resStop = @"";
+        _lapSwimmers = 0;
+        _lapSwimmerRes = NO;
     }
     return self;
 }

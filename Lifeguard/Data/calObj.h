@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *start;
 @property (nonatomic, strong) NSString *end;
 @property (nonatomic, strong) NSString *memberId;
+@property (nonatomic) BOOL lapSwimmer;
+@property (nonatomic) int numberLapSwimmers;
 
 
 @end

@@ -89,20 +89,6 @@
     self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.service = self.appDelegate.sheetService;
 
-    // work around, allows you to manually login to the google account
-   //NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:@"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", @"UserAgent", nil];
-    //[[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
-    // end workaround
-    
-    // Initialize the Google Sheets API service & load existing credentials from the keychain if available.
-//    [GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;
-//    if ([GIDSignIn sharedInstance].currentUser == nil) {
-//        [[GIDSignIn sharedInstance] signIn];
-//    } else {
-//        [[GIDSignIn sharedInstance] signInSilently];
-//    }
-    
-    // initialize the UISearchController
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
     self.searchController.searchBar.delegate = self;
@@ -161,7 +147,7 @@
 {
     if (self.poolLogArray.count > 0) {
         poolRecord *record = [self.poolLogArray lastObject];
-        if ([record.poolPh isEqualToString:@" "]) {
+        if ([record.poolPh isEqualToString:@"-"]) {
             [self.poolLogArray removeLastObject];
         }
     }
@@ -181,105 +167,113 @@
     [self.tableView reloadData];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 // reads the google sheet pointed to by the sheet object
 - (void)readSheet
 {
-    NSString *range = [NSString stringWithFormat:@"%@!A2:Z", self.sheet.range];
+    NSString *range = [NSString stringWithFormat:@"%@!A2:I", self.sheet.range];
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:self.sheet.spreadSheetID
                                                             range:range];
+    
     [self.service executeQuery:query
-                      delegate:self
-             didFinishSelector:@selector(displayResultWithTicket:finishedWithObject:error:)];
+             completionHandler:^(GTLRServiceTicket *ticket,
+                                 GTLRSheets_ValueRange *result,
+                                 NSError *error) {
+        if (error == nil) {
+            [self createRecord:result];
+        } else {
+            NSString *message = [NSString stringWithFormat:@"Error getting display result sheet data: %@\n", error.localizedDescription];
+            [self showAlert:@"Error" message:message];
+        }
+    }];
+
 }
 
-// callback from readsheet, takes row and puts them into a poolRecord object and adds
-// objects to poolLogArray
-- (void)displayResultWithTicket:(GTLRServiceTicket *)ticket
-             finishedWithObject:(GTLRSheets_ValueRange *)result
-                          error:(NSError *)error {
-    if (error == nil) {
-        NSArray *rows = result.values;
-        if (rows.count > 0) {
-            [self.poolLogArray removeAllObjects];
-            for (NSArray *row in rows) {
-                if (row.count > 1) {
-                    // create the object here
-                    poolRecord *record = [[poolRecord alloc] init];
-                    record.date = row[0];
-                    record.time = row[1];
+// creates records from result array
+- (void)createRecord:(GTLRSheets_ValueRange *) result {
+   
+    NSArray *rows = result.values;
+    if (rows.count > 0) {
+        [self.poolLogArray removeAllObjects];
+        for (NSArray *row in rows) {
+            if (row.count > 1) {
+                // create the object here
+                poolRecord *record = [[poolRecord alloc] init];
+                record.date = row[0];
+                record.time = row[1];
+                if (row.count > 2)
                     record.poolPh = row[2];
+                if (row.count > 3)
                     record.poolCl = row[3];
-                    if (self.sheet.service) {
+                if (self.sheet.service) {
+                    if (row.count > 4)
                         record.poolSensorPh = row[4];
+                    if (row.count > 5)
                         record.poolSensorCl = row[5];
+                    if (row.count > 6)
                         record.poolGalAcid = row[6];
+                    if (row.count > 7)
                         record.poolGalCl = row[7];
+                    if (row.count > 8) {
                         if ([row[8] isEqualToString:@"TRUE"]) {
                             record.poolfilterBackwash = true;
                         } else {
                             record.poolfilterBackwash = false;
                         }
+                    }
+                    if (row.count > 9)
                         record.spaPh = row[9];
+                    
+                    if (row.count > 10)
                         record.spaCl = row[10];
+                    
+                    if (row.count > 11)
                         record.spaSensorPh = row[11];
+                    
+                    if (row.count > 12)
                         record.spaSensorCl = row[12];
+                    
+                    if (row.count > 13)
                         record.spaGalAcid = row[13];
+                    
+                    if (row.count > 14)
                         record.spaGalCl = row[14];
+                    
+                    if (row.count > 15) {
                         if ([row[15] isEqualToString:@"TRUE"]) {
                             record.spafilterBackwash = true;
                         } else {
                             record.spafilterBackwash = false;
                         }
-                        if(row.count>=17) {
-                            record.note = row[16];
-                        }
-                    } else {
-                        record.spaPh = row[4];
-                        record.spaCl = row[5];
-                        if(row.count >= 7) {
-                            record.note = row[6];
-                        }
                     }
-                    record.newRecord = false;
-                    record.updated = false;
-                    record.service = self.sheet.service;
-                    
-                    [self.poolLogArray addObject:record];  // add to poolLogArray
+                    if(row.count > 16) {
+                        record.note = row[16];
+                    }
                 } else {
-                    break;
+                    if (row.count > 4)
+                        record.spaPh = row[4];
+                    if (row.count > 5)
+                        record.spaCl = row[5];
+                    if(row.count > 6) {
+                        record.note = row[6];
+                    }
                 }
+                record.newRecord = false;
+                record.updated = false;
+                record.service = self.sheet.service;
+                [self.poolLogArray addObject:record];  // add to poolLogArray
+            } else {
+                break;
             }
         }
-        [self.poolLogArray sortUsingSelector:@selector(compareDates:)];  // sort array
-        self.displayedPoolLogArray = self.poolLogArray;
-        [self.tableView.refreshControl endRefreshing];
-        [self.tableView reloadData];
-    } else {
-        [self.appDelegate signInToGoogle:self];
-        /*
-        // put in relogin here
-        //[self presentViewController:[self createAuthController] animated:YES completion:nil];
-        NSString *message = [NSString stringWithFormat:@"Error getting sheet data: %@\n", error.localizedDescription];
-        [self showAlert:@"Error" message:message];
-        // Google sign-in; if not signed in, sign-in, else silently signin.
-        [GIDSignIn sharedInstance].uiDelegate = (id<GIDSignInUIDelegate>) self;
-        if ([GIDSignIn sharedInstance].currentUser == nil) {
-            [[GIDSignIn sharedInstance] signIn];
-        } else {
-            [[GIDSignIn sharedInstance] signInSilently];
-        }
-         */
     }
-    
+    [self.poolLogArray sortUsingSelector:@selector(compareDates:)];  // sort array
+    self.displayedPoolLogArray = self.poolLogArray;
+    [self.tableView.refreshControl endRefreshing];
+    [self.tableView reloadData];
 }
 
-// this creates an array which updates the specified row
+// this creates an array which updates/replaces the specified row
 - (void)updateRecordAtRow: (int)row poolRecord:(poolRecord *)poolRecord
 {
     NSString *range = [NSString stringWithFormat:@"%@!A%d", self.sheet.range, row+2];
@@ -291,31 +285,22 @@
                                                 spreadsheetId:self.sheet.spreadSheetID
                                                         range:range];
     query.valueInputOption = @"USER_ENTERED";
-    
-    [self.service executeQuery:query
-                      delegate:self
-             didFinishSelector:@selector(displayUpdateResultWithTicket:finishedWithObject:error:)];
+    [self.service executeQuery:query completionHandler:^(GTLRServiceTicket *ticket,
+                                                         GTLRSheets_ValueRange *result,
+                                                         NSError *error) {
+        if (error == nil) {
+            [self readSheet];
+        } else {
+            NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
+            [self showAlert:@"Error" message:message];
+        }
+    }];
 }
-
-
-
-// callback routine for writing the value to the given row, indicates an error (if one)
-- (void)displayUpdateResultWithTicket:(GTLRServiceTicket *)ticket
-                   finishedWithObject:(GTLRSheets_ValueRange *)result
-                                error:(NSError *)error {
-    if (error != nil) {
-        NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
-        [self showAlert:@"Error" message:message];
-    } else {
-        [self readSheet];
-    }
-}
-
 
 // this creates an array to append a row to end of sheet.
 - (void)appendRowToSheetWith: (poolRecord *)poolRecord
 {
-    NSString *range = [NSString stringWithFormat:@"%@!A2:Z", self.sheet.range];
+    NSString *range = [NSString stringWithFormat:@"%@!A2:H", self.sheet.range];
     GTLRSheets_ValueRange *valueRange = [[GTLRSheets_ValueRange alloc] init];
     valueRange.values = [self createValueArrayFromPoolRecord:poolRecord];
     
@@ -326,21 +311,76 @@
     query.valueInputOption = @"USER_ENTERED";
 
     [self.service executeQuery:query
-                      delegate:self
-             didFinishSelector:@selector(displayAppendResultWithTicket:finishedWithObject:error:)];
+             completionHandler:^(GTLRServiceTicket *ticket,
+                                 GTLRSheets_ValueRange *result,
+                                 NSError *error) {
+        if (error == nil) {
+            [self readSheet];
+        } else {
+            NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
+            [self showAlert:@"Error" message:message];
+        }
+    }];
 }
 
-// callback routine for writing the value to the guest column, indicates an error (if one)
-- (void)displayAppendResultWithTicket:(GTLRServiceTicket *)ticket
-                   finishedWithObject:(GTLRSheets_ValueRange *)result
-                                error:(NSError *)error {
-    if (error != nil) {
-        NSString *message = [NSString stringWithFormat:@"Error getting append sheet data: %@\n", error.localizedDescription];
-        [self showAlert:@"Error" message:message];
-    } else {
-        [self readSheet];
-    }
+// removes the record (poolRecord) at row from the Logger spreadsheet
+- (void) removeRecAtRow: (poolRecord *)poolRecToDel
+{
+    // first find the row of the record to delete
+    NSString *range = [NSString stringWithFormat:@"%@!A1:H", self.sheet.range];
+    GTLRSheetsQuery_SpreadsheetsValuesGet *query =
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:self.sheet.spreadSheetID
+                                                            range:range];
+    
+    [self.service executeQuery:query
+                  completionHandler:^(GTLRServiceTicket *ticket,
+                                      GTLRSheets_ValueRange *result,
+                                      NSError *error) {
+        int rowOfRec = 0;
+        if (error == nil) {
+            NSArray *rows = result.values;
+            if (rows.count > 0) {
+                for (NSArray *row in rows) {
+                    if (row.count > 1) {
+                        if (([poolRecToDel.date isEqualToString:row[0]])&&([poolRecToDel.time isEqualToString:row[1]])) {
+                            break;  // this is the record with the date and time stamps
+                        }
+                    } else {
+                        break;
+                    }
+                    rowOfRec++;
+                }
+            }
+            rowOfRec += 1;
+            
+            // next clear this record in the Logger sheet (A-Z of the found row)
+            GTLRSheets_ClearValuesRequest *clear = [[GTLRSheets_ClearValuesRequest alloc] init];
+            NSString *clearRange = [NSString stringWithFormat:@"%@!A%D:Z%D", self.sheet.range, rowOfRec, rowOfRec];
+            
+            GTLRSheetsQuery_SpreadsheetsValuesClear *query1 =
+            [GTLRSheetsQuery_SpreadsheetsValuesClear queryWithObject:clear
+                                                       spreadsheetId:self.sheet.spreadSheetID
+                                                               range:clearRange];
+            
+            [self.service executeQuery:query1 completionHandler:^(GTLRServiceTicket *ticket,
+                                                                      GTLRSheets_ValueRange *result,
+                                                                      NSError *error) {
+                if (error == nil) {
+                    [self readSheet];
+                } else {
+                    NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
+                    [self showAlert:@"Error" message:message];
+                }
+            }];
+
+        } else {
+            NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
+            [self showAlert:@"Error" message:message];
+        }
+    }];
 }
+
+
 
 - (NSArray *) createValueArrayFromPoolRecord:(poolRecord *)poolRecord
 {
@@ -428,7 +468,6 @@ viewForHeaderInSection:(NSInteger)section
                                             poolTxt:poolTxt
                                              spaTxt:spaTxt];
         headerTxt.text = @"Meas Date (Time)";
-        //famMem.text = @"Pool pH/CL, Spa pH/CL";
     }
     [headerView addSubview:famMem];
     [headerView addSubview:headerTxt];
@@ -501,15 +540,7 @@ viewForHeaderInSection:(NSInteger)section
                 poolTxt = [NSString stringWithFormat:@"pH:%@/CL:%@", record.poolPh, record.poolCl];
                 spaTxt = [NSString stringWithFormat:@"pH:%@/CL:%@", record.spaPh, record.spaCl];
         }
-        /*
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            poolTxt = [NSString stringWithFormat:@"pH:%@/CL:%@ppm", record.poolPh, record.poolCl];
-            spaTxt = [NSString stringWithFormat:@"pH:%@/CL:%@ppm", record.spaPh, record.spaCl];
-        } else {
-            poolTxt = [NSString stringWithFormat:@"pH:%@/CL:%@", record.poolPh, record.poolCl];
-            spaTxt = [NSString stringWithFormat:@"pH:%@/CL:%@", record.spaPh, record.spaCl];
-        }
-         */
+
         cell.detailTextLabel.attributedText = [self createAttrTxt:cell.detailTextLabel.textColor
                                                              font:cell.detailTextLabel.font
                                                           poolTxt:poolTxt
@@ -605,9 +636,17 @@ viewForHeaderInSection:(NSInteger)section
  - (BOOL)tableView:(UITableView *)tableView
 canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
- // Return NO if you do not want the specified item to be editable.
  return YES;
  }
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }
+}
 
 #pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

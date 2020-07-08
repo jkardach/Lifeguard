@@ -35,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic) BOOL hasRes;
 @property(nonatomic, strong) NSString *resStart;
 @property(nonatomic, strong) NSString *resStop;
+@property(nonatomic) BOOL lapSwimmerRes;
+@property(nonatomic) NSInteger lapSwimmers;
 
 
 - (void)sendSMS:(id)viewController phone1:(int)phone1;

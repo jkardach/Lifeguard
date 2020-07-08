@@ -171,11 +171,6 @@
     [self.noteTV resignFirstResponder];
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -317,8 +312,6 @@
 
 - (void)backgroundTapped:(UITapGestureRecognizer*)recognizer {
     [self allResignFirstResponder];
-//    [self.activeTextField  resignFirstResponder];
-//    [self.activeTextView resignFirstResponder];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

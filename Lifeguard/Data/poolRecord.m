@@ -21,19 +21,19 @@
         _date = [dateFormatter stringFromDate:today];
         _time = [timeFormatter stringFromDate:today];
         _note = @" ";
-        _poolPh = @" ";
-        _poolCl = @" ";
-        _poolSensorPh = @" ";
-        _poolSensorCl = @" ";
-        _poolGalAcid = @" ";
-        _poolGalCl = @" ";
+        _poolPh = @"-";
+        _poolCl = @"-";
+        _poolSensorPh = @"-";
+        _poolSensorCl = @"-";
+        _poolGalAcid = @"-";
+        _poolGalCl = @"-";
         
-        _spaPh = @" ";
-        _spaCl = @" ";
-        _spaSensorPh = @" ";
-        _spaSensorCl = @" ";
-        _spaGalAcid = @" ";
-        _spaGalCl = @" ";
+        _spaPh = @"-";
+        _spaCl = @"-";
+        _spaSensorPh = @"-";
+        _spaSensorCl = @"-";
+        _spaGalAcid = @"-";
+        _spaGalCl = @"-";
         
         _newRecord = true;
         _poolfilterBackwash = false;

@@ -15,6 +15,8 @@
         _start = @"";
         _end = @"";
         _memberId = @"";
+        _lapSwimmer = NO;
+        _numberLapSwimmers = 0;
     }
     return self;
 }

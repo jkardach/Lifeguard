@@ -137,6 +137,7 @@
 // removes the record (FamilyRec) from the Accounts.SignIn spreadsheet
 - (void) removeRecFromSignIn:(FamilyRec *)rec
 {
+    // find the row of the record in SignIn
     self.recToDelete = rec;
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
@@ -162,9 +163,11 @@
                     rowOfRec++;
                 }
             }
-            rowOfRec += 2;
+            rowOfRec++;  // because search started at row 2 add 2.
             
             // now clear this record in the sign-in sheet
+            [self deleteRow:rowOfRec];
+            /*
             GTLRSheets_ClearValuesRequest *clear = [[GTLRSheets_ClearValuesRequest alloc] init];
             NSString *clearRange = [NSString stringWithFormat:@"SignIn!A%D:M%D", rowOfRec, rowOfRec];
             
@@ -183,7 +186,7 @@
                     [self showAlert:@"Error" message:message];
                 }
             }];
-
+*/
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
             [self showAlert:@"Error" message:message];
@@ -191,8 +194,7 @@
     }];
 }
 
-// this writes family record to the signIn tab
-// results is in callback "displayUpdateResultWithWriteGuest"
+// this writes family record to the signIn
 - (void)writeGuest:(FamilyRec *)member
 {
     GTLRSheets_ValueRange *value = [[GTLRSheets_ValueRange alloc] init];
@@ -225,11 +227,12 @@
                   completionHandler:^(GTLRServiceTicket *ticket,
                                       GTLRSheets_ValueRange *result,
                                       NSError *error) {
-        if (error != nil) {
+        if (error == nil) {
+            [self readLog];
+    
+        } else {
             NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
             [self showAlert:@"Error" message:message];
-        } else {
-            [self readLog];
         }
     }];
 }
@@ -268,9 +271,52 @@
     }];
 }
 
+
+
+- (void)deleteRow:(int) row {
+    GTLRSheets_DeleteDimensionRequest *delDimReq = [[GTLRSheets_DeleteDimensionRequest alloc] init];
+    GTLRSheets_Request *sheetsRequest = [[GTLRSheets_Request alloc] init];
+    sheetsRequest.deleteDimension = delDimReq;
+    
+    
+    // https://docs.google.com/spreadsheets/d/1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ/edit#gid=744046825
+    GTLRSheets_DimensionRange *range = [[GTLRSheets_DimensionRange alloc] init];
+    range.dimension = @"ROWS";
+    range.sheetId = @(744046825);
+    range.startIndex = @(row);  // row to delete inclusive
+    range.endIndex = @(row + 1);    // row to delete exclusive
+    
+    delDimReq.range = range;
+    
+    GTLRSheets_BatchUpdateSpreadsheetRequest *request = [[GTLRSheets_BatchUpdateSpreadsheetRequest alloc] init];
+    request.includeSpreadsheetInResponse = 0;
+    request.responseIncludeGridData = 0;
+    request.requests = @[sheetsRequest];
+
+    //(GTLRSheets_BatchUpdateValuesRequest *)
+    
+    GTLRSheetsQuery_SpreadsheetsBatchUpdate *query = [GTLRSheetsQuery_SpreadsheetsBatchUpdate
+                                                      queryWithObject:(GTLRSheets_BatchUpdateSpreadsheetRequest *) request
+                                                      spreadsheetId: ACT_SHEET_ID];
+    
+    [self.sheetService executeQuery:query
+                      completionHandler:^(GTLRServiceTicket *ticket,
+                                          GTLRSheets_ValueRange *result,
+                                          NSError *error) {
+            if (error == nil) {
+                [self readLog];
+        
+            } else {
+                NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
+                [self showAlert:@"Error" message:message];
+            }
+        }];
+}
+
 // defined in Constants.h: ACT_SHEET_ID = 1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ
 // get values from Members sheet (PM, Lease, Trial)
 - (void)readbatchSheet {
+    
     GTLRSheetsQuery_SpreadsheetsValuesGet *query1 =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
                                                             range:@"Members!A2:R86"];  // PM
@@ -341,8 +387,6 @@
             }
 
             [self readTodaysResCal];
-            //[self.tableView reloadData];
-            //self.output.text = output;
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting display result sheet data: %@\n", error.localizedDescription];
             [self showAlert:@"Error" message:message];
@@ -353,8 +397,8 @@
 
 - (void)readTodaysResCal {
     // get the Accounts tab of the SSC sheet;
-    NSString *calId = @"lssmnscr8a49bcg51knvtgo234@group.calendar.google.com";
-    
+    //NSString *calId = @"lssmnscr8a49bcg51knvtgo234@group.calendar.google.com";  // the reservation calendar
+    NSString *calId = @"45hmspi6f6ur1i6h62et9tet08@group.calendar.google.com";   // the test calendar
     // create events list query
     GTLRCalendarQuery_EventsList *query = [GTLRCalendarQuery_EventsList queryWithCalendarId:calId];
     query.maxResults = 40;
@@ -380,6 +424,10 @@
                     cal.memberId = [item.summary stringByReplacingOccurrencesOfString:@"#" withString:(@"")];
                     cal.end = [self stringFromDateTime: [item.end valueForKey:@"dateTime"]];
                     cal.start = [self stringFromDateTime: [item.start valueForKey:@"dateTime"]];
+                    NSString *tempStr = [cal.start substringFromIndex:2];
+                    if ([tempStr isEqualToString:@":30"]) {
+                        cal.lapSwimmer = YES;
+                    }
                     [self.calArray addObject:cal];
                 }
                 [self addResToFamiles];
@@ -452,6 +500,10 @@
                 rec.hasRes = YES;
                 rec.resStart = cal.start;
                 rec.resStop = cal.end;
+                rec.lapSwimmerRes = cal.lapSwimmer;
+                if (rec.lapSwimmerRes) {
+                    rec.lapSwimmers++;  // if this is a lapswimmer res, inc lap swimmers
+                }
             }
         }
     }
@@ -757,58 +809,65 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     if((indexPath.section == 0) || ((indexPath.section == 1)&&(self.maxSections==3)))
         return;
     FamilyRec *member = self.families[indexPath.row];
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@(%@) Family",
-                                                                            member.lastName, member.memberID]
-                                                                   message:@"How many members and guests are you checking in?"
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = @"(number of) members";
-        textField.textColor = [UIColor blueColor];
-        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        textField.borderStyle = UITextBorderStyleRoundedRect;
-        [textField setKeyboardType:UIKeyboardTypeNumberPad ];
-    }];
-    
-    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = @"(number of) guests";
-        textField.textColor = [UIColor blueColor];
-        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        textField.borderStyle = UITextBorderStyleRoundedRect;
-        [textField setKeyboardType:UIKeyboardTypeNumberPad ];
-    }];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        NSArray *textfields = alert.textFields;
-        UITextField *members = textfields[0];
-        UITextField *guests = textfields[1];
-        member.checked = YES;
-        //NSLog(@"%@",guests.text);
-        member.members = [members.text intValue];
-        member.guests = [guests.text intValue];
-        [self.checkedInToday addObject:member];
-        [tableView reloadData];
-        [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+    if(!member.lapSwimmerRes) {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@(%@) Family",
+                                                                                member.lastName, member.memberID]
+                                                                       message:@"How many members and guests are you checking in?"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
         
-        [self writeGuest:(FamilyRec *)member];   // update database
-        [tableView reloadData];
-    }]];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"Drop Off Children" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        NSArray *textfields = alert.textFields;
-        UITextField *members = textfields[0];
-        UITextField *guests = textfields[1];
+        [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.placeholder = @"(number of) members";
+            textField.textColor = [UIColor blueColor];
+            textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+            textField.borderStyle = UITextBorderStyleRoundedRect;
+            [textField setKeyboardType:UIKeyboardTypeNumberPad ];
+        }];
+        
+        [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.placeholder = @"(number of) guests";
+            textField.textColor = [UIColor blueColor];
+            textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+            textField.borderStyle = UITextBorderStyleRoundedRect;
+            [textField setKeyboardType:UIKeyboardTypeNumberPad ];
+        }];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            NSArray *textfields = alert.textFields;
+            UITextField *members = textfields[0];
+            UITextField *guests = textfields[1];
+            member.checked = YES;
+            //NSLog(@"%@",guests.text);
+            member.members = [members.text intValue];
+            member.guests = [guests.text intValue];
+            [self.checkedInToday addObject:member];
+            [tableView reloadData];
+            [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+            
+            [self writeGuest:(FamilyRec *)member];   // update database
+            [tableView reloadData];
+        }]];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Drop Off Children" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            NSArray *textfields = alert.textFields;
+            UITextField *members = textfields[0];
+            UITextField *guests = textfields[1];
+            member.checked = YES;
+            //NSLog(@"%@",guests.text);
+            member.members = [members.text intValue];
+            member.guests = [guests.text intValue];
+            [self getNamesOfKids:(FamilyRec *) member];
+        }]];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        // this is a lapswimmer with reservation
+        member.members = (int)member.lapSwimmers;
         member.checked = YES;
-        //NSLog(@"%@",guests.text);
-        member.members = [members.text intValue];
-        member.guests = [guests.text intValue];
-        [self getNamesOfKids:(FamilyRec *) member];
-    }]];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-    }]];
-    [self presentViewController:alert animated:YES completion:nil];
-    
+        [self writeGuest: member];
+        [self.tableView reloadData];
+    }
 }
 
 - (void)getNamesOfKids:(FamilyRec *)member {
