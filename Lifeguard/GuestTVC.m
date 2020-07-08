@@ -92,7 +92,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.sheetService = self.appDelegate.sheetService;
     self.calendarService = self.appDelegate.calendarService;
@@ -140,7 +140,7 @@
     // find the row of the record in SignIn
     self.recToDelete = rec;
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
                                                             range:@"SignIn!A2:N"];
     
     [self.sheetService executeQuery:query
@@ -163,30 +163,7 @@
                     rowOfRec++;
                 }
             }
-            rowOfRec++;  // because search started at row 2 add 2.
-            
-            // now clear this record in the sign-in sheet
-            [self deleteRow:rowOfRec];
-            /*
-            GTLRSheets_ClearValuesRequest *clear = [[GTLRSheets_ClearValuesRequest alloc] init];
-            NSString *clearRange = [NSString stringWithFormat:@"SignIn!A%D:M%D", rowOfRec, rowOfRec];
-            
-            GTLRSheetsQuery_SpreadsheetsValuesClear *query =
-            [GTLRSheetsQuery_SpreadsheetsValuesClear queryWithObject:clear
-                                                       spreadsheetId:ACT_SHEET_ID
-                                                               range:clearRange];
-            
-            [self.sheetService executeQuery:query completionHandler:^(GTLRServiceTicket *ticket,
-                                                                      GTLRSheets_ValueRange *result,
-                                                                      NSError *error) {
-                if (error == nil) {
-                    [self readLog];
-                } else {
-                    NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
-                    [self showAlert:@"Error" message:message];
-                }
-            }];
-*/
+            [self deleteRow:rowOfRec+1];  // increment row as spreadsheet starts at 1, not 0
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
             [self showAlert:@"Error" message:message];
@@ -219,7 +196,7 @@
 
     GTLRSheetsQuery_SpreadsheetsValuesAppend *query =
     [GTLRSheetsQuery_SpreadsheetsValuesAppend queryWithObject:value
-                                                spreadsheetId:ACT_SHEET_ID
+                                                spreadsheetId:ACT_SSHEET_ID
                                                         range:@"SignIn!A1"];
     query.valueInputOption = @"USER_ENTERED";
 
@@ -241,7 +218,7 @@
 // this reads the record from the SignIn sheet on the account spreadsheet
 - (void)readLog {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
                                                             range:@"SignIn!A2:N"];
     [self.sheetService executeQuery:query
                   completionHandler:^(GTLRServiceTicket *ticket,
@@ -271,18 +248,21 @@
     }];
 }
 
-
-
+// deletes the row in the spreadsheet.  row is the spreadsheet row (starts at 1)
 - (void)deleteRow:(int) row {
+    // sign-in tab of accounts sheet is edit#gid=744046825
+    [self delRow:row spreadSheetId:ACT_SSHEET_ID sheetId:@(744046825)];
+}
+
+
+- (void)delRow:(int) row  spreadSheetId:(NSString *)spreadsheetId sheetId:(NSNumber *)sheetId {
     GTLRSheets_DeleteDimensionRequest *delDimReq = [[GTLRSheets_DeleteDimensionRequest alloc] init];
     GTLRSheets_Request *sheetsRequest = [[GTLRSheets_Request alloc] init];
     sheetsRequest.deleteDimension = delDimReq;
     
-    
-    // https://docs.google.com/spreadsheets/d/1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ/edit#gid=744046825
     GTLRSheets_DimensionRange *range = [[GTLRSheets_DimensionRange alloc] init];
     range.dimension = @"ROWS";
-    range.sheetId = @(744046825);
+    range.sheetId = sheetId;
     range.startIndex = @(row);  // row to delete inclusive
     range.endIndex = @(row + 1);    // row to delete exclusive
     
@@ -293,12 +273,10 @@
     request.responseIncludeGridData = 0;
     request.requests = @[sheetsRequest];
 
-    //(GTLRSheets_BatchUpdateValuesRequest *)
-    
     GTLRSheetsQuery_SpreadsheetsBatchUpdate *query = [GTLRSheetsQuery_SpreadsheetsBatchUpdate
                                                       queryWithObject:(GTLRSheets_BatchUpdateSpreadsheetRequest *) request
-                                                      spreadsheetId: ACT_SHEET_ID];
-    
+                                                      spreadsheetId: spreadsheetId];
+    NSLog(@"Deleting Row: %D", row);
     [self.sheetService executeQuery:query
                       completionHandler:^(GTLRServiceTicket *ticket,
                                           GTLRSheets_ValueRange *result,
@@ -307,24 +285,23 @@
                 [self readLog];
         
             } else {
-                NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
+                NSString *message = [NSString stringWithFormat:@"Error: %@\n", error.localizedDescription];
                 [self showAlert:@"Error" message:message];
             }
         }];
 }
 
-// defined in Constants.h: ACT_SHEET_ID = 1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ
+// defined in Constants.h: ACT_SSHEET_ID = 1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ
 // get values from Members sheet (PM, Lease, Trial)
 - (void)readbatchSheet {
-    
     GTLRSheetsQuery_SpreadsheetsValuesGet *query1 =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
                                                             range:@"Members!A2:R86"];  // PM
     GTLRSheetsQuery_SpreadsheetsValuesGet *query2 =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
                                                             range:@"Members!A89:R99"];  // Lease
     GTLRSheetsQuery_SpreadsheetsValuesGet *query3 =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
                                                             range:@"Members!A127:R139"];  // Trial
     GTLRBatchQuery *batchQuery = [GTLRBatchQuery batchQuery];
     [batchQuery addQuery:query1];
@@ -365,7 +342,7 @@
 
 - (void)readSheet {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
                                                             range:@"Accounts!A3:AQ"];
     [self.sheetService executeQuery:query
                   completionHandler:^(GTLRServiceTicket *ticket,
@@ -528,7 +505,7 @@
     
     GTLRSheetsQuery_SpreadsheetsValuesUpdate *query =
     [GTLRSheetsQuery_SpreadsheetsValuesUpdate queryWithObject:value
-                                                spreadsheetId:ACT_SHEET_ID
+                                                spreadsheetId:ACT_SSHEET_ID
                                                         range:[NSString stringWithFormat:@"SignIn!A%d", recordToUpdate.signInRow]];
     query.valueInputOption = @"USER_ENTERED";
     [self.sheetService executeQuery:query

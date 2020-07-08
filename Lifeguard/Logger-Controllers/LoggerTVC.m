@@ -119,16 +119,17 @@
 }
 
 // When the view appears, ensure that the Google Sheets API service is authorized, and perform API calls.
+// this could be the initial viewing, or comming back from edit or add record (where it is added)
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:YES];
     
     if (!self.poolLogArray) return;
-    [self removeBadRecord];     // removes any partial record
+    [self removeBadRecord];     // removes any aborted new record
     
     int i = 0;
     for (poolRecord *record in self.poolLogArray) {
-        if (record.updated && !record.newRecord) {
-            [self updateRecordAtRow:i poolRecord:record];
+        if (record.updated && !record.newRecord) {  //
+            [self updateRecordAtRow:i poolRecord:record];  // replace old record with updated record in spreadsheet
             record.updated = false;
         } else if (record.newRecord && ![record.poolPh isEqualToString:@" "]) {
             [self appendRowToSheetWith:record];
@@ -142,7 +143,7 @@
     [self.tableView reloadData];
 }
 
-// check to see if a sheet was aborted, and remove if so
+// check to see if an add record, or edit record was aborted, remove record
 -(void)removeBadRecord
 {
     if (self.poolLogArray.count > 0) {
@@ -170,7 +171,7 @@
 // reads the google sheet pointed to by the sheet object
 - (void)readSheet
 {
-    NSString *range = [NSString stringWithFormat:@"%@!A2:I", self.sheet.range];
+    NSString *range = [NSString stringWithFormat:@"%@!A2:I", self.sheet.tab1Name];
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:self.sheet.spreadSheetID
                                                             range:range];
@@ -276,7 +277,7 @@
 // this creates an array which updates/replaces the specified row
 - (void)updateRecordAtRow: (int)row poolRecord:(poolRecord *)poolRecord
 {
-    NSString *range = [NSString stringWithFormat:@"%@!A%d", self.sheet.range, row+2];
+    NSString *range = [NSString stringWithFormat:@"%@!A%d", self.sheet.tab1Name, row+2];
     GTLRSheets_ValueRange *value = [[GTLRSheets_ValueRange alloc] init];
     value.values = [self createValueArrayFromPoolRecord:poolRecord];
     
@@ -291,7 +292,7 @@
         if (error == nil) {
             [self readSheet];
         } else {
-            NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
+            NSString *message = [NSString stringWithFormat:@"Error: %@\n", error.localizedDescription];
             [self showAlert:@"Error" message:message];
         }
     }];
@@ -300,7 +301,7 @@
 // this creates an array to append a row to end of sheet.
 - (void)appendRowToSheetWith: (poolRecord *)poolRecord
 {
-    NSString *range = [NSString stringWithFormat:@"%@!A2:H", self.sheet.range];
+    NSString *range = [NSString stringWithFormat:@"%@!A2:H", self.sheet.tab1Name];
     GTLRSheets_ValueRange *valueRange = [[GTLRSheets_ValueRange alloc] init];
     valueRange.values = [self createValueArrayFromPoolRecord:poolRecord];
     
@@ -327,7 +328,7 @@
 - (void) removeRecAtRow: (poolRecord *)poolRecToDel
 {
     // first find the row of the record to delete
-    NSString *range = [NSString stringWithFormat:@"%@!A1:H", self.sheet.range];
+    NSString *range = [NSString stringWithFormat:@"%@!A1:H", self.sheet.tab1Name];
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:self.sheet.spreadSheetID
                                                             range:range];
@@ -351,11 +352,12 @@
                     rowOfRec++;
                 }
             }
-            rowOfRec += 1;
-            
+            //rowOfRec += 1;  // array starts at zero, spreadsheet row starts at 1
+            [self delRow:rowOfRec spreadSheetId:self.sheet.spreadSheetID sheetId:self.sheet.tab1sheetID];  // del spreadsheet row
+            /*
             // next clear this record in the Logger sheet (A-Z of the found row)
             GTLRSheets_ClearValuesRequest *clear = [[GTLRSheets_ClearValuesRequest alloc] init];
-            NSString *clearRange = [NSString stringWithFormat:@"%@!A%D:Z%D", self.sheet.range, rowOfRec, rowOfRec];
+            NSString *clearRange = [NSString stringWithFormat:@"%@!A%D:Z%D", self.sheet.tab1Name, rowOfRec, rowOfRec];
             
             GTLRSheetsQuery_SpreadsheetsValuesClear *query1 =
             [GTLRSheetsQuery_SpreadsheetsValuesClear queryWithObject:clear
@@ -372,9 +374,9 @@
                     [self showAlert:@"Error" message:message];
                 }
             }];
-
+*/
         } else {
-            NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
+            NSString *message = [NSString stringWithFormat:@"Error: %@\n", error.localizedDescription];
             [self showAlert:@"Error" message:message];
         }
     }];
@@ -639,13 +641,54 @@ canEditRowAtIndexPath:(NSIndexPath *)indexPath
  return YES;
  }
 
+// allow deleting of log records
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
+        poolRecord *record = self.displayedPoolLogArray[indexPath.row];  // get record to delete
+        [self.displayedPoolLogArray removeObjectAtIndex:indexPath.row];  // remove the record from tableview datasource
+        [self removeRecAtRow:record];                                    // remove record from spreadsheet
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }
+}
+
+- (void)delRow:(int) row  spreadSheetId:(NSString *)spreadsheetId sheetId:(NSNumber *)sheetId {
+    GTLRSheets_DeleteDimensionRequest *delDimReq = [[GTLRSheets_DeleteDimensionRequest alloc] init];
+    GTLRSheets_Request *sheetsRequest = [[GTLRSheets_Request alloc] init];
+    sheetsRequest.deleteDimension = delDimReq;
+    
+    // Create range property
+    GTLRSheets_DimensionRange *range = [[GTLRSheets_DimensionRange alloc] init];
+    range.dimension = @"ROWS";
+    range.sheetId = sheetId;
+    range.startIndex = @(row);  // row to delete inclusive
+    range.endIndex = @(row + 1);    // row to delete exclusive
+    delDimReq.range = range;  // add range property to delDimReq
+
+    GTLRSheets_BatchUpdateSpreadsheetRequest *request = [[GTLRSheets_BatchUpdateSpreadsheetRequest alloc] init];
+    request.includeSpreadsheetInResponse = 0;
+    request.responseIncludeGridData = 0;
+    request.requests = @[sheetsRequest];
+    NSLog(@"Deleting Row: %D", row);
+
+    GTLRSheetsQuery_SpreadsheetsBatchUpdate *query = [GTLRSheetsQuery_SpreadsheetsBatchUpdate
+                                                      queryWithObject:(GTLRSheets_BatchUpdateSpreadsheetRequest *) request
+                                                      spreadsheetId: spreadsheetId];
+    
+    [self.service executeQuery:query
+                      completionHandler:^(GTLRServiceTicket *ticket,
+                                          GTLRSheets_ValueRange *result,
+                                          NSError *error) {
+            if (error == nil) {
+                [self readSheet];
+        
+            } else {
+                NSString *message = [NSString stringWithFormat:@"Error: %@\n", error.localizedDescription];
+                [self showAlert:@"Error" message:message];
+            }
+        }];
 }
 
 #pragma mark - Navigation

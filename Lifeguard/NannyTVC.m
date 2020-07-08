@@ -55,7 +55,7 @@
 // Get the id for the SSC budget sheet
 - (void)readSheet {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
                                                             range:@"Accounts!A4:AQ130"];
     [self.service executeQuery:query
              completionHandler:^(GTLRServiceTicket *ticket,

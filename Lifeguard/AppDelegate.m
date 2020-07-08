@@ -24,12 +24,14 @@
 {
     if (!_poolSheets) {
         _poolSheets = [[NSMutableArray alloc] init];
-        
+        //https://docs.google.com/spreadsheets/d/13u7WLeKiXEpn6rGJeKB81I6SUR6GGcvJR8ccRetCcns/edit#gid=1913985701
         GoogleSheet *initSheet = [[GoogleSheet alloc] init];
         initSheet.name = @"Saratoga Swim Club";
         initSheet.spreadSheetID = @"13u7WLeKiXEpn6rGJeKB81I6SUR6GGcvJR8ccRetCcns";
-        initSheet.range = @"LifeGuard";
+        initSheet.range = @"LifeGuard";  // this should be removed
         initSheet.service = false;
+        initSheet.tab1Name = @"LifeGuard";
+        initSheet.tab1sheetID = @(1913985701);
         [_poolSheets addObject:initSheet];
     }
     return _poolSheets;

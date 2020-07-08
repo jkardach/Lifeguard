@@ -74,7 +74,7 @@
 
 - (void)readSheet {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
-    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SHEET_ID
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
                                                             range:@"Parties!A2:V"];
     [self.service executeQuery:query
              completionHandler:^(GTLRServiceTicket *ticket,
