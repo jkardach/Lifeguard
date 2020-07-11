@@ -11,13 +11,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface calObj : NSObject
+@property (nonatomic, strong) NSString *resDate;
 @property (nonatomic, strong) NSString *start;
 @property (nonatomic, strong) NSString *end;
+@property (nonatomic, strong) NSString *lapStart;
 @property (nonatomic, strong) NSString *memberId;
 @property (nonatomic) BOOL lapSwimmer;
 @property (nonatomic) int numberLapSwimmers;
-
-
 @end
 
 NS_ASSUME_NONNULL_END

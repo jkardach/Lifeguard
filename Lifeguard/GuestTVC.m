@@ -374,8 +374,8 @@
 
 - (void)readTodaysResCal {
     // get the Accounts tab of the SSC sheet;
-    //NSString *calId = @"lssmnscr8a49bcg51knvtgo234@group.calendar.google.com";  // the reservation calendar
-    NSString *calId = @"45hmspi6f6ur1i6h62et9tet08@group.calendar.google.com";   // the test calendar
+    NSString *calId = @"lssmnscr8a49bcg51knvtgo234@group.calendar.google.com";  // the reservation calendar
+    //NSString *calId = @"45hmspi6f6ur1i6h62et9tet08@group.calendar.google.com";   // the test calendar
     // create events list query
     GTLRCalendarQuery_EventsList *query = [GTLRCalendarQuery_EventsList queryWithCalendarId:calId];
     query.maxResults = 40;
@@ -961,7 +961,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     NSDateComponents *components = [cal components:(NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
                                           fromDate:self.currentDate];
     NSDate *today = [cal dateFromComponents:components];
-    components = [cal components:(NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay) fromDate:aDate];
+    components = [cal components:(NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
+                        fromDate:aDate];
     NSDate *otherDate = [cal dateFromComponents:components];
     BOOL isToday = [today isEqualToDate:otherDate];
     return isToday;

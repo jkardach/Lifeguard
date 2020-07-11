@@ -18,6 +18,7 @@ MFMailComposeViewControllerDelegate>
 - (id)init
 {
     if (self = [super init]) {
+        _resDate = @"";
         _date = @"";
         _lastName = @"";
         _memberID = @"";
@@ -42,6 +43,8 @@ MFMailComposeViewControllerDelegate>
         _resStop = @"";
         _lapSwimmers = 0;
         _lapSwimmerRes = NO;
+        _added = NO;
+        _lapStart = @"";
     }
     return self;
 }

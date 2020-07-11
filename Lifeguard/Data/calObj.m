@@ -12,8 +12,10 @@
 
 - (id)init {
     if (self = [super init]) {
+        _resDate = @"";
         _start = @"";
         _end = @"";
+        _lapStart = @"";
         _memberId = @"";
         _lapSwimmer = NO;
         _numberLapSwimmers = 0;

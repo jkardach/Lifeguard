@@ -31,13 +31,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic) BOOL droppedOff;
 @property(nonatomic) BOOL checked;
 @property(nonatomic) BOOL updated;
+@property(nonatomic) BOOL added;
 
 @property(nonatomic) BOOL hasRes;
+@property(nonatomic, strong) NSString *resDate;
 @property(nonatomic, strong) NSString *resStart;
 @property(nonatomic, strong) NSString *resStop;
+@property(nonatomic, strong) NSString *lapStart;
 @property(nonatomic) BOOL lapSwimmerRes;
 @property(nonatomic) NSInteger lapSwimmers;
-
 
 - (void)sendSMS:(id)viewController phone1:(int)phone1;
 - (void)call:(id)viewController phone1:(BOOL)phone1;
