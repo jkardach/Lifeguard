@@ -10,10 +10,12 @@
 #import "GoogleSheet.h"
 #import "FileRoutines.h"
 #import "poolRecord.h"
+#import "SheetTab.h"
+#import "Constants.h"
 
 @interface AppDelegate ()
 @property (nonatomic, strong) FileRoutines *fileH;
-
+@property (nonatomic, strong) GTLRSheetsService *googleSheetService;
 @end
 
 @implementation AppDelegate
@@ -26,15 +28,31 @@
         _poolSheets = [[NSMutableArray alloc] init];
         //https://docs.google.com/spreadsheets/d/13u7WLeKiXEpn6rGJeKB81I6SUR6GGcvJR8ccRetCcns/edit#gid=1913985701
         GoogleSheet *initSheet = [[GoogleSheet alloc] init];
+        
         initSheet.name = @"Saratoga Swim Club";
-        initSheet.spreadSheetID = @"13u7WLeKiXEpn6rGJeKB81I6SUR6GGcvJR8ccRetCcns";
-        initSheet.range = @"LifeGuard";  // this should be removed
+        initSheet.spreadSheetID = POOLLOG_SSHEET_ID;
         initSheet.service = false;
-        initSheet.tab1Name = @"LifeGuard";
-        initSheet.tab1sheetID = @(1913985701);
+        initSheet.tabName = LG_SHEET_TAB;
+        initSheet.tabsheetID = LG_SHEET_ID;
+        initSheet.sheetService = self.sheetService;
+        
+        SheetTab *tab = [[SheetTab alloc] init];
+        tab.name = LG_SHEET_TAB;
+        tab.sheetID = LG_SHEET_ID;
+        tab.range = @"A2:I";
+        initSheet.tabs[@"LifeGuard"] = tab;
+        initSheet.service = NO;
+
         [_poolSheets addObject:initSheet];
     }
     return _poolSheets;
+}
+
+-(GoogleSheet *) accountSheet {
+    if(!_accountSheet) {
+        _accountSheet = [[GoogleSheet alloc] init];
+    }
+    return _accountSheet;
 }
 
 - (GTLRSheetsService *) sheetService {
@@ -106,7 +124,7 @@ didSignInForUser:(GIDGoogleUser *)user
     }
         
     self.sheetService.authorizer = user.authentication.fetcherAuthorizer;
-    
+    self.googleSheetService = self.sheetService;  // updates the sheet service in googlesheet object
     self.calendarService.shouldFetchNextPages = @YES;
     self.calendarService.retryEnabled = @YES;
     self.calendarService.maxRetryInterval = 15;

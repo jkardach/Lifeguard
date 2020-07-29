@@ -19,6 +19,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *time;
 @property (weak, nonatomic) IBOutlet UILabel *poolLabel;
 @property (weak, nonatomic) IBOutlet UILabel *spaLabel;
+@property (weak, nonatomic) IBOutlet UITableViewCell *poolWaterLevelCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *spaWaterLevelCell;
+
 @property (weak, nonatomic) IBOutlet UITextView *note;
 
 // additional Service fields
@@ -89,6 +92,17 @@
     [self.phRange setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
     self.phRange.textColor = [self.tools getUIColorObjectFromHexString:@"#0984e3" alpha:1];
     
+    if (self.precord.poolWaterLevel) {
+        self.poolWaterLevelCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        self.poolWaterLevelCell.accessoryType = UITableViewCellAccessoryNone;
+    }
+    
+    if (self.precord.spaWaterLevel) {
+        self.spaWaterLevelCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        self.spaWaterLevelCell.accessoryType = UITableViewCellAccessoryNone;
+    }
     
     self.date.text = [NSString stringWithFormat:@"Date: %@", self.precord.date];
     self.time.text = [NSString stringWithFormat:@"Time: %@", self.precord.time];
@@ -138,7 +152,9 @@
         rows = 2;
     } else if (section == 1 || section ==2) {
         if (self.precord.service) {
-            rows = 4;
+            rows = 5;
+        } else {
+            rows = 2;
         }
     }
     return rows;

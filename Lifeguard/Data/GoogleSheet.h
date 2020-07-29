@@ -7,16 +7,32 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "GTLRSheets.h"
+#import "SheetTab.h"
+
+@protocol GoogleSheetDelegate
+@required
+- (void)createRecord:(GTLRSheets_ValueRange *) result;  // this passes the result of the query back
+
+@optional
+
+
+@end
 
 @interface GoogleSheet : NSObject <NSCoding>
+@property (nonatomic, strong) id delegate;
+
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *spreadSheetID;
-@property (nonatomic, strong) NSArray *tabs;  // an array of tabs in the sheet
+@property (nonatomic, strong) NSString *tabName;
+@property (nonatomic, strong) NSString *tabsheetID;
+@property (nonatomic, strong) GTLRSheetsService *sheetService;
 @property (nonatomic, strong) NSString *range;
-@property(nonatomic, strong) NSString *tab1Name;
-@property(nonatomic, strong) NSNumber *tab1sheetID;
-@property(nonatomic, strong) NSString *tab2Name;
-@property(nonatomic, strong) NSNumber *tab2sheetID;
 @property (nonatomic) BOOL service;     // indicates this is a service account
+@property (nonatomic, strong) NSMutableDictionary *tabs;  // dictionary of tabs
+@property (nonatomic, strong) GTLRSheets_ValueRange *result; 
 
+-(void)setDelegate:(id)newDelegate;
+
+-(void)readSheetWith:(NSString *)tabName tabRange:(NSString *)tabRange;
 @end

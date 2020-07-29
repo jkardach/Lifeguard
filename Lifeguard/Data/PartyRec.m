@@ -49,6 +49,14 @@
     return [thisDate compare:recDate];
 }
 
+-(NSArray *)keys {
+    
+    return @[@"name", @"memberID",
+             @"invoiceDate", @"partyOccassion",@"partyDate", @"start",
+             @"stop", @"partyTime", @"duration", @"partyType", @"memberType",
+             @"fees", @"partyFee", @"lateFee", @"email", @"phone", @"payment",
+             @"check", @"received", @"deposited", @"refund", @"checked"];
+}
 
 
 @end

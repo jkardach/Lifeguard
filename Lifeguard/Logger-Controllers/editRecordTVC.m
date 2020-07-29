@@ -7,8 +7,9 @@
 //
 
 #import "editRecordTVC.h"
+#import "Alert.h"
 
-@interface editRecordTVC () <UITextViewDelegate, UITextFieldDelegate>
+@interface editRecordTVC () <UITextViewDelegate, UITextFieldDelegate, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *date;
 @property (weak, nonatomic) IBOutlet UILabel *time;
 @property (weak, nonatomic) IBOutlet UITextField *poolPhTF;
@@ -26,6 +27,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *spaClSensorTF;
 @property (weak, nonatomic) IBOutlet UITextField *spaAcidGalsTF;
 @property (weak, nonatomic) IBOutlet UITextField *spaClGalsTF;
+@property (weak, nonatomic) IBOutlet UITableViewCell *spaWaterLevelCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *poolWaterLevelCell;
 
 // note textView
 @property (weak, nonatomic) IBOutlet UITextView *noteTV;
@@ -52,6 +55,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.tableView setDelegate: self];
+    [self.tableView setDataSource:self];
+    
     [self initDelegates];
     [self initCellValues];
     //[self initToolBars];        // adds done/cancel button to all textFields with decimalnumber keybard
@@ -64,9 +70,9 @@
      object:[UIDevice currentDevice]];
     
     // add gesture recognizer to the view
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundTapped:)];
-    tapRecognizer.numberOfTapsRequired = 1;
-    [self.view addGestureRecognizer:tapRecognizer];
+    //UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundTapped:)];
+    //tapRecognizer.numberOfTapsRequired = 1;
+    //[self.view addGestureRecognizer:tapRecognizer];
 }
 
 -(void)initDelegates
@@ -117,6 +123,18 @@
     self.spaClTF.text = [self updateValue:self.precord.spaCl];
     //
     self.noteTV.text = [self updateValue:self.precord.note];
+    
+    // initialize checkmarks for water level
+    if (self.precord.poolWaterLevel) {
+        self.poolWaterLevelCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        self.poolWaterLevelCell.accessoryType = UITableViewCellAccessoryNone;
+    }
+    if (self.precord.spaWaterLevel) {
+        self.spaWaterLevelCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        self.spaWaterLevelCell.accessoryType = UITableViewCellAccessoryNone;
+    }
     
     if (self.precord.service) {
         self.poolPhSensorTF.text = [self updateValue:self.precord.poolSensorPh];
@@ -182,9 +200,9 @@
     int rows = 1;   // default sections 0, 3 have 1 row
     if (section == 1 || section == 2) {
         if (self.precord.service) {
-            rows = 7;
+            rows = 8;
         } else {
-            rows = 2;
+            rows = 3;
         }
     } else if (section == 3) {
         rows = 2;
@@ -286,6 +304,25 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    self.precord.updated = true;
+    if(indexPath.row == 2) {
+        if(indexPath.section == 2) {
+            self.precord.poolWaterLevel = !self.precord.poolWaterLevel;
+            if(self.precord.poolWaterLevel) {
+                self.poolWaterLevelCell.accessoryType = UITableViewCellAccessoryCheckmark;
+            } else {
+                self.poolWaterLevelCell.accessoryType = UITableViewCellAccessoryNone;
+            }
+        } else {  // section 2 is spa
+            self.precord.spaWaterLevel = !self.precord.spaWaterLevel;
+            if(self.precord.spaWaterLevel) {
+                self.spaWaterLevelCell.accessoryType = UITableViewCellAccessoryCheckmark;
+            } else {
+                self.spaWaterLevelCell.accessoryType = UITableViewCellAccessoryNone;
+            }
+        }
+    }
+    
     if (indexPath.row == 6) {
         if (indexPath.section == 1) {
             self.precord.poolfilterBackwash = !self.precord.poolfilterBackwash;
@@ -304,6 +341,7 @@
             }
         }
     }
+    [self.tableView reloadData];
 }
 
 
@@ -327,7 +365,15 @@
 }
 
 - (IBAction)EnterRecord:(UIButton *)sender {
+    // check if water level was checked, if not send alert and exit
+    if(!self.precord.poolWaterLevel || !self.precord.spaWaterLevel) {
+        [Alert showAlert:@"Check the water level!"
+                 message:@"The pool or spa water level was not checked.  Check the water level, and if it is ok, put a checkmark on the record!"
+          viewController:self];
+    } else {
     [self.navigationController popViewControllerAnimated:YES];
+    }
 }
+
 
 @end

@@ -81,25 +81,6 @@
     }];
 }
 
-// Helper for showing an alert
-- (void) showAlert:(NSString *)title
-           message:(NSString *)message {
-    
-    UIAlertController *alert =
-    [UIAlertController alertControllerWithTitle:title
-                                        message:message
-                                 preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *ok =
-    [UIAlertAction actionWithTitle:@"OK"
-                             style:UIAlertActionStyleDefault
-                           handler:^(UIAlertAction * action)
-     {
-         [alert dismissViewControllerAnimated:YES completion:nil];
-     }];
-    [alert addAction:ok];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
 #pragma mark - Table view data source
 
 

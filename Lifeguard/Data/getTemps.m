@@ -148,9 +148,9 @@
         } else {
             self.ambErrorCnt++;
             if (self.ambErrorCnt > 5) {
-                NSLog(@"Failed reading spa temperature from spa device, timing out");
+                //NSLog(@"Failed reading spa temperature from spa device, timing out");
             } else {
-                NSLog(@"Failed reading spa temperature from spa device, trying again");
+                //NSLog(@"Failed reading spa temperature from spa device, trying again");
                 [self getSpaTemp];
             }
         }

@@ -40,10 +40,20 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSString *lapStart;
 @property(nonatomic) BOOL lapSwimmerRes;
 @property(nonatomic) NSInteger lapSwimmers;
+@property(nonatomic) BOOL missedReservation;
+@property(nonatomic) BOOL missedReservationSaved;
+@property(nonatomic) BOOL noShow;
 
 - (void)sendSMS:(id)viewController phone1:(int)phone1;
 - (void)call:(id)viewController phone1:(BOOL)phone1;
 - (void)sendEmail:(id)viewController subject:(NSString *)subject email1:(BOOL)email1;
+-(BOOL)didTheyMissReservation;
+-(NSArray *)getFamilyValueArray;
+-(NSArray *)getSignInValueArray;
+-(NSArray *)getMissedResValueArray;
+-(BOOL)timeToSaveMissedReservation;
+-(NSArray *)signinKeys;
+-(NSArray *)famKeys;
 @end
 
 NS_ASSUME_NONNULL_END

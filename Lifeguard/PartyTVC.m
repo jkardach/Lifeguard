@@ -104,24 +104,6 @@
     }];
 }
 
-// Helper for showing an alert
-- (void)showAlert:(NSString *)title message:(NSString *)message {
-    UIAlertController *alert =
-    [UIAlertController alertControllerWithTitle:title
-                                        message:message
-                                 preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *ok =
-    [UIAlertAction actionWithTitle:@"OK"
-                             style:UIAlertActionStyleDefault
-                           handler:^(UIAlertAction * action)
-     {
-         [alert dismissViewControllerAnimated:YES completion:nil];
-     }];
-    [alert addAction:ok];
-    [self presentViewController:alert animated:YES completion:nil];
-    
-}
-
 
 #pragma mark - Table view data source
 
@@ -188,7 +170,6 @@ heightForHeaderInSection:(NSInteger)section
     [payment setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
     payment.textColor = [UIColor greenColor];
     
-    
     [headerView addSubview:famTxt];
     [headerView addSubview:fee];
     [headerView addSubview:payment];
@@ -203,6 +184,7 @@ heightForHeaderInSection:(NSInteger)section
 {
     FCell *cell = (FCell *)[tableView dequeueReusableCellWithIdentifier:@"FCell"
                                                            forIndexPath:indexPath];
+    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
     PartyRec *party;
     if (indexPath.section == 0) {
         party = self.upcomingParties[indexPath.row];
@@ -234,104 +216,24 @@ heightForHeaderInSection:(NSInteger)section
     }
     
     PartyRec *rec = [[PartyRec alloc] init];
-    if (member.count > 0) {     // date
-        rec.name = member[0];
-    }
-
-    if (member.count > 1) {     // member number
-        rec.memberID = member[1];
-        if ([rec.memberID isEqualToString:@""] || [rec.memberID isEqualToString:@"0"]) {
-            rec.memberID = @"NM";
+    for (int i = 0; i <= member.count; i++) {
+        if (i == 21) {
+            break;
+        }
+        if (((i >=11)&&(i <= 13)) || (i == 16) || (i == 20)) {
+            if ([member[i] isEqualToString: @""]) {
+                [rec setValue:@"0.00" forKey:rec.keys[i]];
+            } else {
+                [rec setValue: [NSString stringWithFormat:@"$%@", member[i]] forKey: rec.keys[i]];
+            }
         } else {
-            rec.memberID = [NSString stringWithFormat:@"%@", rec.memberID];
+            [rec setValue:member[i] forKey:rec.keys[i]];
         }
     }
-    if (member.count > 2) {
-        rec.invoiceDate = member[2];
-    }
-    if (member.count > 3) {
-        rec.partyOccassion = member[3];
-    }
-    if (member.count > 4) {
-        rec.partyDate = member[4];
-    }
-    if (member.count > 5) {     // date
-        rec.start = member[5];
-    }
-    if (member.count > 6) {     // date
-        rec.stop = member[6];
-    }
-    if (member.count > 7) {     // date
-        rec.partyTime = member[7];
-    }
-
-    if (member.count > 8) {
-        rec.duration = member[8];
-    }
-    if (member.count > 9) {
-        rec.partyType = member[9];
-    }
-    if (member.count > 10) {     // type
-        rec.memberType = member[10];
-    }
-
-    if (member.count > 11) {     // fees
-        
-        if ([member[11] isEqualToString: @""]) {
-          rec.fees = @"$0.00";
-        } else {
-            rec.fees = [NSString stringWithFormat:@"$%@", member[11]];
-        }
-    }
-    if (member.count > 12) {     // fees
-        if ([member[12] isEqualToString: @""]) {
-            rec.partyFee = @"$0.00";
-        } else {
-            rec.partyFee = [NSString stringWithFormat:@"$%@", member[12]];
-        }
-    }
-    if (member.count > 13) {     // fees
-        
-        if ([member[13] isEqualToString: @""]) {
-            rec.lateFee = @"$0.00";
-        } else {
-            rec.lateFee = [NSString stringWithFormat:@"$%@", member[13]];
-        }
-    }
-
-
-    if (member.count > 14) {     // email
-        rec.email = member[14];
-    }
-
-    if (member.count > 15) {     // phone
-        rec.phone = member[15];
-    }
-
-    if (member.count > 16) {     // payment
-        if ([member[16] isEqualToString: @""]) {
-            rec.payment = @"$0.00";
-        } else {
-            rec.payment = [NSString stringWithFormat:@"$%@", member[16]];
-        }
-    }
-
-    if (member.count > 17) {     // phone
-        rec.check = member[17];
-    }
-    if (member.count > 18) {     // phone
-        rec.received = member[18];
-    }
-    if (member.count > 19) {     // phone
-        rec.deposited = member[19];
-    }
-    if (member.count > 20) {     // phone
-        
-        if ([member[20] isEqualToString: @""]) {
-            rec.refund = @"$0.00";
-        } else {
-            rec.refund = member[20];
-        }
+    if ([rec.memberID isEqualToString:@""] || [rec.memberID isEqualToString:@"0"]) {
+        rec.memberID = @"NM";
+    } else {
+        rec.memberID = [NSString stringWithFormat:@"%@", rec.memberID];
     }
     return rec;
 }
@@ -373,11 +275,12 @@ heightForHeaderInSection:(NSInteger)section
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
      if ([segue.identifier isEqualToString:@"partyDetail"]) {
          NSIndexPath *path = [self.tableView indexPathForSelectedRow];
-         PartyDetailTVC *pdTVC = [segue destinationViewController];
+         
+         PartyDetailTVC *partydetailTVC = [segue destinationViewController];
          if (path.section == 0) {
-             pdTVC.rec = self.upcomingParties[path.row];
+             partydetailTVC.rec = self.upcomingParties[path.row];
          } else if (path.section == 1) {
-             pdTVC.rec = self.parties[path.row];
+             partydetailTVC.rec = self.parties[path.row];
          }
      }
  }

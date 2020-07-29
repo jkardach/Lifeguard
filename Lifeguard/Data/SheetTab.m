@@ -9,5 +9,19 @@
 #import "SheetTab.h"
 
 @implementation SheetTab
+- (id)init
+{
+    if (self = [super init]) {
+        _name = @"";
+        _sheetID = @"";
+        _range = @"";
+        _supportsBulk = false;
+        _batchRangePE = @"";
+        _batchRangeLE = @"";
+        _batchRangeTR = @"";
+    }
+    return self;
+}
+
 
 @end

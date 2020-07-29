@@ -10,12 +10,14 @@
 #import <UIKit/UIKit.h>
 #import "GTLRSheets.h"
 #import "GTLRCalendar.h"
+#import "GoogleSheet.h"
 @import GoogleSignIn;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, GIDSignInDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, strong) NSMutableArray *poolSheets;
+@property (nonatomic, strong) GoogleSheet *accountSheet;
 @property (nonatomic, strong) GIDAuthentication *authentication;
 @property (nonatomic, strong) GTLRSheetsService *sheetService;
 @property (nonatomic, strong) GTLRCalendarService *calendarService;

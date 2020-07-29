@@ -15,6 +15,7 @@
 #import "CalDetailTVCTableViewController.h"
 #import "DateSelTVCell.h"
 #import "GoToTodayTVCell.h"
+#import "Alert.h"
 
 @interface CalTVC ()
 
@@ -82,6 +83,7 @@
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     self.tableView.refreshControl = refreshControl;
     self.resSummary.date = [NSDate now];
+    self.title  = @"Reservation Calendar";
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -103,6 +105,11 @@
         return [Reservations compareFullArray].count;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -120,7 +127,8 @@
     } else { // section == 1
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell3" forIndexPath:indexPath];
         NSInteger count = [self.resSummary getCountFromTitleRow:indexPath.row];
-        cell.textLabel.text = [NSString stringWithFormat:@"%@: (Swimmers-%ld)",
+        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
+        cell.textLabel.text = [NSString stringWithFormat:@"%@: (%ld Swimmers)",
                                [Reservations compareFullArray][indexPath.row],
                                count];
         if (![self even:indexPath.row]) {
@@ -201,7 +209,7 @@
 
             } else {
                 NSString *message = [NSString stringWithFormat:@"Error: %@\n", error.localizedDescription];
-                [self showAlert:@"Error" message:message];
+                [Alert showAlert:@"Error" message:message viewController:self];
             }
         }];
 }
@@ -262,7 +270,7 @@
             [self updateDisplay];
         } else {
             NSString *message = [NSString stringWithFormat:@"Error: %@\n", error.localizedDescription];
-            [self showAlert:@"Error" message:message];
+            [Alert showAlert:@"Error" message:message viewController:self];
         }
     }];
 }
@@ -275,12 +283,6 @@
         FamilyRec *rec = self.families[i];
         for (calObj *cal in self.calArray) {
             if ([cal.memberId isEqualToString:rec.memberID]) {
-                if ([rec.lastName isEqualToString:@"Bannon"]) {
-                    printf("Bannon record");
-                }
-                if ([cal.memberId isEqualToString:@"62"]) {
-                    printf("Bannon Cal for %s", [cal.start UTF8String]);
-                }
                 rec.hasRes = YES;
                 rec.resDate = cal.resDate;
                 
@@ -295,7 +297,7 @@
                 if (rec.lapSwimmerRes) {
                     rec.lapSwimmers++;  // if this is a lapswimmer res, inc lap swimmers
                 }
-                //[self.resSummary updateCount:rec.resStart];  // update the reservation count
+
                 if (!rec.added) {
                     [self.familiesWithReservations addObject:rec];  // only add object once
                     rec.added = YES;
@@ -346,23 +348,6 @@
     GTLRDateTime *startDateTime = [GTLRDateTime dateTimeWithRFC3339String:startDate];
     GTLRDateTime *endDateTime = [GTLRDateTime dateTimeWithRFC3339String:stopDate];
     return @[startDateTime, endDateTime];
-}
-
-// Helper for showing an alert
-- (void)showAlert:(NSString *)title message:(NSString *)message {
-    UIAlertController *alert =
-    [UIAlertController alertControllerWithTitle:title
-                                        message:message
-                                 preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *ok =
-    [UIAlertAction actionWithTitle:@"OK"
-                             style:UIAlertActionStyleDefault
-                           handler:^(UIAlertAction * action)
-     {
-         [alert dismissViewControllerAnimated:YES completion:nil];
-     }];
-    [alert addAction:ok];
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 // converts memberSheet record to family object, remove CL, PL records

@@ -39,6 +39,9 @@
         _poolfilterBackwash = false;
         _spafilterBackwash = false;
         _updated = false;
+        _poolWaterLevel = false;
+        _spaWaterLevel = false;
+        _service = false;
     }
     return self;
 }
@@ -58,4 +61,57 @@
     return [recDate compare:thisDate];
 }
 
+-(NSArray *)keys {
+    if (self.service) {
+        // 0-18
+        return @[@"date", @"time",
+                 @"poolPh", @"poolCl",@"poolSensorPh", @"poolSensorCl",
+                 @"poolGalAcid", @"poolGalCl", @"poolfilterBackwash",
+                 @"spaPh", @"spaCl",@"spaSensorPh", @"spaSensorCl",
+                 @"spaGalAcid", @"spaGalCl", @"spafilterBackwash",
+                 @"note", @"poolWaterLevel", @"spaWaterLevel"];
+    } else {
+        // 0-8
+        return @[@"date", @"time", @"poolPh", @"poolCl", @"spaPh", @"spaCl",
+                 @"note", @"poolWaterLevel", @"spaWaterLevel"];
+    }
+}
+-(NSArray *)valueArray {
+    NSString *poolWaterLevel = @"FALSE";
+    NSString *spaWaterLevel = @"FALSE";
+    NSString *poolBackwash = @"FALSE";
+    NSString *spaBackwash = @"FALSE";
+    if (self.poolfilterBackwash) {
+        poolBackwash = @"TRUE";
+    }
+    if (self.spafilterBackwash) {
+        spaBackwash = @"TRUE";
+    }
+    if(self.poolWaterLevel) {
+        poolWaterLevel = @"TRUE";
+    }
+    if(self.spaWaterLevel) {
+        spaWaterLevel = @"TRUE";
+    }
+    NSArray *valueArray;
+    if(self.service) {
+        valueArray = @[
+            @[self.date, self.time,
+              self.poolPh, self.poolCl,
+              self.poolSensorPh, self.poolSensorCl,
+              self.poolGalAcid, self.poolGalCl, poolBackwash,
+              self.spaPh, self.spaCl,
+              self.spaSensorPh, self.spaSensorCl,
+              self.spaGalAcid, self.spaGalCl, spaBackwash,
+              self.note, poolWaterLevel, spaWaterLevel]
+        ];
+    } else {
+        valueArray = @[
+            @[self.date, self.time, self.poolPh,
+              self.poolCl, self.spaPh, self.spaCl,
+              self.note, self, spaWaterLevel]
+        ];
+    }
+    return valueArray;
+}
 @end

@@ -14,6 +14,7 @@
 #import "FileRoutines.h"
 #import "getTemps.h"
 #import "AppDelegate.h"
+#import "Alert.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-w documentation"
@@ -124,12 +125,26 @@
     [super viewDidAppear:YES];
     
     if (!self.poolLogArray) return;
+}
+
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    // setup the configuration button
+    self.configButton.title = @"\u2699";
+    UIFont *f1 = [UIFont fontWithName:@"Helvetica" size:24.0];
+    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
+                          f1, NSFontAttributeName, nil];
+    [self.configButton setTitleTextAttributes:dict forState:UIControlStateNormal];
+    
     [self removeBadRecord];     // removes any aborted new record
     
     int i = 0;
     for (poolRecord *record in self.poolLogArray) {
         if (record.updated && !record.newRecord) {  //
-            [self updateRecordAtRow:i poolRecord:record];  // replace old record with updated record in spreadsheet
+            [self updateRec: record];  // replace old record with updated record in spreadsheet
             record.updated = false;
         } else if (record.newRecord && ![record.poolPh isEqualToString:@" "]) {
             [self appendRowToSheetWith:record];
@@ -140,6 +155,9 @@
     
     [self.poolLogArray sortUsingSelector:@selector(compareDates:)];  // sort array
     [self readSheet];
+    [self.tableView reloadData];
+    
+    [self.poolLogArray sortUsingSelector:@selector(compareDates:)];  // sort array
     [self.tableView reloadData];
 }
 
@@ -154,24 +172,16 @@
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    // setup the configuration button
-    self.configButton.title = @"\u2699";
-    UIFont *f1 = [UIFont fontWithName:@"Helvetica" size:24.0];
-    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:
-                          f1, NSFontAttributeName, nil];
-    [self.configButton setTitleTextAttributes:dict forState:UIControlStateNormal];
-    [self.poolLogArray sortUsingSelector:@selector(compareDates:)];  // sort array
-    [self.tableView reloadData];
-}
-
 // reads the google sheet pointed to by the sheet object
 - (void)readSheet
 {
-    NSString *range = [NSString stringWithFormat:@"%@!A2:I", self.sheet.tab1Name];
+    NSString *range;
+    if(self.sheet.service) {
+        range = [NSString stringWithFormat:@"%@!A2:S", self.sheet.tabName];
+    } else {
+        range = [NSString stringWithFormat:@"%@!A2:I", self.sheet.tabName];
+    }
+    
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:self.sheet.spreadSheetID
                                                             range:range];
@@ -184,7 +194,7 @@
             [self createRecord:result];
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting display result sheet data: %@\n", error.localizedDescription];
-            [self showAlert:@"Error" message:message];
+            [Alert showAlert:@"Error" message:message viewController:self];
         }
     }];
 
@@ -192,10 +202,49 @@
 
 // creates records from result array
 - (void)createRecord:(GTLRSheets_ValueRange *) result {
+    
+    NSArray *rows = result.values;
+    if (rows.count > 0) {
+        [self.poolLogArray removeAllObjects];
+        poolRecord *rec;
+        for (NSArray *row in rows) {
+            rec = [[poolRecord alloc] init];
+            rec.service = self.sheet.service;
+            for(int i = 0; i < row.count; i++) {
+                if ((i <= 6) ||
+                    (rec.service&&((i==7)||((i>=9)&&(i<=14))||(i==16)))) {
+                    [rec setValue:row[i] forKey:rec.keys[i]];
+                } else {
+                    NSString *value = row[i];
+                    if([value isEqualToString:@"TRUE"]) {
+                        [rec setValue:@YES forKey:rec.keys[i]];
+                    } else {
+                        [rec setValue:@NO forKey:rec.keys[i]];
+                    }
+                }
+                
+            }
+            rec.newRecord = false;
+            rec.updated = false;
+            rec.service = self.sheet.service;
+            [self.poolLogArray addObject:rec];
+        }
+    }
+    
+    [self.poolLogArray sortUsingSelector:@selector(compareDates:)];  // sort array
+    self.displayedPoolLogArray = self.poolLogArray;
+    [self.tableView.refreshControl endRefreshing];
+    [self.tableView reloadData];
+}
+
+// creates records from result array
+- (void)create2Record:(GTLRSheets_ValueRange *) result {
    
     NSArray *rows = result.values;
     if (rows.count > 0) {
         [self.poolLogArray removeAllObjects];
+        
+        
         for (NSArray *row in rows) {
             if (row.count > 1) {
                 // create the object here
@@ -250,6 +299,20 @@
                     if(row.count > 16) {
                         record.note = row[16];
                     }
+                    if(row.count > 17) {
+                        if ([row[17] isEqualToString:@"TRUE"]) {
+                            record.poolWaterLevel = true;
+                        } else {
+                            record.poolWaterLevel = false;
+                        }
+                    }
+                    if(row.count > 18) {
+                        if ([row[18] isEqualToString:@"TRUE"]) {
+                            record.spaWaterLevel = true;
+                        } else {
+                            record.spaWaterLevel = false;
+                        }
+                    }
                 } else {
                     if (row.count > 4)
                         record.spaPh = row[4];
@@ -257,6 +320,20 @@
                         record.spaCl = row[5];
                     if(row.count > 6) {
                         record.note = row[6];
+                    }
+                    if(row.count > 7) {
+                        if ([row[7] isEqualToString:@"TRUE"]) {
+                            record.poolWaterLevel = true;
+                        } else {
+                            record.poolWaterLevel = false;
+                        }
+                    }
+                    if(row.count > 8) {
+                        if ([row[8] isEqualToString:@"TRUE"]) {
+                            record.spaWaterLevel = true;
+                        } else {
+                            record.spaWaterLevel = false;
+                        }
                     }
                 }
                 record.newRecord = false;
@@ -274,12 +351,61 @@
     [self.tableView reloadData];
 }
 
+//****************
+- (void) updateRec: (poolRecord *)poolRecToUpdate
+{
+    // first find the row of the record to update
+    NSString *range;
+    if(self.sheet.service) {
+        range = [NSString stringWithFormat:@"%@!A1:S", self.sheet.tabName];
+    } else {
+        range = [NSString stringWithFormat:@"%@!A1:I", self.sheet.tabName];
+    }
+    
+    GTLRSheetsQuery_SpreadsheetsValuesGet *query =
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:self.sheet.spreadSheetID
+                                                            range:range];
+    [self.service executeQuery:query
+                  completionHandler:^(GTLRServiceTicket *ticket,
+                                      GTLRSheets_ValueRange *result,
+                                      NSError *error) {
+        int rowOfRec = 0;
+        if (error == nil) {
+            NSArray *rows = result.values;
+            if (rows.count > 0) {
+                for (NSArray *row in rows) {
+                    if (row.count > 1) {
+                        if (([poolRecToUpdate.date isEqualToString:row[0]])&&([poolRecToUpdate.time isEqualToString:row[1]])) {
+                            break;  // this is the record with the date and time stamps
+                        }
+                    } else {
+                        break;
+                    }
+                    rowOfRec++;
+                }
+            }
+            rowOfRec -= 1;  // array starts at zero, spreadsheet row starts at 1
+            [self updateRecordAtRow:rowOfRec poolRecord:poolRecToUpdate];  // update spreadsheet row
+        } else {
+            NSString *message = [NSString stringWithFormat:@"Error: %@\n", error.localizedDescription];
+            [Alert showAlert:@"Error" message:message viewController:self];
+        }
+    }];
+}
+
+
 // this creates an array which updates/replaces the specified row
 - (void)updateRecordAtRow: (int)row poolRecord:(poolRecord *)poolRecord
 {
-    NSString *range = [NSString stringWithFormat:@"%@!A%d", self.sheet.tab1Name, row+2];
+    NSString *range;
+    if(self.sheet.service) {
+        range = [NSString stringWithFormat:@"%@!A%d", self.sheet.tabName, row+2];
+    } else {
+        range = [NSString stringWithFormat:@"%@!A%d", self.sheet.tabName, row+2];
+    }
+    
     GTLRSheets_ValueRange *value = [[GTLRSheets_ValueRange alloc] init];
-    value.values = [self createValueArrayFromPoolRecord:poolRecord];
+    value.values = poolRecord.valueArray;
     
     GTLRSheetsQuery_SpreadsheetsValuesUpdate *query =
     [GTLRSheetsQuery_SpreadsheetsValuesUpdate queryWithObject:value
@@ -293,7 +419,7 @@
             [self readSheet];
         } else {
             NSString *message = [NSString stringWithFormat:@"Error: %@\n", error.localizedDescription];
-            [self showAlert:@"Error" message:message];
+            [Alert showAlert:@"Error" message:message viewController:self];
         }
     }];
 }
@@ -301,9 +427,14 @@
 // this creates an array to append a row to end of sheet.
 - (void)appendRowToSheetWith: (poolRecord *)poolRecord
 {
-    NSString *range = [NSString stringWithFormat:@"%@!A2:H", self.sheet.tab1Name];
+    NSString *range;
+    if(self.sheet.service) {
+        range = [NSString stringWithFormat:@"%@!A2:S", self.sheet.tabName];
+    } else {
+        range = [NSString stringWithFormat:@"%@!A2:I", self.sheet.tabName];
+    }
     GTLRSheets_ValueRange *valueRange = [[GTLRSheets_ValueRange alloc] init];
-    valueRange.values = [self createValueArrayFromPoolRecord:poolRecord];
+    valueRange.values = poolRecord.valueArray;
     
     GTLRSheetsQuery_SpreadsheetsValuesAppend *query =
     [GTLRSheetsQuery_SpreadsheetsValuesAppend queryWithObject:valueRange
@@ -319,7 +450,7 @@
             [self readSheet];
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
-            [self showAlert:@"Error" message:message];
+            [Alert showAlert:@"Error" message:message viewController:self];
         }
     }];
 }
@@ -328,7 +459,13 @@
 - (void) removeRecAtRow: (poolRecord *)poolRecToDel
 {
     // first find the row of the record to delete
-    NSString *range = [NSString stringWithFormat:@"%@!A1:H", self.sheet.tab1Name];
+    NSString *range;
+    if(self.sheet.service) {
+        range = [NSString stringWithFormat:@"%@!A1:S", self.sheet.tabName];
+    } else {
+        range = [NSString stringWithFormat:@"%@!A1:I", self.sheet.tabName];
+    }
+    
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:self.sheet.spreadSheetID
                                                             range:range];
@@ -353,84 +490,13 @@
                 }
             }
             //rowOfRec += 1;  // array starts at zero, spreadsheet row starts at 1
-            [self delRow:rowOfRec spreadSheetId:self.sheet.spreadSheetID sheetId:self.sheet.tab1sheetID];  // del spreadsheet row
-            /*
-            // next clear this record in the Logger sheet (A-Z of the found row)
-            GTLRSheets_ClearValuesRequest *clear = [[GTLRSheets_ClearValuesRequest alloc] init];
-            NSString *clearRange = [NSString stringWithFormat:@"%@!A%D:Z%D", self.sheet.tab1Name, rowOfRec, rowOfRec];
-            
-            GTLRSheetsQuery_SpreadsheetsValuesClear *query1 =
-            [GTLRSheetsQuery_SpreadsheetsValuesClear queryWithObject:clear
-                                                       spreadsheetId:self.sheet.spreadSheetID
-                                                               range:clearRange];
-            
-            [self.service executeQuery:query1 completionHandler:^(GTLRServiceTicket *ticket,
-                                                                      GTLRSheets_ValueRange *result,
-                                                                      NSError *error) {
-                if (error == nil) {
-                    [self readSheet];
-                } else {
-                    NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
-                    [self showAlert:@"Error" message:message];
-                }
-            }];
-*/
+            [self delRow:rowOfRec spreadSheetId:self.sheet.spreadSheetID sheetId:@(744046825)];  // del spreadsheet row
+
         } else {
             NSString *message = [NSString stringWithFormat:@"Error: %@\n", error.localizedDescription];
-            [self showAlert:@"Error" message:message];
+            [Alert showAlert:@"Error" message:message viewController:self];
         }
     }];
-}
-
-
-
-- (NSArray *) createValueArrayFromPoolRecord:(poolRecord *)poolRecord
-{
-    NSString *poolBackwash = @"FALSE";
-    NSString *spaBackwash = @"FALSE";
-    if (poolRecord.poolfilterBackwash) {
-        poolBackwash = @"TRUE";
-    }
-    if (poolRecord.spafilterBackwash) {
-        spaBackwash = @"TRUE";
-    }
-    NSArray *valueArray;
-    if(self.sheet.service) {
-        valueArray = @[
-                       @[poolRecord.date, poolRecord.time,
-                         poolRecord.poolPh, poolRecord.poolCl,
-                         poolRecord.poolSensorPh, poolRecord.poolSensorCl,
-                         poolRecord.poolGalAcid, poolRecord.poolGalCl, poolBackwash,
-                         poolRecord.spaPh, poolRecord.spaCl,
-                         poolRecord.spaSensorPh, poolRecord.spaSensorCl,
-                         poolRecord.spaGalAcid, poolRecord.spaGalCl, spaBackwash,
-                         poolRecord.note]
-                       ];
-    } else {
-        valueArray = @[
-                       @[poolRecord.date, poolRecord.time, poolRecord.poolPh,
-                         poolRecord.poolCl, poolRecord.spaPh, poolRecord.spaCl,
-                         poolRecord.note]
-                       ];
-    }
-    return valueArray;
-}
-
-// Helper for showing an alert
-- (void)showAlert:(NSString *)title message:(NSString *)message {
-    UIAlertController *alert =
-    [UIAlertController alertControllerWithTitle:title
-                                        message:message
-                                 preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *ok =
-    [UIAlertAction actionWithTitle:@"OK"
-                             style:UIAlertActionStyleDefault
-                           handler:^(UIAlertAction * action)
-     {
-         [alert dismissViewControllerAnimated:YES completion:nil];
-     }];
-    [alert addAction:ok];
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Table view data source#pragma mark - Table view data source
@@ -523,18 +589,15 @@ viewForHeaderInSection:(NSInteger)section
                 cell.detailTextLabel.text = @"";
                 break;
         }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        // make odd rows light blue
-        
+        return cell;
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-        //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         poolRecord *record = self.displayedPoolLogArray[indexPath.row];
         NSString *poolTxt;
         NSString *spaTxt;
         cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", record.date, record.time];
         cell.textLabel.textColor = [UIColor blackColor];
-        
+        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
         if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
                 poolTxt = [NSString stringWithFormat:@"pH:%@/CL:%@ppm", record.poolPh, record.poolCl];
                 spaTxt = [NSString stringWithFormat:@"pH:%@/CL:%@ppm", record.spaPh, record.spaCl];
@@ -686,7 +749,7 @@ canEditRowAtIndexPath:(NSIndexPath *)indexPath
         
             } else {
                 NSString *message = [NSString stringWithFormat:@"Error: %@\n", error.localizedDescription];
-                [self showAlert:@"Error" message:message];
+                [Alert showAlert:@"Error" message:message viewController:self];
             }
         }];
 }
@@ -728,7 +791,6 @@ canEditRowAtIndexPath:(NSIndexPath *)indexPath
 }
 
 - (void) receiveLoggerAuthUINotification:(NSNotification *) notification {
-    NSLog(@"-Logger- AuthUINotification");
     if ([notification.name isEqualToString:@"authUINotification"]) {
         [self readSheet];
     }

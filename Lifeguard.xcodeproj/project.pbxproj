@@ -40,6 +40,7 @@
 		3DBFB5B724B7FFBB001B82BA /* CalDetailTVCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5B624B7FFBB001B82BA /* CalDetailTVCTableViewController.m */; };
 		3DBFB5BF24B903A1001B82BA /* GoToTodayTVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5BE24B903A1001B82BA /* GoToTodayTVCell.m */; };
 		3DBFB5C224B903C3001B82BA /* DateSelTVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5C124B903C3001B82BA /* DateSelTVCell.m */; };
+		3DFEE28524CC897400B1B37F /* Alert.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DFEE28424CC897400B1B37F /* Alert.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -106,6 +107,8 @@
 		3DBFB5BE24B903A1001B82BA /* GoToTodayTVCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoToTodayTVCell.m; sourceTree = "<group>"; };
 		3DBFB5C024B903C3001B82BA /* DateSelTVCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DateSelTVCell.h; sourceTree = "<group>"; };
 		3DBFB5C124B903C3001B82BA /* DateSelTVCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DateSelTVCell.m; sourceTree = "<group>"; };
+		3DFEE28324CC897400B1B37F /* Alert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Alert.h; sourceTree = "<group>"; };
+		3DFEE28424CC897400B1B37F /* Alert.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Alert.m; sourceTree = "<group>"; };
 		70739B3F90572A754CE18EDC /* Pods-googleSheetsTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-googleSheetsTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-googleSheetsTest/Pods-googleSheetsTest.debug.xcconfig"; sourceTree = "<group>"; };
 		735DB8BDFD4ECA26FFC58717 /* Pods-SSClub.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SSClub.release.xcconfig"; path = "Pods/Target Support Files/Pods-SSClub/Pods-SSClub.release.xcconfig"; sourceTree = "<group>"; };
 		969D46FFDED5A033E1A1E77F /* Pods-Lifeguard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lifeguard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Lifeguard/Pods-Lifeguard.debug.xcconfig"; sourceTree = "<group>"; };
@@ -224,6 +227,8 @@
 				3D1DCD9724A3F051002E1667 /* calObj.m */,
 				3DBFB5B224B7BC6E001B82BA /* Reservations.h */,
 				3DBFB5B324B7BC6E001B82BA /* Reservations.m */,
+				3DFEE28324CC897400B1B37F /* Alert.h */,
+				3DFEE28424CC897400B1B37F /* Alert.m */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -385,6 +390,7 @@
 				3D65A42E22C5536F00BA0BF9 /* poolRecord.m in Sources */,
 				3D3531AD22C65862005A3C64 /* PartyRec.m in Sources */,
 				3D0720AB1EBD239300B083EF /* PartyTVC.m in Sources */,
+				3DFEE28524CC897400B1B37F /* Alert.m in Sources */,
 				3D07208A1EBA3B5600B083EF /* AppDelegate.m in Sources */,
 				3D65A43D22C553F800BA0BF9 /* editRecordTVC.m in Sources */,
 				3DBFB5B124B78B29001B82BA /* CalTVC.m in Sources */,
@@ -549,7 +555,7 @@
 			baseConfigurationReference = 969D46FFDED5A033E1A1E77F /* Pods-Lifeguard.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 2.3;
+				CURRENT_PROJECT_VERSION = 3.1;
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -557,7 +563,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.8;
+				MARKETING_VERSION = 3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -569,7 +575,7 @@
 			baseConfigurationReference = 9DC5F724CBE550B0F016FE14 /* Pods-Lifeguard.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 2.3;
+				CURRENT_PROJECT_VERSION = 3.1;
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -577,7 +583,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.8;
+				MARKETING_VERSION = 3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

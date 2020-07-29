@@ -43,10 +43,10 @@
     
     FamilyRec *rec = self.recArray[indexPath.row];
     if (rec.lapSwimmerRes) {
-        cell.textLabel.text = [NSString stringWithFormat:@"%@(%@, %@), Swimmers: %ld",
+        cell.textLabel.text = [NSString stringWithFormat:@"%@(%@, %@), %ld Swimmers",
                                rec.lastName, rec.memberID, rec.memType, rec.lapSwimmers];
     } else {
-        cell.textLabel.text = [NSString stringWithFormat:@"%@(%@, %@), Swimmers: %@",
+        cell.textLabel.text = [NSString stringWithFormat:@"%@(%@, %@), %@ Swimmers",
                                rec.lastName, rec.memberID, rec.memType, rec.familyMembers];
     }
     

@@ -197,8 +197,6 @@
 #pragma mark - CheckInTVCellTableViewCell delegate
 
 - (IBAction)buttonClick:(UIButton *)sender {
-
-    NSLog(@"button pressed: %@", sender.titleLabel.text);
     
     if([sender.titleLabel.text isEqualToString:@"SMS"]) {
         [self.member sendSMS:self phone1:1];

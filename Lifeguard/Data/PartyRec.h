@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic) BOOL checked;
 
 - (NSComparisonResult)compareDates:(PartyRec *)record;
+-(NSArray *)keys;
 @end
 
 NS_ASSUME_NONNULL_END

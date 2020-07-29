@@ -22,7 +22,7 @@ class RulesVC: UIViewController, WKUIDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Rules"
-        let myURL = URL(string:"https://sites.google.com/site/saratogaswimclub/pool-rules")
+        let myURL = URL(string:"https://sites.google.com/site/saratogaswimclub/our-members/pool-rules")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }

@@ -13,6 +13,8 @@
 #import "getTemps.h"
 #import "AppDelegate.h"
 #import "calObj.h"
+#import "Reservations.h"
+#import "Alert.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-w documentation"
@@ -27,6 +29,7 @@
 
 @property (nonatomic, strong) NSMutableArray *families;
 @property (nonatomic, strong) NSMutableArray *checkedInToday;
+@property (nonatomic, strong) NSMutableArray *missedResToday;
 @property (nonatomic) int guestRow;
 @property (nonatomic) int guestValue;
 @property (nonatomic, strong) NSDate *currentDate;
@@ -38,6 +41,7 @@
 @property (nonatomic) int maxSections;
 @property (nonatomic, strong) getTemps *temps;
 @property (nonatomic, strong) FamilyRec *recToUpdate;
+@property (nonatomic, strong) Reservations *resSummary;
 @end
 
 @implementation GuestTVC
@@ -57,6 +61,14 @@
         _checkedInToday = [[NSMutableArray alloc] init];
     }
     return _checkedInToday;
+}
+
+// array of members who missed their today's reservation
+- (NSMutableArray *)missedResToday {
+    if (!_missedResToday) {
+        _missedResToday = [[NSMutableArray alloc] init];
+    }
+    return _missedResToday;
 }
 
 // array of today's calendar events
@@ -86,6 +98,13 @@
         _temps = [[getTemps alloc] init];
     }
     return _temps;
+}
+
+- (Reservations *)resSummary {
+    if (!_resSummary) {
+        _resSummary = [[Reservations alloc] init];
+    }
+    return _resSummary;
 }
 
 #pragma mark viewcontroller Lifecycle
@@ -141,7 +160,7 @@
     self.recToDelete = rec;
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
-                                                            range:@"SignIn!A2:N"];
+                                                            range:@"SignIn!A2:R"];
     
     [self.sheetService executeQuery:query
                   completionHandler:^(GTLRServiceTicket *ticket,
@@ -166,38 +185,25 @@
             [self deleteRow:rowOfRec+1];  // increment row as spreadsheet starts at 1, not 0
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
-            [self showAlert:@"Error" message:message];
+            [Alert showAlert:@"Error" message:message viewController:self];
         }
     }];
 }
 
 // this writes family record to the signIn
 - (void)writeGuest:(FamilyRec *)member
+            values:(NSArray *)values
+           sheetID:(NSString *)sheetID
+        sheetRange:(NSString *)sheetRange
 {
     GTLRSheets_ValueRange *value = [[GTLRSheets_ValueRange alloc] init];
-    NSNumber *guestNum = [NSNumber numberWithInt:member.guests];
-    NSNumber *memberNum = [NSNumber numberWithInt:member.members];
 
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-    
-    NSDate *currentDate = [NSDate date];
-    NSString *dateString = [formatter stringFromDate:currentDate];
-    NSString *elg = @"NO";
-    if (member.eligable) {
-        elg = @"YES";
-    }
-    NSArray *valueArray = @[@[dateString, member.lastName, member.memberID,
-                              memberNum, guestNum, member.kidsDroppedOff,
-                              member.familyMembers, member.memType, member.phone,
-                              member.email, member.phone2, member.email2,
-                              member.optPhone, elg]];
-    value.values = valueArray;
+    value.values = values;
 
     GTLRSheetsQuery_SpreadsheetsValuesAppend *query =
     [GTLRSheetsQuery_SpreadsheetsValuesAppend queryWithObject:value
-                                                spreadsheetId:ACT_SSHEET_ID
-                                                        range:@"SignIn!A1"];
+                                                spreadsheetId:sheetID
+                                                        range:sheetRange];
     query.valueInputOption = @"USER_ENTERED";
 
     [self.sheetService executeQuery:query
@@ -209,7 +215,7 @@
     
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
-            [self showAlert:@"Error" message:message];
+            [Alert showAlert:@"Error" message:message viewController:self];
         }
     }];
 }
@@ -219,7 +225,7 @@
 - (void)readLog {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
-                                                            range:@"SignIn!A2:N"];
+                                                            range:@"SignIn!A2:R"];
     [self.sheetService executeQuery:query
                   completionHandler:^(GTLRServiceTicket *ticket,
                                       GTLRSheets_ValueRange *result,
@@ -243,7 +249,7 @@
             [self readbatchSheet];
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
-            [self showAlert:@"Error" message:message];
+            [Alert showAlert:@"Error" message:message viewController:self];
         }
     }];
 }
@@ -276,7 +282,6 @@
     GTLRSheetsQuery_SpreadsheetsBatchUpdate *query = [GTLRSheetsQuery_SpreadsheetsBatchUpdate
                                                       queryWithObject:(GTLRSheets_BatchUpdateSpreadsheetRequest *) request
                                                       spreadsheetId: spreadsheetId];
-    NSLog(@"Deleting Row: %D", row);
     [self.sheetService executeQuery:query
                       completionHandler:^(GTLRServiceTicket *ticket,
                                           GTLRSheets_ValueRange *result,
@@ -286,7 +291,7 @@
         
             } else {
                 NSString *message = [NSString stringWithFormat:@"Error: %@\n", error.localizedDescription];
-                [self showAlert:@"Error" message:message];
+                [Alert showAlert:@"Error" message:message viewController:self];
             }
         }];
 }
@@ -335,7 +340,7 @@
 
             } else {
                 NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
-                [self showAlert:@"Error" message:message];
+                [Alert showAlert:@"Error" message:message viewController:self];
             }
         }];
 }
@@ -366,14 +371,13 @@
             [self readTodaysResCal];
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting display result sheet data: %@\n", error.localizedDescription];
-            [self showAlert:@"Error" message:message];
+            [Alert showAlert:@"Error" message:message viewController:self];
         }
     }];
 }
 
 
 - (void)readTodaysResCal {
-    // get the Accounts tab of the SSC sheet;
     NSString *calId = @"lssmnscr8a49bcg51knvtgo234@group.calendar.google.com";  // the reservation calendar
     //NSString *calId = @"45hmspi6f6ur1i6h62et9tet08@group.calendar.google.com";   // the test calendar
     // create events list query
@@ -398,17 +402,21 @@
                 calObj *cal;
                 for (GTLRCalendar_Event *item in events) {
                     cal = [[calObj alloc] init];
+                    cal.resDate = self.resSummary.dateString;
                     cal.memberId = [item.summary stringByReplacingOccurrencesOfString:@"#" withString:(@"")];
                     cal.end = [self stringFromDateTime: [item.end valueForKey:@"dateTime"]];
-                    cal.start = [self stringFromDateTime: [item.start valueForKey:@"dateTime"]];
-                    NSString *tempStr = [cal.start substringFromIndex:2];
+                    NSString *start = [self stringFromDateTime: [item.start valueForKey:@"dateTime"]];
+                    NSString *tempStr = [start substringFromIndex:2];
                     if ([tempStr isEqualToString:@":30"]) {
                         cal.lapSwimmer = YES;
+                        cal.lapStart = start;
+                    } else {
+                        cal.start = start;
                     }
                     [self.calArray addObject:cal];
                 }
                 [self addResToFamiles];
-                
+
                 // sort the families array such that (checked in on top and alphabetical, then rest alphabetical)
                 // Set ascending:NO so that "YES" would appear ahead of "NO"
                 NSSortDescriptor *checkedBool = [[NSSortDescriptor alloc] initWithKey:@"checked" ascending:NO];
@@ -436,7 +444,7 @@
             }
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting display result sheet data: %@\n", error.localizedDescription];
-            [self showAlert:@"Error" message:message];
+            [Alert showAlert:@"Error" message:message viewController:self];
         }
     }];
 }
@@ -448,7 +456,6 @@
     [pstDf setDateFormat:@"HH:mm"];
     NSString *dateStr = [pstDf stringFromDate:today];
     
-
     return dateStr;
 }
 
@@ -458,7 +465,7 @@
     
     NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat: @"yyyy-MM-dd"];
-    NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
+    NSString *dateString = [dateFormatter stringFromDate:self.resSummary.date];
     
     NSString *startDate = [NSString stringWithFormat:@"%@T00:00:00-07:00", dateString];
     NSString *stopDate = [NSString stringWithFormat:@"%@T23:00:00-07:00", dateString];
@@ -470,27 +477,45 @@
 
 // add reservation values to Family and checked-in arrays
 - (void)addResToFamiles {
+    [self.resSummary reset];
+    [self.missedResToday removeAllObjects];
+    
+    // add reservation data to family records
     for (int i = 0; i < self.families.count; i++) {
         FamilyRec *rec = self.families[i];
         for (calObj *cal in self.calArray) {
             if ([cal.memberId isEqualToString:rec.memberID]) {
-                rec.hasRes = YES;
-                rec.resStart = cal.start;
-                rec.resStop = cal.end;
-                rec.lapSwimmerRes = cal.lapSwimmer;
-                if (rec.lapSwimmerRes) {
-                    rec.lapSwimmers++;  // if this is a lapswimmer res, inc lap swimmers
+                rec.hasRes = YES;  // member matches reservation, hasRes
+                rec.resDate = cal.resDate;
+                if (cal.lapSwimmer) {
+                    rec.lapStart = cal.lapStart;
+                    rec.lapSwimmerRes = YES;
+                    rec.lapSwimmers++;
+                } else {
+                    rec.resStop = cal.end;
+                    rec.resStart = cal.start;
+                }
+                if ([rec didTheyMissReservation]) {
+                    [self.missedResToday addObject:rec];
                 }
             }
         }
     }
+    // go through the checked in families, and update cal reservation if needed
     for (int i = 0; i < self.checkedInToday.count; i++) {
         FamilyRec *rec = self.checkedInToday[i];
         for (calObj *cal in self.calArray) {
             if ([cal.memberId isEqualToString:rec.memberID]) {
-                rec.hasRes = YES;
-                rec.resStart = cal.start;
-                rec.resStop = cal.end;
+                //rec.hasRes = YES;  // check-in already, so update hasRes in case
+                rec.resDate = cal.resDate;
+                if (cal.lapSwimmer) {
+                    rec.lapStart = cal.lapStart;
+                    rec.lapSwimmers = cal.numberLapSwimmers;
+                    rec.lapSwimmerRes = cal.lapSwimmer;
+                } else {
+                    rec.resStart = cal.start;
+                    rec.resStop = cal.end;
+                }  
             }
         }
     }
@@ -501,7 +526,7 @@
 - (void)updateRecord:(FamilyRec *)recordToUpdate
 {
     GTLRSheets_ValueRange *value = [[GTLRSheets_ValueRange alloc] init];
-    value.values = [self createValueArrayFromFamilyRecord:recordToUpdate];
+    value.values = recordToUpdate.getFamilyValueArray;
     
     GTLRSheetsQuery_SpreadsheetsValuesUpdate *query =
     [GTLRSheetsQuery_SpreadsheetsValuesUpdate queryWithObject:value
@@ -516,41 +541,9 @@
             [self readSheet];
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
-            [self showAlert:@"Error" message:message];
+            [Alert showAlert:@"Error" message:message viewController:self];
         }
     }];
-}
-
-- (NSArray *) createValueArrayFromFamilyRecord:(FamilyRec *)record
-{
-    NSArray *valueArray = @[
-                       @[record.date, record.lastName,
-                         record.memberID,
-                         [NSString stringWithFormat:@"%D", record.members],
-                         [NSString stringWithFormat:@"%D", record.guests],
-                         record.kidsDroppedOff,record.familyMembers,
-                         record.memType, record.phone, record.email,
-                         record.phone2, record.email2, record.optPhone]
-                       ];
-
-    return valueArray;
-}
-
-// Helper for showing an alert
-- (void)showAlert:(NSString *)title message:(NSString *)message {
-    UIAlertController *alert =
-    [UIAlertController alertControllerWithTitle:title
-                                        message:message
-                                 preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *ok =
-    [UIAlertAction actionWithTitle:@"OK"
-                             style:UIAlertActionStyleDefault
-                           handler:^(UIAlertAction * action)
-     {
-         [alert dismissViewControllerAnimated:YES completion:nil];
-     }];
-    [alert addAction:ok];
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Table view data source
@@ -617,14 +610,14 @@ viewForHeaderInSection:(NSInteger)section
         [headerView addSubview:center];
         
         headerTxt.text = @" Family(type,ID):";
-        headerTxt.textColor = [UIColor blackColor];
+        headerTxt.textColor = [UIColor labelColor];
         famMem.text = @"# Fam Members ";
-        famMem.textColor = [UIColor blackColor];
+        famMem.textColor = [UIColor labelColor];
     } else {
         headerTxt.text = @" Signed-In Family(type,ID):";
-        headerTxt.textColor = [UIColor blackColor];
+        headerTxt.textColor = [UIColor labelColor];
         famMem.text = @"# Signed-In";
-        famMem.textColor = [UIColor blackColor];
+        famMem.textColor = [UIColor labelColor];
     }
     [headerView addSubview:famMem];
     [headerView addSubview:headerTxt];
@@ -643,13 +636,15 @@ viewForHeaderInSection:(NSInteger)section
         cell = [tableView dequeueReusableCellWithIdentifier:@"Celld" forIndexPath:indexPath];
         member = self.checkedInToday[indexPath.row];
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%D",member.guests + member.members];
+        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
     } else {  // families
         cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
         member = self.families[indexPath.row];
         cell.detailTextLabel.text = member.familyMembers;
+        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
     }
     // default
-    cell.imageView.image = nil;  // default
+
     cell.textLabel.textColor = [UIColor blackColor];
     cell.detailTextLabel.textColor = [UIColor blackColor];
     [cell.textLabel setFont:[UIFont fontWithName:@"System" size:17]];
@@ -658,7 +653,7 @@ viewForHeaderInSection:(NSInteger)section
         [self clearCheckmarks];
     }
     if (indexPath.section == 0) {
-        cell.backgroundColor = [UIColor yellowColor];
+        cell.backgroundColor = [UIColor systemYellowColor];
         switch (indexPath.row)
         {
             case 0:
@@ -700,8 +695,18 @@ viewForHeaderInSection:(NSInteger)section
         if (member.droppedOff) {
             cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@): Dropped Off: %@", member.lastName, member.memType, member.memberID, member.kidsDroppedOff];
         } else if (member.hasRes){
-            cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@), R:%@", member.lastName, member.memType,
-                                   member.memberID, member.resStart];
+            if (member.lapSwimmerRes) {
+                if (![member.resStart isEqualToString:@""]) {
+                    cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@), R:%@ & R:%@", member.lastName, member.memType,
+                                           member.memberID, member.resStart, member.lapStart];
+                } else {
+                    cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@), R:%@", member.lastName, member.memType,
+                                       member.memberID, member.lapStart];
+                }
+            } else {
+                cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@), R:%@", member.lastName, member.memType,
+                member.memberID, member.resStart];
+            }
         } else {
             cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@)", member.lastName, member.memType, member.memberID];
         }
@@ -716,6 +721,9 @@ viewForHeaderInSection:(NSInteger)section
             cell.backgroundColor = lightBlue;
         } else {
             cell.backgroundColor = [UIColor whiteColor];
+        }
+        if(member.missedReservation || member.noShow) {
+            cell.backgroundColor = [UIColor systemOrangeColor];
         }
     }
     return cell;
@@ -736,8 +744,15 @@ viewForHeaderInSection:(NSInteger)section
     unsigned unitFlags = NSCalendarUnitDay;
     NSDateComponents *comp1 = [calendar components:unitFlags fromDate:currentDate];
     NSDateComponents *comp2 = [calendar components:unitFlags fromDate:now];
-    
     return [comp1 day] == [comp2 day];
+}
+
+// takes a string time in, and compares it to the current time.
+// if current time is two hours past resTime, then return YES, else NO
+-(BOOL)missedReservation:(NSString *) resTime {
+    BOOL missedRes = NO;
+    
+    return missedRes;
 }
          
 - (BOOL)even:(int)value
@@ -769,7 +784,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         FamilyRec *rec = self.checkedInToday[indexPath.row];
         [self.checkedInToday removeObjectAtIndex:indexPath.row];
-        if (indexPath.row == 0) {
+        if (self.checkedInToday.count == 0) {
             [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationBottom];
         } else {
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -778,7 +793,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     }
 }
 
-// this picks the family member which will be checked in, which is either section 2&&max3 or sectoin 1 max2
+// this picks the family member which will be checked in, which is either section 2&&max3 or section 1 max2
 // but not section 0 or section 1 max 3 (which returns)
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -786,6 +801,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     if((indexPath.section == 0) || ((indexPath.section == 1)&&(self.maxSections==3)))
         return;
     FamilyRec *member = self.families[indexPath.row];
+    member.missedReservation = NO;
     if(!member.lapSwimmerRes) {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@(%@) Family",
                                                                                 member.lastName, member.memberID]
@@ -794,7 +810,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         
         [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
             textField.placeholder = @"(number of) members";
-            textField.textColor = [UIColor blueColor];
+            textField.textColor = [UIColor systemBlueColor];
             textField.clearButtonMode = UITextFieldViewModeWhileEditing;
             textField.borderStyle = UITextBorderStyleRoundedRect;
             [textField setKeyboardType:UIKeyboardTypeNumberPad ];
@@ -802,7 +818,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         
         [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
             textField.placeholder = @"(number of) guests";
-            textField.textColor = [UIColor blueColor];
+            textField.textColor = [UIColor systemBlueColor];
             textField.clearButtonMode = UITextFieldViewModeWhileEditing;
             textField.borderStyle = UITextBorderStyleRoundedRect;
             [textField setKeyboardType:UIKeyboardTypeNumberPad ];
@@ -819,8 +835,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
             [self.checkedInToday addObject:member];
             [tableView reloadData];
             [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
-            
-            [self writeGuest:(FamilyRec *)member];   // update database
+            [self writeGuest:member values:member.getSignInValueArray sheetID:ACT_SSHEET_ID sheetRange:@"SignIn!A1"];
+            //[self writeGuest:(FamilyRec *)member];   // update database
             [tableView reloadData];
         }]];
         
@@ -834,7 +850,19 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
             member.guests = [guests.text intValue];
             [self getNamesOfKids:(FamilyRec *) member];
         }]];
-        
+        if (member.didTheyMissReservation) {
+            [alert addAction:[UIAlertAction actionWithTitle:@"No Show" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                NSArray *textfields = alert.textFields;
+                UITextField *members = textfields[0];
+                UITextField *guests = textfields[1];
+                member.checked = YES;
+                //NSLog(@"%@",guests.text);
+                member.members = [members.text intValue];
+                member.guests = [guests.text intValue];
+                member.noShow = YES;
+                [self writeGuest:member values:member.getSignInValueArray sheetID:ACT_SSHEET_ID sheetRange:@"SignIn!A1"];
+            }]];
+        }
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         }]];
         [self presentViewController:alert animated:YES completion:nil];
@@ -842,7 +870,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         // this is a lapswimmer with reservation
         member.members = (int)member.lapSwimmers;
         member.checked = YES;
-        [self writeGuest: member];
+        [self writeGuest:member values:member.getSignInValueArray sheetID:ACT_SSHEET_ID sheetRange:@"SignIn!A1"];
+        //[self writeGuest: member];
         [self.tableView reloadData];
     }
 }
@@ -860,14 +889,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     
     [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         textField.placeholder = @"name(age), name(age), name(age), ...";
-        textField.textColor = [UIColor blueColor];
+        textField.textColor = [UIColor systemBlueColor];
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         textField.borderStyle = UITextBorderStyleRoundedRect;
         [textField setKeyboardType:UIKeyboardTypeDefault];
     }];
     [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         textField.placeholder = @"(xxx) ttt-tttt";
-        textField.textColor = [UIColor blueColor];
+        textField.textColor = [UIColor systemBlueColor];
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         textField.borderStyle = UITextBorderStyleRoundedRect;
         [textField setKeyboardType:UIKeyboardTypeDefault];
@@ -881,82 +910,58 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         member.optPhone = optPhone.text;
         member.checked = YES;
         member.droppedOff = YES;
-        //NSLog(@"%@",kids.text);
-        [self writeGuest: member];
+
+        [self writeGuest:member values:member.getSignInValueArray sheetID:ACT_SSHEET_ID sheetRange:@"SignIn!A1"];
+
         [self.tableView reloadData];
     }]];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self writeGuest:member];
+        [self writeGuest:member values:member.getSignInValueArray sheetID:ACT_SSHEET_ID sheetRange:@"SignIn!A1"];
+        //[self writeGuest:member];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
 // converts record from sign-in sheet to familyRec
 - (FamilyRec *)convertToSignIn: (NSArray *)input {
+    if([input[0] isEqualToString:@""] ||
+       [input[0] isEqualToString:@"Date Time"]) {
+        return nil;
+    }
     if (input.count > 0) {     // date
-        NSString *recDateStr = input[0];
-        if (![self isToday:[self stringToDate:recDateStr]] || ([input[0] isEqualToString:@"Date Time"])) {
+        if (![self isToday:[self stringToDate:input[0]]]) {
             return nil;   // if not today, return empty
         }
     }
-    FamilyRec *rec = [[FamilyRec alloc] init];  // create a record
-    if (input.count > 0) {      // date
-        rec.date = input[0];
-    }
-    if (input.count > 1) {     // lastname
-        rec.lastName = input[1];
-    }
-    if (input.count > 2) {     // member id
-        rec.memberID = input[2];
-    }
-    if (input.count > 3) {      //
-        rec.members = [(NSString *)input[3] intValue];
-    }
-    if (input.count > 4) {     // number of guests
-        rec.guests = [(NSString *)input[4] intValue];
-    }
-    if (input.count > 5) {     // number of kids dropped off
-        rec.kidsDroppedOff = input[5];
-    }
-    if (input.count > 6) {     // number of family members
-        rec.familyMembers = input[6];
-    }
-    if (input.count > 7) {     // membership type
-        rec.memType = input[7];
-    }
-    if (input.count > 8) {     // member phone number
-        rec.phone = input[8];
-    }
-    if (input.count > 9) {     // member email
-        rec.email = input[9];
-    }
-    if (input.count > 10) {     // member phone number 2
-        rec.phone2 = input[10];
-    }
-    if (input.count > 11) {     // member email 2
-        rec.email2 = input[11];
-    }
-    if (input.count > 12) {     // member optional phone
-        rec.optPhone = input[12];
-    }
-    if (input.count > 13) {     // member eligible for reservations
-        
-        if ([input[13] isEqualToString:@"YES"]) {
-            rec.eligable = YES;
-        } else {
-            rec.eligable = NO;
-        }
+    
+    FamilyRec *rec = [[FamilyRec alloc] init];
+    for (int i = 0; i < input.count; i++) {
+        if (((i >= 0) && (i <= 2)) || ((i >= 5) && (i <= 12))) {
+            [rec setValue:input[i] forKey:rec.signinKeys[i]];
+        } else if (i == 3) {
+            rec.members = [(NSString *)input[3] intValue];
+        } else if (i == 4) {
+            rec.guests = [(NSString *)input[4] intValue];
+        } else if ((i == 13)||(i == 14)) {
+            if ([input[i] isEqualToString:@"YES"]) {
+                [rec setValue:@YES forKey:rec.signinKeys[i]];
+            } else {
+                [rec setValue:@NO forKey:rec.signinKeys[i]];
+            }
+        } 
     }
     rec.checked = YES;
     if (![rec.kidsDroppedOff isEqualToString:@""]) {  // kids dropped off?
         rec.droppedOff = YES;
     }
+    rec.hasRes = YES;  // these are records from signedin array, so have reservation
     return rec;
 }
 
 // indicates if this record is from today (current date)
 -(BOOL) isToday:(NSDate *)aDate {
+    
     NSCalendar *cal = [NSCalendar currentCalendar];
     NSDateComponents *components = [cal components:(NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
                                           fromDate:self.currentDate];
@@ -987,56 +992,30 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 // converts memberSheet record to family object, remove CL, PL records
 - (FamilyRec *) convertToFamObj: (NSArray *)member {
-    FamilyRec *rec;
-    if (member[0]) {
-        if (([member[0] isEqualToString: @"Certificate Number"]) ||
-            [member[2] isEqualToString:@"CL"] || [member[2] isEqualToString:@"PL"]) {
-            return nil;      // this is the header, remove
-        } else {
-            rec = [[FamilyRec alloc] init];
-        }
-    }
-    
-    if (member.count > 1) {     // member ID
-        rec.memberID = member[1];
-    }
-    if (member.count > 0) {     // member last name
-        rec.lastName = member[0];
-        if ([rec.lastName isEqualToString:@""]) {
-            return nil;
-        }
-    }
-    if (member.count > 2) {     // membership type
-        rec.memType = member[2];
-    }
-    if (member.count > 7) {     // member phone
-        rec.phone = member[7];
-    }
-    if (member.count > 9) {     // member email
-        rec.email = member[9];
-    }
-    if (member.count > 8) {     // member phone 2
-        rec.phone2 = member[8];
-    }
-    if (member.count > 10) {     // member email 2
-        rec.email2 = member[10];
-    }
-    if (member.count > 16) {
-        rec.familyMembers = member[16];
-    }
-    // indicates if member is eligable to swim
-    rec.eligable = YES;
-    if (member.count > 17) {
-        NSString *owesMoney = member[17];
-        if ([owesMoney isEqualToString:@"x"] ||
-            [rec.memType isEqualToString:@"PL"]) {
-            rec.eligable = NO;
-        }
-        if ([rec.memType isEqualToString:@"BD"] ||
-            [rec.memType isEqualToString:@"BE"] ) {
-            rec.eligable = YES;
-        }
 
+    if (([member[1] isEqualToString: @"Certificate Number"]) ||
+        [member[2] isEqualToString:@"CL"] || [member[2] isEqualToString:@"PL"] ||
+        [member[0] isEqualToString:@""]) {
+        return nil;      // this is the header, blank last name, or CL or PL remove
+    }
+    FamilyRec *rec = [[FamilyRec alloc] init];
+    for(int i = 0; i < member.count; i++) {
+        if (((i >= 0) && (i <= 2)) || ((i >= 7)&&(i <= 10)) || (i == 16)) {
+            [rec setValue:member[i] forKey:rec.famKeys[i]];
+        }
+        
+        rec.eligable = YES;
+        if (i == 17) {
+            NSString *owesMoney = member[17];
+            if ([owesMoney isEqualToString:@"x"] ||
+                [rec.memType isEqualToString:@"PL"]) {
+                rec.eligable = NO;
+            }
+            if ([rec.memType isEqualToString:@"BD"] ||
+                [rec.memType isEqualToString:@"BE"] ) {
+                rec.eligable = YES;
+            }
+        }
     }
     // if record is in checkedInToday, then use this record
     return [self isCheckedInToday: rec];  // if checked in today, then replaces record
