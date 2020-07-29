@@ -68,11 +68,9 @@
 - (NSArray *)getReservationsFromFamilies:(NSArray *)families fromTitleRow:(NSInteger)titleRow {
     self.title = [Reservations compareFullArray][titleRow];
     NSMutableArray *resSlot = [[NSMutableArray alloc] init];
-    printf("\n");
     for (FamilyRec *fam in families) {
         if ([fam.resStart isEqualToString:[Reservations compareArray][titleRow]] ||
             [fam.lapStart isEqualToString:[Reservations compareArray][titleRow]]) {
-            printf("%s(%s)\n", [fam.lastName UTF8String], [fam.memberID UTF8String]);
             [resSlot addObject:fam];
         }
     }

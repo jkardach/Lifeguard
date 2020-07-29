@@ -170,9 +170,6 @@ MFMailComposeViewControllerDelegate>
     if(self.missedReservationSaved || self.checked || !self.hasRes) {
         return NO;          // they missed the reservation, but have already been saved
     }
-    if ([self.memberID isEqualToString:@"37"]) {
-        printf("Jim was here");
-    }
     // if two hours beyond start time then YES and set self.missedReservation
     float lapResTimeLimit = 0.0 + deltaHour;
     float resTimeLimit = 0.0 + deltaHour;
