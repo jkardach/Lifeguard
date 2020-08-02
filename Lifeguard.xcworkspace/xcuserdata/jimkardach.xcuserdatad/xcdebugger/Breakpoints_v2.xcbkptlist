@@ -202,8 +202,8 @@
             filePath = "Lifeguard/GuestTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "509"
-            endingLineNumber = "509"
+            startingLineNumber = "532"
+            endingLineNumber = "532"
             landmarkName = "-addResToFamiles"
             landmarkType = "7">
          </BreakpointContent>
@@ -323,22 +323,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A744CFDD-9E81-43FE-B47A-8DF920754DDB"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Lifeguard/GuestTVC.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "488"
-            endingLineNumber = "488"
-            landmarkName = "-addResToFamiles"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "250F0D3F-13C1-4D1E-AF30-DA7410B66682"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -346,8 +330,8 @@
             filePath = "Lifeguard/GuestTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "724"
-            endingLineNumber = "724"
+            startingLineNumber = "739"
+            endingLineNumber = "739"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -842,8 +826,8 @@
             filePath = "Lifeguard/GuestTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "698"
-            endingLineNumber = "698"
+            startingLineNumber = "713"
+            endingLineNumber = "713"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -938,8 +922,8 @@
             filePath = "Lifeguard/GuestTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "697"
-            endingLineNumber = "697"
+            startingLineNumber = "712"
+            endingLineNumber = "712"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -954,8 +938,8 @@
             filePath = "Lifeguard/GuestTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "695"
-            endingLineNumber = "695"
+            startingLineNumber = "708"
+            endingLineNumber = "708"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1066,8 +1050,8 @@
             filePath = "Lifeguard/GuestTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "792"
-            endingLineNumber = "792"
+            startingLineNumber = "807"
+            endingLineNumber = "807"
             landmarkName = "-tableView:commitEditingStyle:forRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1082,8 +1066,8 @@
             filePath = "Lifeguard/GuestTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "787"
-            endingLineNumber = "787"
+            startingLineNumber = "802"
+            endingLineNumber = "802"
             landmarkName = "-tableView:commitEditingStyle:forRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1098,8 +1082,8 @@
             filePath = "Lifeguard/GuestTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "786"
-            endingLineNumber = "786"
+            startingLineNumber = "801"
+            endingLineNumber = "801"
             landmarkName = "-tableView:commitEditingStyle:forRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1178,8 +1162,8 @@
             filePath = "Lifeguard/GuestTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "938"
-            endingLineNumber = "938"
+            startingLineNumber = "953"
+            endingLineNumber = "953"
             landmarkName = "-convertToSignIn:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1226,8 +1210,8 @@
             filePath = "Lifeguard/GuestTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "637"
-            endingLineNumber = "637"
+            startingLineNumber = "660"
+            endingLineNumber = "660"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1242,8 +1226,8 @@
             filePath = "Lifeguard/GuestTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "959"
-            endingLineNumber = "959"
+            startingLineNumber = "974"
+            endingLineNumber = "974"
             landmarkName = "-convertToSignIn:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1290,8 +1274,8 @@
             filePath = "Lifeguard/GuestTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "971"
-            endingLineNumber = "971"
+            startingLineNumber = "986"
+            endingLineNumber = "986"
             landmarkName = "-isToday:"
             landmarkType = "7">
             <Actions>
@@ -1393,6 +1377,22 @@
             startingLineNumber = "277"
             endingLineNumber = "277"
             landmarkName = "-prepareForSegue:sender:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0E571485-89E0-493B-A42C-E20AB69BDEF0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/GuestTVC.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "512"
+            endingLineNumber = "512"
+            landmarkName = "-addResToFamiles"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

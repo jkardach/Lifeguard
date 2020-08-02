@@ -275,4 +275,54 @@ MFMailComposeViewControllerDelegate>
                self.phone, self.email, self.email2, self.phone2,
                self.resDate, self.resStart, self.lapStart]];
 }
+
+-(UIImage *)getLogo {
+    if (!self.eligable) {
+        return [UIImage imageNamed:@"xSwimClub10mm"];
+    } else {
+        if (self.hasRes) {
+            return [UIImage imageNamed:@"gSwimClub10mm"];
+        } else {
+            return [UIImage imageNamed:@"SwimClub10mm"];
+        }
+    }
+}
+
+-(id) copyWithZone: (NSZone *) zone
+{
+    FamilyRec *copy = [[FamilyRec allocWithZone: zone] init];
+    copy.date = self.date;
+    copy.lastName = self.lastName;
+    copy.memberID = self.memberID;
+    copy.memType = self.memType;
+    copy.familyMembers = self.familyMembers;
+    copy.members = self.members;
+    copy.guests = self.guests;
+    copy.kidsDroppedOff = self.kidsDroppedOff;
+    copy.email = self.email;
+    copy.phone = self.phone;
+    copy.email2 = self.email2;
+    copy.phone2 = self.phone2;
+    copy.signOut = self.signOut;
+    copy.optPhone = self.optPhone;
+    copy.signInRow = self.signInRow;
+    copy.eligable = self.eligable;
+    copy.droppedOff = self.droppedOff;
+    copy.checked = self.checked;
+    copy.updated = self.updated;
+    copy.added = self.added;
+    copy.hasRes = self.hasRes;
+    copy.resDate = self.resDate;
+    copy.resStart = self.resStart;
+    copy.resStop = self.resStop;
+    copy.lapStart = self.lapStart;
+    copy.lapSwimmerRes = self.lapSwimmerRes;
+    copy.lapSwimmers = self.lapSwimmers;
+    copy.missedReservation = self.missedReservation;
+    copy.missedReservationSaved = self.missedReservationSaved;
+    copy.noShow = self.noShow;
+    
+    return copy;
+}
+
 @end

@@ -476,22 +476,27 @@
 }
 
 // add reservation values to Family and checked-in arrays
+// if lapSwimmer, create a new record
 - (void)addResToFamiles {
     [self.resSummary reset];
     [self.missedResToday removeAllObjects];
-    
+    NSMutableArray *lapArray = [[NSMutableArray alloc] init];
     // add reservation data to family records
     for (int i = 0; i < self.families.count; i++) {
         FamilyRec *rec = self.families[i];
         for (calObj *cal in self.calArray) {
             if ([cal.memberId isEqualToString:rec.memberID]) {
-                rec.hasRes = YES;  // member matches reservation, hasRes
-                rec.resDate = cal.resDate;
                 if (cal.lapSwimmer) {
-                    rec.lapStart = cal.lapStart;
-                    rec.lapSwimmerRes = YES;
-                    rec.lapSwimmers++;
+                    FamilyRec *lapRec = [rec copy];
+                    lapRec.hasRes = YES;  // member matches reservation, hasRes
+                    lapRec.resDate = cal.resDate;
+                    lapRec.lapStart = cal.lapStart;
+                    lapRec.lapSwimmerRes = YES;
+                    lapRec.lapSwimmers = 1;
+                    [lapArray addObject:lapRec];  // add them to seperate array
                 } else {
+                    rec.hasRes = YES;  // member matches reservation, hasRes
+                    rec.resDate = cal.resDate;
                     rec.resStop = cal.end;
                     rec.resStart = cal.start;
                 }
@@ -501,6 +506,24 @@
             }
         }
     }
+    // add the lap swimmers back into the family array, if duplicate combine into single record
+    // has to have two or more records to have a duplicate
+    NSMutableArray *dupArray = [[NSMutableArray alloc] init];
+    if (lapArray.count>=2) {
+        FamilyRec *lastRec = lapArray[0];
+        for (int i = 1; i < lapArray.count; i++) {
+            FamilyRec *rec = lapArray[i];
+            if ([lastRec.memberID isEqualToString:rec.memberID]) {
+                // duplicate record
+                lastRec.lapSwimmers = 2;
+                [dupArray addObject:rec];
+            }
+            lastRec = rec;
+        }
+    }
+    [lapArray removeObjectsInArray:dupArray];  // remove these objects
+    [self.families addObjectsFromArray:lapArray];
+
     // go through the checked in families, and update cal reservation if needed
     for (int i = 0; i < self.checkedInToday.count; i++) {
         FamilyRec *rec = self.checkedInToday[i];
@@ -654,6 +677,8 @@ viewForHeaderInSection:(NSInteger)section
     }
     if (indexPath.section == 0) {
         cell.backgroundColor = [UIColor systemYellowColor];
+        cell.imageView.image = nil;
+        cell.accessoryType = 0;
         switch (indexPath.row)
         {
             case 0:
@@ -677,38 +702,28 @@ viewForHeaderInSection:(NSInteger)section
         // make odd rows light blue
 
     } else {
-        if (!member.eligable) {
-            cell.imageView.image = [UIImage imageNamed:@"xSwimClub10mm"];
-        } else {
-            if (member.hasRes) {
-                cell.imageView.image = [UIImage imageNamed:@"gSwimClub10mm"];
-            } else {
-                cell.imageView.image = [UIImage imageNamed:@"SwimClub10mm"];
-            }
-        }
-        
-        if (member.checked) {
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        } else {
-            cell.accessoryType = UITableViewCellAccessoryNone;
-        }
+        cell.imageView.image = [member getLogo];
+        cell.accessoryType = member.checked ?UITableViewCellAccessoryDisclosureIndicator: UITableViewCellAccessoryNone;
+
         if (member.droppedOff) {
-            cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@): Dropped Off: %@", member.lastName, member.memType, member.memberID, member.kidsDroppedOff];
+            cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@): Dropped Off: %@",
+                                   member.lastName, member.memType,
+                                   member.memberID, member.kidsDroppedOff];
         } else if (member.hasRes){
             if (member.lapSwimmerRes) {
-                if (![member.resStart isEqualToString:@""]) {
-                    cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@), R:%@ & R:%@", member.lastName, member.memType,
-                                           member.memberID, member.resStart, member.lapStart];
-                } else {
-                    cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@), R:%@", member.lastName, member.memType,
+                cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@), R:%@",
+                                       member.lastName, member.memType,
                                        member.memberID, member.lapStart];
-                }
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld", (long)member.lapSwimmers];
             } else {
-                cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@), R:%@", member.lastName, member.memType,
-                member.memberID, member.resStart];
+                cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@), R:%@",
+                                       member.lastName, member.memType,
+                                       member.memberID, member.resStart];
             }
         } else {
-            cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@)", member.lastName, member.memType, member.memberID];
+            cell.textLabel.text = [NSString stringWithFormat:@"%@(%@,%@)",
+                                   member.lastName, member.memType,
+                                   member.memberID];
         }
         
         // make odd rows light blue

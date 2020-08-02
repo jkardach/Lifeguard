@@ -558,7 +558,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Lifeguard/Lifeguard.entitlements;
-				CURRENT_PROJECT_VERSION = 3.1;
+				CURRENT_PROJECT_VERSION = 3.2;
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -566,7 +566,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1;
+				MARKETING_VERSION = 3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -580,7 +580,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Lifeguard/Lifeguard.entitlements;
-				CURRENT_PROJECT_VERSION = 3.1;
+				CURRENT_PROJECT_VERSION = 3.2;
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -588,7 +588,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1;
+				MARKETING_VERSION = 3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;

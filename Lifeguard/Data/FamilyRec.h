@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+@import UIKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FamilyRec : NSObject
+@interface FamilyRec : NSObject <NSCopying>
+
 @property(nonatomic, strong) NSString *date;
 @property(nonatomic, strong) NSString *lastName;
 @property(nonatomic, strong) NSString *memberID;
@@ -54,6 +56,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(BOOL)timeToSaveMissedReservation;
 -(NSArray *)signinKeys;
 -(NSArray *)famKeys;
+-(UIImage *)getLogo;
+-(id)copyWithZone:(NSZone * _Nullable)zone;
 @end
 
 NS_ASSUME_NONNULL_END
