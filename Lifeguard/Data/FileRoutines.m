@@ -37,7 +37,7 @@
     //Archive using iOS 12 compliant coding:
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:&error];
     [data writeToFile:databasePath options:NSDataWritingAtomic error:&error];
-    if (error == nil) {
+    if (error != nil) {
         NSLog(@"Write returned error: %@", [error localizedDescription]);
     }
 }

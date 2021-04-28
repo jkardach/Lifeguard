@@ -1,15 +1,15 @@
 //
-//  RulesVC.swift
+//  EmergVC.swift
 //  Lifeguard
 //
-//  Created by jim kardach on 6/26/19.
-//  Copyright © 2019 Forkbeardlabs. All rights reserved.
+//  Created by jim kardach on 4/28/21.
+//  Copyright © 2021 Forkbeardlabs. All rights reserved.
 //
 
 import UIKit
 import WebKit
 
-class RulesVC: UIViewController, WKUIDelegate {
+class EmergVC: UIViewController, WKUIDelegate {
     var url: String = ""
     var webView: WKWebView!
     
@@ -21,8 +21,8 @@ class RulesVC: UIViewController, WKUIDelegate {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Rules"
-        let myURL = URL(string:"https://sites.google.com/site/saratogaswimclub/our-members/pool-rules")
+        self.title = "Emergency Action Plan"
+        let myURL = URL(string:"https://sites.google.com/site/saratogaswimclub/emergency-action-plan?authuser=0")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }

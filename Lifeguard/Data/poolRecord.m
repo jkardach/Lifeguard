@@ -109,7 +109,7 @@
         valueArray = @[
             @[self.date, self.time, self.poolPh,
               self.poolCl, self.spaPh, self.spaCl,
-              self.note, self, spaWaterLevel]
+              self.note, poolWaterLevel, spaWaterLevel]
         ];
     }
     return valueArray;

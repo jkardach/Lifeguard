@@ -371,7 +371,7 @@
                  message:@"The pool or spa water level was not checked.  Check the water level, and if it is ok, put a checkmark on the record!"
           viewController:self];
     } else {
-    [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

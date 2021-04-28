@@ -90,6 +90,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
         
     }
     // project ID:  229185246988, sets the google sign-in's clintID, delegate and scope
+    //229185246988-tdt93711nfb3t3cvrn8ooet4ibspnhe9.apps.googleusercontent.com
     [GIDSignIn sharedInstance].clientID = @"229185246988-tdt93711nfb3t3cvrn8ooet4ibspnhe9.apps.googleusercontent.com";
     [GIDSignIn sharedInstance].scopes = [NSArray arrayWithObjects:kGTLRAuthScopeSheetsSpreadsheets,
                                          kGTLRAuthScopeCalendar, @"https://www.googleapis.com/auth/calendar.events", nil];
@@ -166,7 +167,7 @@ didDisconnectWithUser:(GIDGoogleUser *)user
 }
 
 - (void)reSignInToGoogle: (id) delegate {
-    // Google sign-in; if prviously signed in, do restore.
+    // Google sign-in; if previously signed in, do restore.
     
     GIDSignIn *signIn = [GIDSignIn sharedInstance];
     signIn.presentingViewController = delegate;

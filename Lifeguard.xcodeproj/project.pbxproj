@@ -15,14 +15,17 @@
 		3D0720A81EBCFAD300B083EF /* GuestTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D0720A71EBCFAD300B083EF /* GuestTVC.m */; };
 		3D0720AB1EBD239300B083EF /* PartyTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D0720AA1EBD239300B083EF /* PartyTVC.m */; };
 		3D11BA3F1ED793DF00DB66FF /* FCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D11BA3E1ED793DF00DB66FF /* FCell.m */; };
+		3D193B7D2639DD8F00B72D09 /* EmergVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D193B7C2639DD8F00B72D09 /* EmergVC.swift */; };
+		3D193B7F2639E91300B72D09 /* MemberListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D193B7E2639E91300B72D09 /* MemberListTVC.swift */; };
+		3D193B812639E95700B72D09 /* MemberDetailTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D193B802639E95700B72D09 /* MemberDetailTVC.swift */; };
 		3D1CE7A522E6136D00F9CA67 /* CheckInTVCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1CE7A422E6136D00F9CA67 /* CheckInTVCellTableViewCell.m */; };
 		3D1DCD9824A3F051002E1667 /* calObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1DCD9724A3F051002E1667 /* calObj.m */; };
 		3D1F310F24B6089700534404 /* SheetTab.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1F310E24B6089700534404 /* SheetTab.m */; };
+		3D2EB267251514160049FD04 /* ShowFamiliesTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D2EB266251514160049FD04 /* ShowFamiliesTVC.m */; };
 		3D3531AD22C65862005A3C64 /* PartyRec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3531AC22C65862005A3C64 /* PartyRec.m */; };
 		3D3531B022C6935D005A3C64 /* FamilyRec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3531AF22C6935D005A3C64 /* FamilyRec.m */; };
 		3D3531B322CC225D005A3C64 /* PartyDetailTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3531B222CC225D005A3C64 /* PartyDetailTVC.m */; };
 		3D4F7A4F22C416CD00365D81 /* RulesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4F7A4E22C416CD00365D81 /* RulesVC.swift */; };
-		3D5B0E1C249AED8A0005B48E /* CheckListTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D5B0E1B249AED8A0005B48E /* CheckListTVC.m */; };
 		3D65A42D22C5536F00BA0BF9 /* GoogleSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A42822C5536F00BA0BF9 /* GoogleSheet.m */; };
 		3D65A42E22C5536F00BA0BF9 /* poolRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A42922C5536F00BA0BF9 /* poolRecord.m */; };
 		3D65A42F22C5536F00BA0BF9 /* FileRoutines.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A42A22C5536F00BA0BF9 /* FileRoutines.m */; };
@@ -35,11 +38,15 @@
 		3D88755222FB3DDB00CB7E15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D88755022FB3DDB00CB7E15 /* Main.storyboard */; };
 		3D91431922F337020081672A /* getTemps.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D91431822F337020081672A /* getTemps.m */; };
 		3D91A9EE1ED3A55C003348ED /* NannyTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D91A9ED1ED3A55C003348ED /* NannyTVC.m */; };
+		3D92EE2024F2E00F008C7E01 /* CancelTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D92EE1F24F2E00F008C7E01 /* CancelTVC.m */; };
 		3DBFB5B124B78B29001B82BA /* CalTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5B024B78B29001B82BA /* CalTVC.m */; };
 		3DBFB5B424B7BC6E001B82BA /* Reservations.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5B324B7BC6E001B82BA /* Reservations.m */; };
 		3DBFB5B724B7FFBB001B82BA /* CalDetailTVCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5B624B7FFBB001B82BA /* CalDetailTVCTableViewController.m */; };
 		3DBFB5BF24B903A1001B82BA /* GoToTodayTVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5BE24B903A1001B82BA /* GoToTodayTVCell.m */; };
 		3DBFB5C224B903C3001B82BA /* DateSelTVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5C124B903C3001B82BA /* DateSelTVCell.m */; };
+		3DF44053253A1C6C00D0A7A2 /* PurpleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF44050253A1C6C00D0A7A2 /* PurpleModel.swift */; };
+		3DF44054253A1C6C00D0A7A2 /* PurpleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF44051253A1C6C00D0A7A2 /* PurpleData.swift */; };
+		3DF44055253A1C6C00D0A7A2 /* PurpleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF44052253A1C6C00D0A7A2 /* PurpleManager.swift */; };
 		3DFEE28524CC897400B1B37F /* Alert.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DFEE28424CC897400B1B37F /* Alert.m */; };
 /* End PBXBuildFile section */
 
@@ -59,12 +66,17 @@
 		3D11BA0C1ED68A4600DB66FF /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		3D11BA3D1ED793DF00DB66FF /* FCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCell.h; sourceTree = "<group>"; };
 		3D11BA3E1ED793DF00DB66FF /* FCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCell.m; sourceTree = "<group>"; };
+		3D193B7C2639DD8F00B72D09 /* EmergVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergVC.swift; sourceTree = "<group>"; };
+		3D193B7E2639E91300B72D09 /* MemberListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberListTVC.swift; sourceTree = "<group>"; };
+		3D193B802639E95700B72D09 /* MemberDetailTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDetailTVC.swift; sourceTree = "<group>"; };
 		3D1CE7A322E6136D00F9CA67 /* CheckInTVCellTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckInTVCellTableViewCell.h; sourceTree = "<group>"; };
 		3D1CE7A422E6136D00F9CA67 /* CheckInTVCellTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckInTVCellTableViewCell.m; sourceTree = "<group>"; };
 		3D1DCD9624A3F051002E1667 /* calObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = calObj.h; sourceTree = "<group>"; };
 		3D1DCD9724A3F051002E1667 /* calObj.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = calObj.m; sourceTree = "<group>"; };
 		3D1F310D24B6089700534404 /* SheetTab.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SheetTab.h; sourceTree = "<group>"; };
 		3D1F310E24B6089700534404 /* SheetTab.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SheetTab.m; sourceTree = "<group>"; };
+		3D2EB265251514160049FD04 /* ShowFamiliesTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowFamiliesTVC.h; sourceTree = "<group>"; };
+		3D2EB266251514160049FD04 /* ShowFamiliesTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowFamiliesTVC.m; sourceTree = "<group>"; };
 		3D3531AB22C65862005A3C64 /* PartyRec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartyRec.h; sourceTree = "<group>"; };
 		3D3531AC22C65862005A3C64 /* PartyRec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PartyRec.m; sourceTree = "<group>"; };
 		3D3531AE22C6935D005A3C64 /* FamilyRec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FamilyRec.h; sourceTree = "<group>"; };
@@ -72,8 +84,6 @@
 		3D3531B122CC225D005A3C64 /* PartyDetailTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartyDetailTVC.h; sourceTree = "<group>"; };
 		3D3531B222CC225D005A3C64 /* PartyDetailTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PartyDetailTVC.m; sourceTree = "<group>"; };
 		3D4F7A4E22C416CD00365D81 /* RulesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesVC.swift; sourceTree = "<group>"; };
-		3D5B0E1A249AED8A0005B48E /* CheckListTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckListTVC.h; sourceTree = "<group>"; };
-		3D5B0E1B249AED8A0005B48E /* CheckListTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckListTVC.m; sourceTree = "<group>"; };
 		3D65A42722C5536F00BA0BF9 /* GoogleSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleSheet.h; sourceTree = "<group>"; };
 		3D65A42822C5536F00BA0BF9 /* GoogleSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleSheet.m; sourceTree = "<group>"; };
 		3D65A42922C5536F00BA0BF9 /* poolRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = poolRecord.m; sourceTree = "<group>"; };
@@ -97,6 +107,8 @@
 		3D91431822F337020081672A /* getTemps.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = getTemps.m; sourceTree = "<group>"; };
 		3D91A9EC1ED3A55C003348ED /* NannyTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NannyTVC.h; sourceTree = "<group>"; };
 		3D91A9ED1ED3A55C003348ED /* NannyTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NannyTVC.m; sourceTree = "<group>"; };
+		3D92EE1E24F2E00F008C7E01 /* CancelTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CancelTVC.h; sourceTree = "<group>"; };
+		3D92EE1F24F2E00F008C7E01 /* CancelTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CancelTVC.m; sourceTree = "<group>"; };
 		3DBFB5AF24B78B29001B82BA /* CalTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CalTVC.h; sourceTree = "<group>"; };
 		3DBFB5B024B78B29001B82BA /* CalTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CalTVC.m; sourceTree = "<group>"; };
 		3DBFB5B224B7BC6E001B82BA /* Reservations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reservations.h; sourceTree = "<group>"; };
@@ -108,6 +120,9 @@
 		3DBFB5C024B903C3001B82BA /* DateSelTVCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DateSelTVCell.h; sourceTree = "<group>"; };
 		3DBFB5C124B903C3001B82BA /* DateSelTVCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DateSelTVCell.m; sourceTree = "<group>"; };
 		3DD4B63124D21C8500603096 /* Lifeguard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lifeguard.entitlements; sourceTree = "<group>"; };
+		3DF44050253A1C6C00D0A7A2 /* PurpleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurpleModel.swift; sourceTree = "<group>"; };
+		3DF44051253A1C6C00D0A7A2 /* PurpleData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurpleData.swift; sourceTree = "<group>"; };
+		3DF44052253A1C6C00D0A7A2 /* PurpleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurpleManager.swift; sourceTree = "<group>"; };
 		3DFEE28324CC897400B1B37F /* Alert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Alert.h; sourceTree = "<group>"; };
 		3DFEE28424CC897400B1B37F /* Alert.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Alert.m; sourceTree = "<group>"; };
 		70739B3F90572A754CE18EDC /* Pods-googleSheetsTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-googleSheetsTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-googleSheetsTest/Pods-googleSheetsTest.debug.xcconfig"; sourceTree = "<group>"; };
@@ -180,6 +195,7 @@
 			children = (
 				3D11BA0C1ED68A4600DB66FF /* Constants.h */,
 				3D4F7A4E22C416CD00365D81 /* RulesVC.swift */,
+				3D193B7C2639DD8F00B72D09 /* EmergVC.swift */,
 				3D0720A61EBCFAD300B083EF /* GuestTVC.h */,
 				3D0720A71EBCFAD300B083EF /* GuestTVC.m */,
 				3D0720A91EBD239300B083EF /* PartyTVC.h */,
@@ -194,16 +210,20 @@
 				3D6DBCC522E4FB1F00430264 /* ShowCheckedInTVC.m */,
 				3D1CE7A322E6136D00F9CA67 /* CheckInTVCellTableViewCell.h */,
 				3D1CE7A422E6136D00F9CA67 /* CheckInTVCellTableViewCell.m */,
-				3D5B0E1A249AED8A0005B48E /* CheckListTVC.h */,
-				3D5B0E1B249AED8A0005B48E /* CheckListTVC.m */,
 				3DBFB5AF24B78B29001B82BA /* CalTVC.h */,
 				3DBFB5B024B78B29001B82BA /* CalTVC.m */,
 				3DBFB5C024B903C3001B82BA /* DateSelTVCell.h */,
 				3DBFB5C124B903C3001B82BA /* DateSelTVCell.m */,
 				3DBFB5BD24B903A1001B82BA /* GoToTodayTVCell.h */,
 				3DBFB5BE24B903A1001B82BA /* GoToTodayTVCell.m */,
+				3D92EE1E24F2E00F008C7E01 /* CancelTVC.h */,
+				3D92EE1F24F2E00F008C7E01 /* CancelTVC.m */,
 				3DBFB5B524B7FFBB001B82BA /* CalDetailTVCTableViewController.h */,
 				3DBFB5B624B7FFBB001B82BA /* CalDetailTVCTableViewController.m */,
+				3D2EB265251514160049FD04 /* ShowFamiliesTVC.h */,
+				3D2EB266251514160049FD04 /* ShowFamiliesTVC.m */,
+				3D193B7E2639E91300B72D09 /* MemberListTVC.swift */,
+				3D193B802639E95700B72D09 /* MemberDetailTVC.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -231,6 +251,9 @@
 				3DBFB5B324B7BC6E001B82BA /* Reservations.m */,
 				3DFEE28324CC897400B1B37F /* Alert.h */,
 				3DFEE28424CC897400B1B37F /* Alert.m */,
+				3DF44051253A1C6C00D0A7A2 /* PurpleData.swift */,
+				3DF44052253A1C6C00D0A7A2 /* PurpleManager.swift */,
+				3DF44050253A1C6C00D0A7A2 /* PurpleModel.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -292,6 +315,8 @@
 			dependencies = (
 			);
 			name = Lifeguard;
+			packageProductDependencies = (
+			);
 			productName = googleSheetsTest;
 			productReference = 3D0720821EBA3B5600B083EF /* Lifeguard.app */;
 			productType = "com.apple.product-type.application";
@@ -302,7 +327,7 @@
 		3D07207A1EBA3B5600B083EF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1030;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = Forkbeardlabs;
 				TargetAttributes = {
 					3D0720811EBA3B5600B083EF = {
@@ -321,6 +346,8 @@
 				Base,
 			);
 			mainGroup = 3D0720791EBA3B5600B083EF;
+			packageReferences = (
+			);
 			productRefGroup = 3D0720831EBA3B5600B083EF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -386,10 +413,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D5B0E1C249AED8A0005B48E /* CheckListTVC.m in Sources */,
 				3D3531B322CC225D005A3C64 /* PartyDetailTVC.m in Sources */,
 				3D4F7A4F22C416CD00365D81 /* RulesVC.swift in Sources */,
 				3D65A42E22C5536F00BA0BF9 /* poolRecord.m in Sources */,
+				3D2EB267251514160049FD04 /* ShowFamiliesTVC.m in Sources */,
 				3D3531AD22C65862005A3C64 /* PartyRec.m in Sources */,
 				3D0720AB1EBD239300B083EF /* PartyTVC.m in Sources */,
 				3DFEE28524CC897400B1B37F /* Alert.m in Sources */,
@@ -398,20 +425,27 @@
 				3DBFB5B124B78B29001B82BA /* CalTVC.m in Sources */,
 				3D0720871EBA3B5600B083EF /* main.m in Sources */,
 				3DBFB5BF24B903A1001B82BA /* GoToTodayTVCell.m in Sources */,
+				3D193B7F2639E91300B72D09 /* MemberListTVC.swift in Sources */,
 				3D1F310F24B6089700534404 /* SheetTab.m in Sources */,
 				3D65A43F22C553F800BA0BF9 /* ConfigTVC.m in Sources */,
 				3DBFB5B424B7BC6E001B82BA /* Reservations.m in Sources */,
 				3D65A43E22C553F800BA0BF9 /* LoggerTVC.m in Sources */,
+				3D193B7D2639DD8F00B72D09 /* EmergVC.swift in Sources */,
 				3D6DBCC622E4FB1F00430264 /* ShowCheckedInTVC.m in Sources */,
+				3D92EE2024F2E00F008C7E01 /* CancelTVC.m in Sources */,
+				3DF44054253A1C6C00D0A7A2 /* PurpleData.swift in Sources */,
 				3D65A42D22C5536F00BA0BF9 /* GoogleSheet.m in Sources */,
 				3D65A42F22C5536F00BA0BF9 /* FileRoutines.m in Sources */,
 				3D1DCD9824A3F051002E1667 /* calObj.m in Sources */,
 				3D11BA3F1ED793DF00DB66FF /* FCell.m in Sources */,
 				3D1CE7A522E6136D00F9CA67 /* CheckInTVCellTableViewCell.m in Sources */,
+				3DF44055253A1C6C00D0A7A2 /* PurpleManager.swift in Sources */,
 				3D91A9EE1ED3A55C003348ED /* NannyTVC.m in Sources */,
 				3D65A43B22C553F800BA0BF9 /* showRecordTVC.m in Sources */,
+				3D193B812639E95700B72D09 /* MemberDetailTVC.swift in Sources */,
 				3D0720A81EBCFAD300B083EF /* GuestTVC.m in Sources */,
 				3DBFB5C224B903C3001B82BA /* DateSelTVCell.m in Sources */,
+				3DF44053253A1C6C00D0A7A2 /* PurpleModel.swift in Sources */,
 				3D91431922F337020081672A /* getTemps.m in Sources */,
 				3DBFB5B724B7FFBB001B82BA /* CalDetailTVCTableViewController.m in Sources */,
 				3D65A43C22C553F800BA0BF9 /* PoolPickerTVC.m in Sources */,
@@ -467,6 +501,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -525,6 +560,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -558,7 +594,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Lifeguard/Lifeguard.entitlements;
-				CURRENT_PROJECT_VERSION = 3.2;
+				CURRENT_PROJECT_VERSION = 3.9;
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -566,7 +602,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2;
+				MARKETING_VERSION = 3.9;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -580,7 +616,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Lifeguard/Lifeguard.entitlements;
-				CURRENT_PROJECT_VERSION = 3.2;
+				CURRENT_PROJECT_VERSION = 3.9;
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -588,7 +624,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2;
+				MARKETING_VERSION = 3.9;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;

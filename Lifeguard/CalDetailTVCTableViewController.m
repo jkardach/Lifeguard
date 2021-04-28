@@ -8,6 +8,8 @@
 
 #import "CalDetailTVCTableViewController.h"
 #import "FamilyRec.h"
+#import "CancelTVC.h"
+#import "ShowFamiliesTVC.h"
 
 @interface CalDetailTVCTableViewController ()
 
@@ -28,29 +30,74 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.recArray.count;
+    if(section == 0) {
+        return 1;
+    } else {
+        return self.recArray.count;
+    }
+}
+
+
+- (IBAction)CancelButton:(UIButton *)sender {
+    __block NSMutableArray *emails = [[NSMutableArray alloc] init];
+    __block NSMutableArray *smss = [[NSMutableArray alloc] init];
+    __block FamilyRec *emailMember;
+    
+    // collect phone numbers and emails
+    for (FamilyRec *member in self.recArray) {
+        if(![member didTheyMissReservation]) {
+            emails = [member addEmails:emails];
+            emailMember = member;  // just a member to call class function
+            smss = [member addSMSs:smss];
+        }
+    }
+    UIAlertController *alert = [UIAlertController
+                                alertControllerWithTitle:[NSString stringWithFormat:@"Email or SMS Members"]
+                                message:[NSString stringWithFormat:@"Do you wish to email or SMS members about cancelled reservations"]
+                                preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Email" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        NSString *body = @"Hello, <br><br>The swim club has had to cancel reservations today. Please contact us for more information.<br><br>Saratoga Swim Club";
+        [emailMember sendEmail:self
+                      subject:@"Reservations have been cancelled"
+                         body:body
+                     ToEmails:emails];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"SMS" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        NSString *body = @"Hello, \n\nThe swim club has had to cancel reservations today. Please contact us for more information.\n\nSaratoga Swim Club";
+        [emailMember sendSMS:self
+                          to:smss
+                    withBody:body];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    
-    FamilyRec *rec = self.recArray[indexPath.row];
-    if (rec.lapSwimmerRes) {
-        cell.textLabel.text = [NSString stringWithFormat:@"%@(%@, %@), %ld Swimmers",
-                               rec.lastName, rec.memberID, rec.memType, rec.lapSwimmers];
+    if(indexPath.section == 0) {
+        CancelTVC *cell = [tableView dequeueReusableCellWithIdentifier:@"Cancel" forIndexPath:indexPath];
+        cell.backgroundColor = [UIColor systemBlueColor];
+        return cell;
     } else {
-        cell.textLabel.text = [NSString stringWithFormat:@"%@(%@, %@), %@ Swimmers",
-                               rec.lastName, rec.memberID, rec.memType, rec.familyMembers];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+        
+        FamilyRec *rec = self.recArray[indexPath.row];
+        if (rec.lapSwimmerRes) {
+            cell.textLabel.text = [NSString stringWithFormat:@"%@(%@, %@), %ld Swimmers",
+                                   rec.lastName, rec.memberID, rec.memType, rec.lapSwimmers];
+        } else {
+            cell.textLabel.text = [NSString stringWithFormat:@"%@(%@, %@), %@ Swimmers",
+                                   rec.lastName, rec.memberID, rec.memType, rec.familyMembers];
+        }
+        return cell;
     }
-    
-    return cell;
 }
 
 
@@ -88,14 +135,21 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"ShowFamily"]) {
+        NSIndexPath *path = [self.tableView indexPathForSelectedRow];
+        FamilyRec *rec = self.recArray[path.row];   // get the family
+        
+        ShowFamiliesTVC *sFTVC = [segue destinationViewController];  // get the TVC
+        sFTVC.family = rec;  // set the record 
+        
+        sFTVC.title = rec.lastName;
+    }
 }
-*/
+
 
 @end

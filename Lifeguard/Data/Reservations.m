@@ -103,7 +103,7 @@
     }
     NSException *myException = [NSException
                                 exceptionWithName:@"Reservations Class"
-                                reason:@"getRowFromStartTime: did not fine a value"
+                                reason:@"getRowFromStartTime: did not find a value"
                                 userInfo:nil];
     [myException raise];
     return 0;

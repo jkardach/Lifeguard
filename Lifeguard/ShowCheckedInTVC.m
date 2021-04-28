@@ -14,15 +14,16 @@
 @property (nonatomic, strong) NSMutableArray *nameArray;
 
 // user interface
-@property (weak, nonatomic) IBOutlet UITableViewCell *dateTimeCell;
-@property (weak, nonatomic) IBOutlet UITableViewCell *familyCell;
-@property (weak, nonatomic) IBOutlet UITableViewCell *totalFamilyMembersCell;
-@property (weak, nonatomic) IBOutlet UITableViewCell *guestsAttendingCell;
+//@property (weak, nonatomic) IBOutlet UITableViewCell *dateTimeCell;
+//@property (weak, nonatomic) IBOutlet UITableViewCell *familyCell;
+//@property (weak, nonatomic) IBOutlet UITableViewCell *totalFamilyMembersCell;
+//@property (weak, nonatomic) IBOutlet UITableViewCell *guestsAttendingCell;
 
 @property (weak, nonatomic) IBOutlet UILabel *dateTimeCheckedIn;
 @property (weak, nonatomic) IBOutlet UILabel *familyTypeId;
 @property (weak, nonatomic) IBOutlet UILabel *totalFamilyMembers;
 @property (weak, nonatomic) IBOutlet UITextField *membersAttending;
+@property (weak, nonatomic) IBOutlet UILabel *familyNames;
 @property (weak, nonatomic) IBOutlet UITextField *guestsAttending;
 @property (weak, nonatomic) IBOutlet UITextField *kidsDroppedOffTF;
 
@@ -79,15 +80,21 @@
         [self.itemArray addObject:self.member.email2];
         [self.nameArray addObject:@"Email2"];
     }
-    
+    self.familyNames.text = [self.member getNames];
     self.membersAttending.text = [NSString stringWithFormat:@"%d", self.member.members];
     self.guestsAttending.text = [NSString stringWithFormat:@"%d", self.member.guests];
     self.kidsDroppedOffTF.text = self.member.kidsDroppedOff;
     
     self.dateTimeCheckedIn.text = self.member.date;
+    
     if (self.member.hasRes) {
-        self.familyTypeId.text = [NSString stringWithFormat:@"%@",
-                                  self.member.resStart];
+        if (self.member.lapSwimmerRes) {
+            self.familyTypeId.text = [NSString stringWithFormat:@"%@",
+                                  self.member.lapStart];
+        } else {
+            self.familyTypeId.text = [NSString stringWithFormat:@"%@",
+                                      self.member.resStart];
+        }
         self.famOrRes.text = @"Reservation";
     } else {
         self.familyTypeId.text = [NSString stringWithFormat:@"%@(%@, %@)",
@@ -97,6 +104,7 @@
         self.famOrRes.text = @"Family(memType, id)";
     }
     self.totalFamilyMembers.text = self.member.familyMembers;
+    
     self.membersAttending.delegate = self;
     self.guestsAttending.delegate = self;
     self.kidsDroppedOffTF.delegate = self;
@@ -162,7 +170,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.itemArray.count + 6;
+    return self.itemArray.count + 7;
 }
 
 #pragma mark - textfield delegate method

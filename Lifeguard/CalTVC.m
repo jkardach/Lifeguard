@@ -83,7 +83,7 @@
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     self.tableView.refreshControl = refreshControl;
     self.resSummary.date = [NSDate now];
-    self.title  = @"Reservation Calendar";
+    self.title  = @"Reservations";
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -100,7 +100,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0)
-        return 2;
+        return 3;       // adding cancel button to section 0
     else
         return [Reservations compareFullArray].count;
 }
@@ -119,8 +119,13 @@
             cell.date.text = self.resSummary.dateString;
             cell.backgroundColor = [UIColor systemBlueColor];
             return cell;
-        } else {
+        } else if(indexPath.row == 1){
             GoToTodayTVCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell2" forIndexPath:indexPath];
+            cell.backgroundColor = [UIColor systemBlueColor];
+            cell.goToTodayButton.titleLabel.text = @"Today";
+            return cell;
+        } else {
+            GoToTodayTVCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cancel" forIndexPath:indexPath];
             cell.backgroundColor = [UIColor systemBlueColor];
             return cell;
         }
@@ -131,19 +136,13 @@
         cell.textLabel.text = [NSString stringWithFormat:@"%@: (%ld Swimmers)",
                                [Reservations compareFullArray][indexPath.row],
                                count];
-        if (![self even:indexPath.row]) {
-            // light blue color
+        if (![FamilyRec even:(int)indexPath.row]) {
             cell.backgroundColor = [UIColor systemTealColor];
         } else {
             cell.backgroundColor = [UIColor systemGreenColor];
         }
         return cell;
     }
-}
-
-- (BOOL)even:(NSInteger)value
-{
-    return (value%2) ? YES : NO;
 }
 
 #pragma mark - Navigation Buttons
@@ -163,6 +162,41 @@
     [self readbatchSheet];
 }
 
+//This will mark all of the reservations as cancelled and send a cancel email to them
+- (IBAction)CancelButton:(UIButton *)sender {
+    __block NSMutableArray *emails = [[NSMutableArray alloc] init];
+    __block NSMutableArray *smss = [[NSMutableArray alloc] init];
+    __block FamilyRec *emailMember;
+    
+    // collect phone numbers and emails
+    for (FamilyRec *member in self.familiesWithReservations) {
+        if(![member didTheyMissReservation]) {
+            emails = [member addEmails:emails];
+            emailMember = member;  // just a member to call class function
+            smss = [member addSMSs:smss];
+        }
+    }
+    UIAlertController *alert = [UIAlertController
+                                alertControllerWithTitle:[NSString stringWithFormat:@"Email or SMS Members"]
+                                message:[NSString stringWithFormat:@"Do you wish to email or SMS members about cancelled reservations"]
+                                preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Email" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        NSString *body = @"Hello, <br><br>The swim club has had to cancel reservations today. Please contact us for more information.<br><br>Saratoga Swim Club";
+        [emailMember sendEmail:self
+                      subject:@"Reservations have been cancelled"
+                         body:body
+                     ToEmails:emails];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"SMS" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        NSString *body = @"Hello, \n\nThe swim club has had to cancel reservations today. Please contact us for more information.\n\nSaratoga Swim Club";
+        [emailMember sendSMS:self
+                          to:smss
+                    withBody:body];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
 
 #pragma mark - sheet methods
 // defined in Constants.h: ACT_SSHEET_ID = 1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ
@@ -170,13 +204,13 @@
 - (void)readbatchSheet {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query1 =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
-                                                            range:@"Members!A2:R86"];  // PM
+                                                            range:@"Members!A2:V86"];  // PM
     GTLRSheetsQuery_SpreadsheetsValuesGet *query2 =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
-                                                            range:@"Members!A89:R99"];  // Lease
+                                                            range:@"Members!A89:V99"];  // Lease
     GTLRSheetsQuery_SpreadsheetsValuesGet *query3 =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
-                                                            range:@"Members!A127:R139"];  // Trial
+                                                            range:@"Members!A127:V139"];  // Trial
     GTLRBatchQuery *batchQuery = [GTLRBatchQuery batchQuery];
     [batchQuery addQuery:query1];
     [batchQuery addQuery:query2];
@@ -196,7 +230,7 @@
                         
                         for (NSArray *row in rows) {
                             if (row.count > 1) {
-                                FamilyRec *rec = [self convertToFamObj: row];
+                                FamilyRec *rec = [FamilyRec convertToFamObj: row];
                                 if (rec)
                                     [self.families addObject:rec];  // add to famalies Array
                             } else {
@@ -349,62 +383,6 @@
     GTLRDateTime *endDateTime = [GTLRDateTime dateTimeWithRFC3339String:stopDate];
     return @[startDateTime, endDateTime];
 }
-
-// converts memberSheet record to family object, remove CL, PL records
-- (FamilyRec *) convertToFamObj: (NSArray *)member {
-    FamilyRec *rec;
-    if (member[0]) {
-        if (([member[0] isEqualToString: @"Certificate Number"]) ||
-            [member[2] isEqualToString:@"CL"] || [member[2] isEqualToString:@"PL"]) {
-            return nil;      // this is the header, remove
-        } else {
-            rec = [[FamilyRec alloc] init];
-        }
-    }
-    
-    if (member.count > 1) {     // member ID
-        rec.memberID = member[1];
-    }
-    if (member.count > 0) {     // member last name
-        rec.lastName = member[0];
-        if ([rec.lastName isEqualToString:@""]) {
-            return nil;
-        }
-    }
-    if (member.count > 2) {     // membership type
-        rec.memType = member[2];
-    }
-    if (member.count > 7) {     // member phone
-        rec.phone = member[7];
-    }
-    if (member.count > 9) {     // member email
-        rec.email = member[9];
-    }
-    if (member.count > 8) {     // member phone 2
-        rec.phone2 = member[8];
-    }
-    if (member.count > 10) {     // member email 2
-        rec.email2 = member[10];
-    }
-    if (member.count > 16) {
-        rec.familyMembers = member[16];
-    }
-    // indicates if member is eligable to swim
-    rec.eligable = YES;
-    if (member.count > 17) {
-        NSString *owesMoney = member[17];
-        if ([owesMoney isEqualToString:@"x"] ||
-            [rec.memType isEqualToString:@"PL"]) {
-            rec.eligable = NO;
-        }
-        if ([rec.memType isEqualToString:@"BD"] ||
-            [rec.memType isEqualToString:@"BE"] ) {
-            rec.eligable = YES;
-        }
-    }
-    return rec;
-}
-
 
 - (void) orientationChanged:(NSNotification *)note
 {

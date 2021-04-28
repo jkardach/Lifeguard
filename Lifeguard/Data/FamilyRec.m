@@ -11,6 +11,7 @@
 
 @interface FamilyRec() <MFMessageComposeViewControllerDelegate,
 MFMailComposeViewControllerDelegate>
+
 @property (nonatomic, strong) id viewController;
 @end
 
@@ -20,6 +21,9 @@ MFMailComposeViewControllerDelegate>
     if (self = [super init]) {
         _resDate = @"";
         _date = @"";
+        _firstName = @"";
+        _firstName2 = @"";
+        _kidsNames = @"";
         _lastName = @"";
         _memberID = @"";
         _memType = @"";
@@ -31,6 +35,7 @@ MFMailComposeViewControllerDelegate>
         _phone = @"";
         _email2 = @"";
         _phone2 = @"";
+        _landLine = @"";
         _signOut = @"";
         _optPhone = @"";
         _signInRow = 0;
@@ -45,18 +50,29 @@ MFMailComposeViewControllerDelegate>
         _lapSwimmerRes = NO;
         _added = NO;
         _lapStart = @"";
-        _missedReservation = NO;
+        //_missedReservation = NO;
         _missedReservationSaved = NO;
         _noShow = NO;
     }
     return self;
 }
 
-- (void)sendSMS:(id)viewController phone1:(int)phone1
-{
+-(void)sendSMS:(id)viewController to:(NSArray *)phones withBody:(NSString *)body {
     // make an SMS
     self.viewController = viewController;
     MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc] init];
+    
+    if([MFMessageComposeViewController canSendText]) {
+        controller.body = body;
+        controller.recipients = phones;
+        controller.messageComposeDelegate = self;
+        [viewController presentViewController:controller animated:YES completion:nil];
+    }
+}
+
+- (void)sendSMS:(id)viewController phone1:(int)phone1
+{
+    // make an SMS
     NSString *phoneNum;
     if (phone1 == 1) {
         phoneNum = [self.phone
@@ -71,13 +87,7 @@ MFMailComposeViewControllerDelegate>
                     stringByReplacingOccurrencesOfString:@" "
                     withString:@""];
     }
-    if([MFMessageComposeViewController canSendText]) {
-        controller.body = @"Important message from the Saratoga Swim Club!  ";
-        controller.recipients = [NSArray arrayWithObjects:phoneNum, nil];
-        controller.messageComposeDelegate = self;
-        [viewController presentViewController:controller animated:YES completion:nil];
-        
-    }
+    [self sendSMS:viewController to:[NSArray arrayWithObjects:phoneNum, nil] withBody:@"Important message from the Saratoga Swim Club!  "];
 }
 
 // if supports phone call make phone call, else SMS
@@ -112,26 +122,19 @@ MFMailComposeViewControllerDelegate>
     }
 }
 
-- (void)sendEmail:(id)viewController subject:(NSString *)subject email1:(BOOL)email1
-{
-    self.viewController = viewController;
-    // send an email
+// send an email to the array of emails with subject and HTML body
+-(void)sendEmail:(id)viewController
+         subject:(NSString *)subject
+            body:(NSString *)body
+        ToEmails:(NSArray *)emails {
+    
     Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
     if (mailClass != nil) {
-        MFMailComposeViewController * mailView = [[MFMailComposeViewController alloc] init];
-        mailView.mailComposeDelegate = self;
-        NSString *email = @"";
-        if (email1) {
-            email = self.email;
-        } else {
-            email = self.email2;
-        }
-        NSArray *toList = @[email];
-        [mailView setToRecipients:toList];
+        MFMailComposeViewController *mailView = [[MFMailComposeViewController alloc] init];
+        mailView.mailComposeDelegate = self;  // return to this object to complete delegate methods
+        [mailView setToRecipients:emails];
         [mailView setSubject:subject];      //Set the subject
-        [mailView setMessageBody:@"" isHTML:YES];   //Set the mail body
-        
-        
+        [mailView setMessageBody:body isHTML:YES];   //Set the mail body
         //Display Email Composer
         if([mailClass canSendMail]) {
             [viewController presentViewController:mailView animated:YES completion:nil];
@@ -139,19 +142,38 @@ MFMailComposeViewControllerDelegate>
     }
 }
 
+-(void)sendEmail:(id)viewController
+         subject:(NSString *)subject
+          email1:(BOOL)email1
+{
+    NSString *email = @"";
+    if (email1) {
+        email = self.email;
+    } else {
+        email = self.email2;
+    }
+    [self sendEmail:viewController subject:subject body:@"" ToEmails:@[email]];
+}
+
 
 // delegate routine for MFMessageComposeViewController, dismisses view controller
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller
                  didFinishWithResult:(MessageComposeResult)result
 {
-    [self.viewController dismissViewControllerAnimated:YES completion:nil];
+    
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller
           didFinishWithResult:(MFMailComposeResult)result
                         error:(NSError *)error
 {
-    [self.viewController dismissViewControllerAnimated:YES completion:nil];
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
++(BOOL)even:(int)value
+{
+    return (value%2) ? YES : NO;
 }
 
 // returns true if more than 2 hours after reservation and not checked in
@@ -167,6 +189,7 @@ MFMailComposeViewControllerDelegate>
 // assumes only called on same day as reservation, checks current time vs. res times
 // sets reservationMissed if if more than 2 hours after reservation and returns true
 -(BOOL)missReservation:(float)deltaHour {
+    BOOL missedReservation = NO;
     if(self.missedReservationSaved || self.checked || !self.hasRes) {
         return NO;          // they missed the reservation, but have already been saved
     }
@@ -178,16 +201,16 @@ MFMailComposeViewControllerDelegate>
     if (self.hasRes && self.lapSwimmerRes) {
         lapResTimeLimit = [self convertTimeToFloat:self.lapStart];
         if ((lapResTimeLimit - currentTime) < 0) {
-            self.missedReservation = YES;
+            missedReservation = YES;
         }
     }
     if (self.hasRes && !self.lapSwimmerRes) {
         resTimeLimit = [self convertTimeToFloat:self.resStart];
         if ((resTimeLimit - currentTime) < 0) {
-            self.missedReservation = YES;
+            missedReservation = YES;
         }
     }
-    return self.missedReservation;
+    return missedReservation;
 }
 
 // converts @"11:00" to 11, or @"11:30" to 11.5
@@ -244,21 +267,24 @@ MFMailComposeViewControllerDelegate>
                self.familyMembers, self.memType, self.phone,
                self.email, self.phone2, self.email2,
                self.optPhone, elg, noShow, self.resDate,
-               self.resStart, self.lapStart]];
+               self.resStart, self.lapStart, @"", self.kidsNames,
+               self.firstName, self.firstName2]];
 }
 
 -(NSArray *)signinKeys {
     return @[@"date", @"lastName", @"memberID", @"members", @"guests",
              @"kidsDroppedOff", @"familyMembers", @"memType", @"phone",
              @"email", @"phone2", @"email2", @"optPhone", @"eligable",
-             @"noShow", @"resDate", @"resStart", @"lapStart"];
+             @"noShow", @"resDate", @"resStart", @"lapStart", @"",
+             @"kidsNames", @"firstName", @"firstName2"];
 }
 
 -(NSArray *)famKeys {
     return @[@"lastName", @"memberID", @"memType", @"", @"",
              @"", @"", @"phone", @"phone2",
-             @"email", @"email2", @"", @"", @"", @"", @"",
-             @"familyMembers", ];
+             @"email", @"email2", @"", @"", @"", @"",
+             @"kidsNames", @"familyMembers", @"eligable", @"", @"landLine",
+             @"firstName", @"firstName2"];
 }
 
 -(NSArray *)getMissedResValueArray {
@@ -267,10 +293,10 @@ MFMailComposeViewControllerDelegate>
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
     NSDate *currentDate = [NSDate date];
     NSString *dateString = [formatter stringFromDate:currentDate];
-    NSString *elg = @"NO";
-    if (self.eligable) {
-        elg = @"YES";
-    }
+//    NSString *elg = @"NO";
+//    if (self.eligable) {
+//        elg = @"YES";
+//    }
     return @[@[dateString, self.lastName, self.memberID, self.memType, 
                self.phone, self.email, self.email2, self.phone2,
                self.resDate, self.resStart, self.lapStart]];
@@ -288,10 +314,147 @@ MFMailComposeViewControllerDelegate>
     }
 }
 
+// returns a comma delimited string of all first names
+-(NSString *)getNames {
+    NSString *names = self.firstName;
+    if(![self.firstName2 isEqualToString:@""]) {
+        names = [names stringByAppendingFormat:@", %@", self.firstName2];
+    }
+    if(![self.kidsNames isEqualToString:@""]) {
+        names = [names stringByAppendingFormat:@", %@", self.kidsNames];
+    }
+    return names;
+}
+
+// this appends this users emails to the email list
+-(NSMutableArray *)addEmails:(NSMutableArray *)emails {
+    [emails addObject:self.email];
+    if (![self.email2 isEqualToString:@""]) {
+        [emails addObject:self.email2];
+    }
+    return emails;
+}
+
+// this appends this users cellphone to the sms list
+-(NSMutableArray *)addSMSs:(NSMutableArray *)smss {
+    [smss addObject:self.phone];
+    if (![self.phone2 isEqualToString:@""]) {
+        [smss addObject:self.phone2];
+    }
+    return smss;
+}
+
+// converts memberSheet record to family object, remove CL, PL records
+// added 18 - landline phone, 19- firstName, 20-firstName2 on 9/17/2020
++(FamilyRec *) convertToFamObj: (NSArray *)member {
+    if (([member[1] isEqualToString: @"Certificate Number"]) ||
+        [member[2] isEqualToString:@"CL"] || [member[2] isEqualToString:@"PL"] ||
+        [member[0] isEqualToString:@""]) {
+        return nil;      // this is the header, blank last name, or CL or PL remove
+    }
+    FamilyRec *rec = [[FamilyRec alloc] init];
+    for(int i = 0; i < member.count; i++) {
+        if ([(NSString *)rec.famKeys[i] isEqualToString: @""]) {
+            //NSLog(@"blank key in convertToSignIn");
+            continue;  // skip if key is blank
+        }
+
+        rec.eligable = YES;
+        if (i == 17) {
+            NSString *owesMoney = member[17];
+            if ([owesMoney isEqualToString:@"x"] ||
+                [rec.memType isEqualToString:@"PL"]) {
+                rec.eligable = NO;
+            }
+            if ([rec.memType isEqualToString:@"BD"] ||
+                [rec.memType isEqualToString:@"BE"] ) {
+                rec.eligable = YES;
+            }
+        } else {
+            [rec setValue:member[i] forKey:rec.famKeys[i]];
+        }
+        
+    }
+    // if record is in checkedInToday, then use this record
+    return rec; //[self isCheckedInToday: rec];  // can have multiple reservations, can't do it here
+}
+
+// converts record from sign-in sheet to familyRec
++(FamilyRec *)convertToSignIn: (NSArray *)input {
+    if([input[0] isEqualToString:@""] ||
+       [input[0] isEqualToString:@"Date Time"]) {
+        return nil;
+    }
+    if (input.count > 0) {     // date
+        if (![self isToday:[self stringToDate:input[0]]]) {
+            return nil;   // if not today, return empty
+        }
+    }
+    
+    FamilyRec *rec = [[FamilyRec alloc] init];
+    for (int i = 0; i < input.count; i++) {
+        if ([(NSString *)rec.signinKeys[i] isEqualToString: @""]) {
+            //NSLog(@"blank key in convertToSignIn");
+            continue;  // skip if key is blank
+        }
+        if (i == 3) {
+            rec.members = [(NSString *)input[3] intValue];
+        } else if (i == 4) {
+            rec.guests = [(NSString *)input[4] intValue];
+        } else if ((i == 13)||(i == 14)) {
+            if ([input[i] isEqualToString:@"YES"]) {
+                [rec setValue:@YES forKey:rec.signinKeys[i]];
+            } else {
+                [rec setValue:@NO forKey:rec.signinKeys[i]];
+            }
+        } else {  // the rest of the values are NSStrings
+            [rec setValue:input[i] forKey:rec.signinKeys[i]];
+        }
+    }
+    rec.checked = YES;
+    if (![rec.kidsDroppedOff isEqualToString:@""]) {  // kids dropped off?
+        rec.droppedOff = YES;
+    }
+    rec.hasRes = YES;  // these are records from signedin array, so have reservation
+    // figure out if normal reservation or lap reservation (lapSwimmerRes YES or NO)
+    if ([rec.lapStart isEqualToString:@""]) {
+        rec.lapSwimmerRes = NO;
+    } else {
+        rec.lapSwimmerRes = YES;
+    }
+
+    return rec;
+}
+
+// indicates if this record is from today (current date)
++(BOOL)isToday:(NSDate *)aDate {
+    
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
+                                          fromDate:[NSDate date]];
+    NSDate *today = [cal dateFromComponents:components];
+    components = [cal components:(NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
+                        fromDate:aDate];
+    NSDate *otherDate = [cal dateFromComponents:components];
+    BOOL isToday = [today isEqualToDate:otherDate];
+    return isToday;
+}
+
+// converts a string date to the yyyy-MM-dd HH:mm format
++(NSDate *)stringToDate:(NSString *)dateStr {
+    // Convert string to date object
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
+    return [dateFormat dateFromString:dateStr];
+}
+
 -(id) copyWithZone: (NSZone *) zone
 {
     FamilyRec *copy = [[FamilyRec allocWithZone: zone] init];
     copy.date = self.date;
+    copy.firstName = self.firstName;
+    copy.firstName2 = self.firstName2;
+    copy.kidsNames = self.kidsNames;
     copy.lastName = self.lastName;
     copy.memberID = self.memberID;
     copy.memType = self.memType;
@@ -305,6 +468,7 @@ MFMailComposeViewControllerDelegate>
     copy.phone2 = self.phone2;
     copy.signOut = self.signOut;
     copy.optPhone = self.optPhone;
+    copy.landLine = self.landLine;
     copy.signInRow = self.signInRow;
     copy.eligable = self.eligable;
     copy.droppedOff = self.droppedOff;
@@ -318,7 +482,6 @@ MFMailComposeViewControllerDelegate>
     copy.lapStart = self.lapStart;
     copy.lapSwimmerRes = self.lapSwimmerRes;
     copy.lapSwimmers = self.lapSwimmers;
-    copy.missedReservation = self.missedReservation;
     copy.missedReservationSaved = self.missedReservationSaved;
     copy.noShow = self.noShow;
     
