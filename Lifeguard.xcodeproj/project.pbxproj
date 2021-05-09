@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,6 +26,13 @@
 		3D3531B022C6935D005A3C64 /* FamilyRec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3531AF22C6935D005A3C64 /* FamilyRec.m */; };
 		3D3531B322CC225D005A3C64 /* PartyDetailTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3531B222CC225D005A3C64 /* PartyDetailTVC.m */; };
 		3D4F7A4F22C416CD00365D81 /* RulesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4F7A4E22C416CD00365D81 /* RulesVC.swift */; };
+		3D5061BB264234420080107D /* CheckList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5061BA264234420080107D /* CheckList.swift */; };
+		3D5061BD264240D60080107D /* ListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5061BC264240D60080107D /* ListTVC.swift */; };
+		3D5061BF264306700080107D /* Lifeguards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5061BE264306700080107D /* Lifeguards.swift */; };
+		3D5061C126431F820080107D /* CheckListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5061C026431F820080107D /* CheckListTVC.swift */; };
+		3D5061C3264320C90080107D /* WorkerListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5061C2264320C90080107D /* WorkerListTVC.swift */; };
+		3D5061C5264369D80080107D /* DirTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5061C4264369D80080107D /* DirTVCell.swift */; };
+		3D5657F42639FDCD00E79F3F /* Members.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5657F32639FDCD00E79F3F /* Members.swift */; };
 		3D65A42D22C5536F00BA0BF9 /* GoogleSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A42822C5536F00BA0BF9 /* GoogleSheet.m */; };
 		3D65A42E22C5536F00BA0BF9 /* poolRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A42922C5536F00BA0BF9 /* poolRecord.m */; };
 		3D65A42F22C5536F00BA0BF9 /* FileRoutines.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A42A22C5536F00BA0BF9 /* FileRoutines.m */; };
@@ -35,7 +42,10 @@
 		3D65A43E22C553F800BA0BF9 /* LoggerTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A43722C553F700BA0BF9 /* LoggerTVC.m */; };
 		3D65A43F22C553F800BA0BF9 /* ConfigTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A43A22C553F800BA0BF9 /* ConfigTVC.m */; };
 		3D6DBCC622E4FB1F00430264 /* ShowCheckedInTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6DBCC522E4FB1F00430264 /* ShowCheckedInTVC.m */; };
+		3D7AE778263F982F0081EB89 /* PurpleSensor in Frameworks */ = {isa = PBXBuildFile; productRef = 3D7AE777263F982F0081EB89 /* PurpleSensor */; };
 		3D88755222FB3DDB00CB7E15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D88755022FB3DDB00CB7E15 /* Main.storyboard */; };
+		3D8AEADC2640EB2900E3A6BA /* LifeGuard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8AEADB2640EB2900E3A6BA /* LifeGuard.swift */; };
+		3D8AEADE2640EF3200E3A6BA /* PhoneEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8AEADD2640EF3200E3A6BA /* PhoneEmail.swift */; };
 		3D91431922F337020081672A /* getTemps.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D91431822F337020081672A /* getTemps.m */; };
 		3D91A9EE1ED3A55C003348ED /* NannyTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D91A9ED1ED3A55C003348ED /* NannyTVC.m */; };
 		3D92EE2024F2E00F008C7E01 /* CancelTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D92EE1F24F2E00F008C7E01 /* CancelTVC.m */; };
@@ -44,9 +54,7 @@
 		3DBFB5B724B7FFBB001B82BA /* CalDetailTVCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5B624B7FFBB001B82BA /* CalDetailTVCTableViewController.m */; };
 		3DBFB5BF24B903A1001B82BA /* GoToTodayTVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5BE24B903A1001B82BA /* GoToTodayTVCell.m */; };
 		3DBFB5C224B903C3001B82BA /* DateSelTVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5C124B903C3001B82BA /* DateSelTVCell.m */; };
-		3DF44053253A1C6C00D0A7A2 /* PurpleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF44050253A1C6C00D0A7A2 /* PurpleModel.swift */; };
-		3DF44054253A1C6C00D0A7A2 /* PurpleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF44051253A1C6C00D0A7A2 /* PurpleData.swift */; };
-		3DF44055253A1C6C00D0A7A2 /* PurpleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF44052253A1C6C00D0A7A2 /* PurpleManager.swift */; };
+		3DF10CF92646EA1E00787F2F /* LifeguardDetailTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF10CF82646EA1E00787F2F /* LifeguardDetailTVC.swift */; };
 		3DFEE28524CC897400B1B37F /* Alert.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DFEE28424CC897400B1B37F /* Alert.m */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +92,14 @@
 		3D3531B122CC225D005A3C64 /* PartyDetailTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartyDetailTVC.h; sourceTree = "<group>"; };
 		3D3531B222CC225D005A3C64 /* PartyDetailTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PartyDetailTVC.m; sourceTree = "<group>"; };
 		3D4F7A4E22C416CD00365D81 /* RulesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesVC.swift; sourceTree = "<group>"; };
+		3D5061BA264234420080107D /* CheckList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckList.swift; sourceTree = "<group>"; };
+		3D5061BC264240D60080107D /* ListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTVC.swift; sourceTree = "<group>"; };
+		3D5061BE264306700080107D /* Lifeguards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lifeguards.swift; sourceTree = "<group>"; };
+		3D5061C026431F820080107D /* CheckListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListTVC.swift; sourceTree = "<group>"; };
+		3D5061C2264320C90080107D /* WorkerListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerListTVC.swift; sourceTree = "<group>"; };
+		3D5061C4264369D80080107D /* DirTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirTVCell.swift; sourceTree = "<group>"; };
+		3D5657F32639FDCD00E79F3F /* Members.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Members.swift; sourceTree = "<group>"; };
+		3D56582E263A381600E79F3F /* Lifeguards-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Lifeguards-Bridging-Header.h"; sourceTree = "<group>"; };
 		3D65A42722C5536F00BA0BF9 /* GoogleSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleSheet.h; sourceTree = "<group>"; };
 		3D65A42822C5536F00BA0BF9 /* GoogleSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleSheet.m; sourceTree = "<group>"; };
 		3D65A42922C5536F00BA0BF9 /* poolRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = poolRecord.m; sourceTree = "<group>"; };
@@ -103,6 +119,8 @@
 		3D6DBCC422E4FB1F00430264 /* ShowCheckedInTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowCheckedInTVC.h; sourceTree = "<group>"; };
 		3D6DBCC522E4FB1F00430264 /* ShowCheckedInTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowCheckedInTVC.m; sourceTree = "<group>"; };
 		3D88755122FB3DDB00CB7E15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3D8AEADB2640EB2900E3A6BA /* LifeGuard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeGuard.swift; sourceTree = "<group>"; };
+		3D8AEADD2640EF3200E3A6BA /* PhoneEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneEmail.swift; sourceTree = "<group>"; };
 		3D91431722F337020081672A /* getTemps.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = getTemps.h; sourceTree = "<group>"; };
 		3D91431822F337020081672A /* getTemps.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = getTemps.m; sourceTree = "<group>"; };
 		3D91A9EC1ED3A55C003348ED /* NannyTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NannyTVC.h; sourceTree = "<group>"; };
@@ -120,9 +138,7 @@
 		3DBFB5C024B903C3001B82BA /* DateSelTVCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DateSelTVCell.h; sourceTree = "<group>"; };
 		3DBFB5C124B903C3001B82BA /* DateSelTVCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DateSelTVCell.m; sourceTree = "<group>"; };
 		3DD4B63124D21C8500603096 /* Lifeguard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lifeguard.entitlements; sourceTree = "<group>"; };
-		3DF44050253A1C6C00D0A7A2 /* PurpleModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurpleModel.swift; sourceTree = "<group>"; };
-		3DF44051253A1C6C00D0A7A2 /* PurpleData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurpleData.swift; sourceTree = "<group>"; };
-		3DF44052253A1C6C00D0A7A2 /* PurpleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurpleManager.swift; sourceTree = "<group>"; };
+		3DF10CF82646EA1E00787F2F /* LifeguardDetailTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeguardDetailTVC.swift; sourceTree = "<group>"; };
 		3DFEE28324CC897400B1B37F /* Alert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Alert.h; sourceTree = "<group>"; };
 		3DFEE28424CC897400B1B37F /* Alert.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Alert.m; sourceTree = "<group>"; };
 		70739B3F90572A754CE18EDC /* Pods-googleSheetsTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-googleSheetsTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-googleSheetsTest/Pods-googleSheetsTest.debug.xcconfig"; sourceTree = "<group>"; };
@@ -139,6 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D7AE778263F982F0081EB89 /* PurpleSensor in Frameworks */,
 				28D130CDD60D8DCDAEDDB844 /* libPods-Lifeguard.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -224,6 +241,11 @@
 				3D2EB266251514160049FD04 /* ShowFamiliesTVC.m */,
 				3D193B7E2639E91300B72D09 /* MemberListTVC.swift */,
 				3D193B802639E95700B72D09 /* MemberDetailTVC.swift */,
+				3D5061BC264240D60080107D /* ListTVC.swift */,
+				3D5061C026431F820080107D /* CheckListTVC.swift */,
+				3D5061C2264320C90080107D /* WorkerListTVC.swift */,
+				3DF10CF82646EA1E00787F2F /* LifeguardDetailTVC.swift */,
+				3D5061C4264369D80080107D /* DirTVCell.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -251,9 +273,12 @@
 				3DBFB5B324B7BC6E001B82BA /* Reservations.m */,
 				3DFEE28324CC897400B1B37F /* Alert.h */,
 				3DFEE28424CC897400B1B37F /* Alert.m */,
-				3DF44051253A1C6C00D0A7A2 /* PurpleData.swift */,
-				3DF44052253A1C6C00D0A7A2 /* PurpleManager.swift */,
-				3DF44050253A1C6C00D0A7A2 /* PurpleModel.swift */,
+				3D5657F32639FDCD00E79F3F /* Members.swift */,
+				3D56582E263A381600E79F3F /* Lifeguards-Bridging-Header.h */,
+				3D8AEADB2640EB2900E3A6BA /* LifeGuard.swift */,
+				3D8AEADD2640EF3200E3A6BA /* PhoneEmail.swift */,
+				3D5061BA264234420080107D /* CheckList.swift */,
+				3D5061BE264306700080107D /* Lifeguards.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -316,6 +341,7 @@
 			);
 			name = Lifeguard;
 			packageProductDependencies = (
+				3D7AE777263F982F0081EB89 /* PurpleSensor */,
 			);
 			productName = googleSheetsTest;
 			productReference = 3D0720821EBA3B5600B083EF /* Lifeguard.app */;
@@ -347,6 +373,7 @@
 			);
 			mainGroup = 3D0720791EBA3B5600B083EF;
 			packageReferences = (
+				3D7AE776263F982F0081EB89 /* XCRemoteSwiftPackageReference "PurpleSensor" */,
 			);
 			productRefGroup = 3D0720831EBA3B5600B083EF /* Products */;
 			projectDirPath = "";
@@ -421,31 +448,38 @@
 				3D0720AB1EBD239300B083EF /* PartyTVC.m in Sources */,
 				3DFEE28524CC897400B1B37F /* Alert.m in Sources */,
 				3D07208A1EBA3B5600B083EF /* AppDelegate.m in Sources */,
+				3D5061C5264369D80080107D /* DirTVCell.swift in Sources */,
 				3D65A43D22C553F800BA0BF9 /* editRecordTVC.m in Sources */,
 				3DBFB5B124B78B29001B82BA /* CalTVC.m in Sources */,
 				3D0720871EBA3B5600B083EF /* main.m in Sources */,
 				3DBFB5BF24B903A1001B82BA /* GoToTodayTVCell.m in Sources */,
+				3D5061C126431F820080107D /* CheckListTVC.swift in Sources */,
 				3D193B7F2639E91300B72D09 /* MemberListTVC.swift in Sources */,
 				3D1F310F24B6089700534404 /* SheetTab.m in Sources */,
 				3D65A43F22C553F800BA0BF9 /* ConfigTVC.m in Sources */,
 				3DBFB5B424B7BC6E001B82BA /* Reservations.m in Sources */,
 				3D65A43E22C553F800BA0BF9 /* LoggerTVC.m in Sources */,
+				3D8AEADC2640EB2900E3A6BA /* LifeGuard.swift in Sources */,
+				3D5061BB264234420080107D /* CheckList.swift in Sources */,
 				3D193B7D2639DD8F00B72D09 /* EmergVC.swift in Sources */,
 				3D6DBCC622E4FB1F00430264 /* ShowCheckedInTVC.m in Sources */,
 				3D92EE2024F2E00F008C7E01 /* CancelTVC.m in Sources */,
-				3DF44054253A1C6C00D0A7A2 /* PurpleData.swift in Sources */,
+				3D5061C3264320C90080107D /* WorkerListTVC.swift in Sources */,
 				3D65A42D22C5536F00BA0BF9 /* GoogleSheet.m in Sources */,
 				3D65A42F22C5536F00BA0BF9 /* FileRoutines.m in Sources */,
+				3D5061BD264240D60080107D /* ListTVC.swift in Sources */,
 				3D1DCD9824A3F051002E1667 /* calObj.m in Sources */,
 				3D11BA3F1ED793DF00DB66FF /* FCell.m in Sources */,
 				3D1CE7A522E6136D00F9CA67 /* CheckInTVCellTableViewCell.m in Sources */,
-				3DF44055253A1C6C00D0A7A2 /* PurpleManager.swift in Sources */,
 				3D91A9EE1ED3A55C003348ED /* NannyTVC.m in Sources */,
 				3D65A43B22C553F800BA0BF9 /* showRecordTVC.m in Sources */,
+				3D5657F42639FDCD00E79F3F /* Members.swift in Sources */,
+				3DF10CF92646EA1E00787F2F /* LifeguardDetailTVC.swift in Sources */,
+				3D8AEADE2640EF3200E3A6BA /* PhoneEmail.swift in Sources */,
 				3D193B812639E95700B72D09 /* MemberDetailTVC.swift in Sources */,
+				3D5061BF264306700080107D /* Lifeguards.swift in Sources */,
 				3D0720A81EBCFAD300B083EF /* GuestTVC.m in Sources */,
 				3DBFB5C224B903C3001B82BA /* DateSelTVCell.m in Sources */,
-				3DF44053253A1C6C00D0A7A2 /* PurpleModel.swift in Sources */,
 				3D91431922F337020081672A /* getTemps.m in Sources */,
 				3DBFB5B724B7FFBB001B82BA /* CalDetailTVCTableViewController.m in Sources */,
 				3D65A43C22C553F800BA0BF9 /* PoolPickerTVC.m in Sources */,
@@ -530,6 +564,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -594,18 +629,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Lifeguard/Lifeguard.entitlements;
-				CURRENT_PROJECT_VERSION = 3.9;
+				CURRENT_PROJECT_VERSION = 3.82;
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.9;
+				MARKETING_VERSION = 3.82;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "Lifeguard/Data/Lifeguards-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -616,18 +652,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Lifeguard/Lifeguard.entitlements;
-				CURRENT_PROJECT_VERSION = 3.9;
+				CURRENT_PROJECT_VERSION = 3.82;
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.9;
+				MARKETING_VERSION = 3.82;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "Lifeguard/Data/Lifeguards-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -654,6 +691,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3D7AE776263F982F0081EB89 /* XCRemoteSwiftPackageReference "PurpleSensor" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jkardach/PurpleSensor.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3D7AE777263F982F0081EB89 /* PurpleSensor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3D7AE776263F982F0081EB89 /* XCRemoteSwiftPackageReference "PurpleSensor" */;
+			productName = PurpleSensor;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3D07207A1EBA3B5600B083EF /* Project object */;
 }

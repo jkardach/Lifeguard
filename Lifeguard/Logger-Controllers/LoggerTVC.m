@@ -24,10 +24,11 @@
 #import "editRecordTVC.h"
 #import "ConfigTVC.h"
 #import "FileRoutines.h"
+//@import PurpleSensor;
 
 #pragma clang diagnostic pop
 
-@interface LoggerTVC () <UISearchBarDelegate, UISearchResultsUpdating, getTempsDelegate>
+@interface LoggerTVC () <UISearchBarDelegate, UISearchResultsUpdating>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *configButton;
 
 @property (nonatomic, strong) NSMutableArray *poolLogArray;
@@ -39,7 +40,8 @@
 
 // 
 @property (nonatomic, strong) UISearchController *searchController;
-@property (nonatomic, strong) getTemps *temps;
+@property (nonatomic, strong) getTemps *particle;
+//@property (nonatomic, strong) PurpleModel *purple;
 @end
 
 @implementation LoggerTVC
@@ -50,12 +52,6 @@
 
 
 #pragma mark setters/getters
--(getTemps *)temps {
-    if (!_temps) {
-        _temps = [[getTemps alloc] init];
-    }
-    return _temps;
-}
 
 - (FileRoutines *)tools {
     if (!_tools) {
@@ -83,12 +79,12 @@
     
     self.title = @"Pool Logger";
     
-    self.temps = [getTemps sharedInstance];
-    self.temps.delegate = self;
-    [self.temps getDevices];
+    
     
     self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.service = self.appDelegate.sheetService;
+    //self.purple = self.appDelegate.purple;
+    //self.particle = self.appDelegate.particle;
 
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
@@ -113,10 +109,18 @@
      name:@"authUINotification"
      object:nil];
     
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(receiveLoggerAuthUINotification:)
+     name:@"tempsUpdated"
+     object:nil];
+    
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing"]; //to give the attributedTitle
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     self.tableView.refreshControl = refreshControl;
+    
+
 }
 
 // When the view appears, ensure that the Google Sheets API service is authorized, and perform API calls.
@@ -573,16 +577,25 @@ viewForHeaderInSection:(NSInteger)section
         switch (indexPath.row)
         {
             case 0:
-                cell.textLabel.text = @"Ambient Temperature:";
-                cell.detailTextLabel.text = self.temps.ambTemp;
-                break;
+                cell.textLabel.text = @"Ambient:";
+//                if(self.purple) {
+//                    // 87F, 22% hum, AQ 15 (Good)
+//                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@F, %@ hum, AQ %d(%@)",
+//                                                 self.purple.temp,
+//                                                 self.purple.humidity,
+//                                                 (int) self.purple.AQ,
+//                                                 self.purple.AQDescription];
+//                } else {
+//                cell.detailTextLabel.text = @"";
+//                }
+//                break;
             case 1:
                 cell.textLabel.text = @"Pool Temperature:";
-                cell.detailTextLabel.text = self.temps.poolTemp;
+                cell.detailTextLabel.text = self.particle.poolTemp;
                 break;
             case 2:
                 cell.textLabel.text = @"Spa Temperature:";
-                cell.detailTextLabel.text = self.temps.spaTemp;
+                cell.detailTextLabel.text = self.particle.spaTemp;
                 break;
             default:
                 cell.textLabel.text = @"";
@@ -790,15 +803,22 @@ canEditRowAtIndexPath:(NSIndexPath *)indexPath
     [self.tableView reloadData];
 }
 
+
+// This is a notification executed after successful signIn, or temp update
 - (void) receiveLoggerAuthUINotification:(NSNotification *) notification {
     if ([notification.name isEqualToString:@"authUINotification"]) {
         [self readSheet];
+    } else if ([notification.name isEqualToString:@"updateTemp"]) {
+        [self.tableView reloadData];  // refresh the dataview
     }
 }
 
 - (void)refresh:(UIRefreshControl *)refreshControl
 {
-    [self.temps refreshTemps];
+    //[self.appDelegate refreshTemps];
+    //[self.appDelegate refreshPurple];   // refresh
     [self readSheet]; //call function you want
 }
+
+
 @end

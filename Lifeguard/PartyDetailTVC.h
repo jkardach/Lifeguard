@@ -6,7 +6,7 @@
 //  Copyright © 2019 Forkbeardlabs. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 #import "PartyRec.h"
 
 NS_ASSUME_NONNULL_BEGIN

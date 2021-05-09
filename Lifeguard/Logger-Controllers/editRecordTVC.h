@@ -6,7 +6,7 @@
 //  Copyright © 2018 Forkbeardlabs. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 #import "poolRecord.h"
 
 @interface editRecordTVC : UITableViewController 

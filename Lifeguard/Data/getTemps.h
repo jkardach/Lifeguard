@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol getTempsDelegate
-- (void)refreshData;
+- (void)didUpdateParticle;
 @end
 
 @interface getTemps : NSObject {
@@ -20,12 +20,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak) id <getTempsDelegate> delegate;
 @property (nonatomic, strong) NSString *poolTemp;
-@property (nonatomic, strong) NSString *ambTemp;
+//@property (nonatomic, strong) NSString *ambTemp;
 @property (nonatomic, strong) NSString *spaTemp;
 + (id)sharedInstance;
 
 - (void)getDevices;
-- (void)refreshTemps;
+//- (void)refreshTemps;
+- (void)getPoolTemp;
+- (void)getSpaTemp;
 @end
 
 NS_ASSUME_NONNULL_END

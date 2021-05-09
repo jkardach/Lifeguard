@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "GoogleSheet.h"
 #import "FileRoutines.h"
 #import "poolRecord.h"
 #import "SheetTab.h"
@@ -19,7 +18,6 @@
 @end
 
 @implementation AppDelegate
-
 
 #pragma mark = setters/getters
 - (NSMutableArray *) poolSheets
@@ -77,6 +75,13 @@
     return _fileH;
 }
 
+//-(getTemps *)temps {
+//    if (!_temps) {
+//        _temps = [[getTemps alloc] init];
+//    }
+//    return _temps;
+//}
+
 - (BOOL)application:(UIApplication *)application
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
@@ -95,7 +100,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [GIDSignIn sharedInstance].scopes = [NSArray arrayWithObjects:kGTLRAuthScopeSheetsSpreadsheets,
                                          kGTLRAuthScopeCalendar, @"https://www.googleapis.com/auth/calendar.events", nil];
     [GIDSignIn sharedInstance].delegate = self;
-    
+
     return YES;
 }
 
@@ -211,6 +216,5 @@ didDisconnectWithUser:(GIDGoogleUser *)user
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [self saveModel];
 }
-
 
 @end

@@ -6,7 +6,7 @@
 //  Copyright © 2017 Forkbeardlabs. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 @import GoogleSignIn;
 
 @interface GuestTVC : UITableViewController

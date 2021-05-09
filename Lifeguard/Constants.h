@@ -10,7 +10,7 @@
 #define Constants_h
 
 #define MISSED_SSHEET_ID @"1DCK6-JHCXUwE_AEIHIhd9_0DxLPMP-wCgYG9W8fAMpk"
-
+// SPoolSheet
 #define ACT_SSHEET_ID @"1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ"
 //https://docs.google.com/spreadsheets/d/1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ/edit#gid=20
 #define ACT_SHEET_TAB @"Accounts"
@@ -34,6 +34,17 @@
 #define SRV_SHEET_TAB @"Service"
 #define SRV_SHEET_ID @"173071843"
 
+// Current Lifeguard roster
+#define LIFEGUARD_SSHEET_ID @"1bHtHAlMX0KMmLZnXbOTXr-k1P7mhby78SmLUVhN6P_M"
+
+// Opening Closing Check Lists for lifeguards
+#define CHK_SSHEET_ID @"1MzZb1xfIf6Z1nlWZO-CpErVS9BMSrnfZrw_yBk40ch8"
+#define CHK_OPEN_TAB @"OpenRules"
+#define CHK_OPEN_ID @"0"
+#define CHK_CLOSE_TAB @"CloseRules"
+#define CHK_CLOSE_ID @"650146575"
+#define CHK_LOGS_TAB @"CheckLogs"
+#define CHK_LOGS_ID @"203193994"
 
 #define kKeychainItemName = @"Google Sheets API"
 #define kClientID = @"229185246988-tdt93711nfb3t3cvrn8ooet4ibspnhe9.apps.googleusercontent.com"

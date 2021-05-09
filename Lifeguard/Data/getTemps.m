@@ -41,7 +41,7 @@
         _spaDevErrorCnt = 0;
         _poolTemp = @"";
         _spaTemp = @"";
-        _ambTemp = @"";
+        //_ambTemp = @"";
     }
     return self;
 }
@@ -58,7 +58,7 @@
 }
 
 - (void)getPoolDevice {
-    NSString *deviceID = @"1c003f001647353236343033";
+    NSString *deviceID = @"3f0028001747353236343033";
     [[ParticleCloud sharedInstance] getDevice:deviceID completion:^(ParticleDevice *device, NSError *error) {
         if (!error) {
             self.poolDevice = device;
@@ -81,6 +81,7 @@
     [[ParticleCloud sharedInstance] getDevice:deviceID completion:^(ParticleDevice *device, NSError *error) {
         if (!error) {
             self.spaDevice = device;
+            [self getSpaTemp];
             [self getPoolTemp];
         } else {
             self.spaDevErrorCnt++;
@@ -94,26 +95,31 @@
         }
     }];
 }
-
+// getPoolTemp -> getSpaTemp
 - (void)refreshTemps
 {
     if (!self.poolDevice || !self.spaDevice) {
         NSLog(@"particle device not found");
         return;
     }
+    [self getSpaTemp];
     [self getPoolTemp];
 }
 
 - (void)getPoolTemp {
+    if (!self.poolDevice) {
+        NSLog(@"particle pool device not found");
+        return;
+    }
     [self.poolDevice getVariable:@"poolTmp" completion:^(id result, NSError *error) {
         if (!error) {
             self.poolTemp = result;
-            [self getAmbTemp];
+            [self.delegate didUpdateParticle];  // generate callback
         } else {
             self.poolErrorCnt++;
             if (self.poolErrorCnt > 5) {
                 NSLog(@"Failed pool temperature from pool device, timing out, %@", error);
-                [self getAmbTemp];
+                [self.delegate didUpdateParticle];  // generate callback
             } else {
                 NSLog(@"Failed pool temperature from pool device, trying again, %@", error);
                 [self getPoolTemp];
@@ -122,29 +128,33 @@
     }];
 }
 
-- (void)getAmbTemp {
-    [self.poolDevice getVariable:@"AmbTemp" completion:^(id result, NSError *error) {
-        if (!error) {
-            self.ambTemp = result;
-            [self getSpaTemp];
-        } else {
-            self.ambErrorCnt++;
-            if (self.ambErrorCnt > 5) {
-                NSLog(@"Failed reading ambient temperature from pool device, timing out");
-                [self getSpaTemp];
-            } else {
-                NSLog(@"Failed reading ambient temperature from pool device, trying again");
-                [self getAmbTemp];
-            }
-        }
-    }];
-}
+//- (void)getAmbTemp {
+//    [self.poolDevice getVariable:@"AmbTemp" completion:^(id result, NSError *error) {
+//        if (!error) {
+//            self.ambTemp = result;
+//            [self getSpaTemp];
+//        } else {
+//            self.ambErrorCnt++;
+//            if (self.ambErrorCnt > 5) {
+//                NSLog(@"Failed reading ambient temperature from pool device, timing out");
+//                [self getSpaTemp];
+//            } else {
+//                NSLog(@"Failed reading ambient temperature from pool device, trying again");
+//                [self getAmbTemp];
+//            }
+//        }
+//    }];
+//}
 
 - (void)getSpaTemp {
+    if (!self.spaDevice) {
+        NSLog(@"particle pool device not found");
+        return;
+    }
     [self.spaDevice getVariable:@"SpaTemp" completion:^(id result, NSError *error) {
         if (!error) {
             self.spaTemp = result;
-            [self.delegate refreshData];  // generate callback
+            [self.delegate didUpdateParticle];  // generate callback
         } else {
             self.ambErrorCnt++;
             if (self.ambErrorCnt > 5) {

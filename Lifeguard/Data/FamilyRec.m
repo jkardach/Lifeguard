@@ -347,9 +347,16 @@ MFMailComposeViewControllerDelegate>
 // converts memberSheet record to family object, remove CL, PL records
 // added 18 - landline phone, 19- firstName, 20-firstName2 on 9/17/2020
 +(FamilyRec *) convertToFamObj: (NSArray *)member {
-    if (([member[1] isEqualToString: @"Certificate Number"]) ||
-        [member[2] isEqualToString:@"CL"] || [member[2] isEqualToString:@"PL"] ||
-        [member[0] isEqualToString:@""]) {
+    if ([member[0] isEqualToString: @"Last Name"] ||
+        [member[0] isEqualToString: @"Test"] ||
+        [member[0] isEqualToString: @"Test row"] ||
+        [member[0] isEqualToString: @"Test Row"] ||
+        [member[1] isEqualToString:@"#"] ||
+        [member[2] isEqualToString:@"CL"] ||
+        [member[2] isEqualToString:@"PL"] ||
+        [member[2] isEqualToString:@"CO"] ||
+        [member[2] isEqualToString:@"SL"] ||
+        [member[2] isEqualToString:@""]) {
         return nil;      // this is the header, blank last name, or CL or PL remove
     }
     FamilyRec *rec = [[FamilyRec alloc] init];

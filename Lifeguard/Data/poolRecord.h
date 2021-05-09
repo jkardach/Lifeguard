@@ -6,7 +6,7 @@
 //  Copyright © 2018 Forkbeardlabs. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #import "GTLRSheets.h"
 
 @interface poolRecord : NSObject

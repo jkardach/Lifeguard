@@ -6,7 +6,7 @@
 //  Copyright © 2020 Forkbeardlabs. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 #import "FamilyRec.h"
 
 NS_ASSUME_NONNULL_BEGIN

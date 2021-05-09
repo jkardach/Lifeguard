@@ -9,6 +9,7 @@
 import UIKit
 
 class MemberDetailTVC: UITableViewController {
+    var member: Members!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,23 +25,37 @@ class MemberDetailTVC: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return Members.memberKeys.count
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DetailCell", for: indexPath)
 
-        // Configure the cell...
+        cell.textLabel!.text = Members.memberKeys[indexPath.row]
+        let key = Members.memberKeyPath[indexPath.row]
+        cell.detailTextLabel!.text = member[keyPath: key]
+        
+        cell.textLabel?.textColor = UIColor.black
+        cell.textLabel?.font = UIFont(name: "System", size: 18)
+        cell.detailTextLabel?.textColor = UIColor.black
+        cell.detailTextLabel?.font = UIFont(name: "System", size: 18)
+        
+        if indexPath.row % 2 == 0 {
+            let color = UIColor.init(hex: "#1cc5dc") // light blue
+            cell.backgroundColor = color
+        } else {
+            cell.backgroundColor = UIColor.white
+        }
 
         return cell
     }
-    */
+    
 
     /*
     // Override to support conditional editing of the table view.

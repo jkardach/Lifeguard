@@ -6,9 +6,10 @@
 //  Copyright © 2018 Forkbeardlabs. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "GoogleSheet.h"
+@import UIKit;
 @import GoogleSignIn;
+
+#import "GoogleSheet.h"
 
 @interface LoggerTVC : UITableViewController
 @property (nonatomic, strong) GoogleSheet *sheet;

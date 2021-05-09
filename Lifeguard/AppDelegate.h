@@ -7,11 +7,13 @@
 //  Client ID for "Lifeguard"
 //  229185246988-v8shefau0te7hh87stnthd6vfiagql95.apps.googleusercontent.com
 //  See https://developers.google.com/identity/sign-in/ios/start for google signIn
-#import <UIKit/UIKit.h>
+
+@import UIKit;
+@import GoogleSignIn;
+
 #import "GTLRSheets.h"
 #import "GTLRCalendar.h"
 #import "GoogleSheet.h"
-@import GoogleSignIn;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, GIDSignInDelegate>
 
@@ -23,9 +25,11 @@
 @property (nonatomic, strong) GTLRCalendarService *calendarService;
 @property (nonatomic, strong) GIDGoogleUser *theUser;
 
+
 - (void)signInToGoogle: (id) delegate;
 - (void)reSignInToGoogle: (id) delegate;
 - (void)saveModel;
+
 
 @end
 

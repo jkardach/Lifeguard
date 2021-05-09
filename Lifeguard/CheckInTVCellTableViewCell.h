@@ -6,7 +6,7 @@
 //  Copyright © 2019 Forkbeardlabs. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 @protocol CellDelegate <NSObject>
 - (void)didClickOnCellAtIndex:(NSInteger)cellIndex withSender:(UIButton * _Nullable)sender;
 @end
