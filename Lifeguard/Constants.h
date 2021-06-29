@@ -10,7 +10,7 @@
 #define Constants_h
 
 #define MISSED_SSHEET_ID @"1DCK6-JHCXUwE_AEIHIhd9_0DxLPMP-wCgYG9W8fAMpk"
-// SPoolSheet
+// SPoolSheet: 1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ
 #define ACT_SSHEET_ID @"1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ"
 //https://docs.google.com/spreadsheets/d/1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ/edit#gid=20
 #define ACT_SHEET_TAB @"Accounts"
@@ -49,6 +49,7 @@
 #define kKeychainItemName = @"Google Sheets API"
 #define kClientID = @"229185246988-tdt93711nfb3t3cvrn8ooet4ibspnhe9.apps.googleusercontent.com"
 
+#define GUESTS_PER_WEEK 5
 
 
 

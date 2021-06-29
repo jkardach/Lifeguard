@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSString *familyMembers;  // total number of family members
 @property(nonatomic) int members;  // number of family members checked in
 @property(nonatomic) int guests;   // number of guests checked in
+@property(nonatomic, strong) NSString *row;     // row of record on members sheet
 @property(nonatomic, strong) NSString *kidsDroppedOff;  // names of kids dropped off (no parents)
 @property(nonatomic, strong) NSString *email; // email 1
 @property(nonatomic, strong) NSString *phone; // cellphone 1
@@ -73,6 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSArray *)famKeys;
 -(UIImage *)getLogo;
 -(id)copyWithZone:(NSZone * _Nullable)zone;
+-(void)addGuests:(int)guests;   // adds the number of guests to the record
 
 +(FamilyRec *) convertToFamObj: (NSArray *)member;
 +(FamilyRec *)convertToSignIn: (NSArray *)input;

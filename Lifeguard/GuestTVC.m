@@ -372,6 +372,41 @@
         }];
 }
 
+// this method will update the guests column for the given member
+-(void)updateGuestForRecord:(FamilyRec *)member {
+    // need to get the row of the member first.
+    int row = [member.row intValue];
+    if(row < 2) {
+        printf("Error: bad row value, should be 2 or more\n");
+        return;
+    }
+    row += 2;  //add two because we are doing a account sheet
+    NSString *range = [NSString stringWithFormat:@"Accounts!X%d", row];  // column X
+    GTLRSheets_ValueRange *value = [[GTLRSheets_ValueRange alloc] init];
+
+    NSString *txtValue = [NSString stringWithFormat:@"%d", [member getPaidGuestsForYear]];
+    NSArray *valueArray = @[@[txtValue]];
+    value.values = valueArray;
+    GTLRSheetsQuery_SpreadsheetsValuesUpdate *query = [GTLRSheetsQuery_SpreadsheetsValuesUpdate queryWithObject:value
+                                                                                                  spreadsheetId:ACT_SSHEET_ID
+                                                                                                          range:range];
+    query.valueInputOption = @"USER_ENTERED";
+    
+    [self.sheetService executeQuery:query
+                  completionHandler:^(GTLRServiceTicket *ticket,
+                                      GTLRSheets_ValueRange *result,
+                                      NSError *error) {
+        if(error != nil) {
+            NSString *message = [NSString stringWithFormat:@"\nError: %@\n", error.localizedDescription];
+            [Alert showAlert:@"Error" message:message viewController:self];
+            printf("\nError: %s", [error.localizedDescription UTF8String]);
+        }
+    }];
+    
+}
+
+
+
 - (void)readSheet {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
@@ -799,26 +834,6 @@ viewForHeaderInSection:(NSInteger)section
     return cell;
 }
 
-//- (NSString *)formatRes:(NSString *) start {
-//    NSArray *strings = [start componentsSeparatedByString:@" "];
-//    NSString *tempString = strings[1];
-//    tempString = [tempString substringToIndex:tempString.length-2];
-//    tempString = [NSString stringWithFormat: @"%@0", tempString];
-//    return tempString;
-//}
-
-//- (BOOL)sameDay:(NSDate *) currentDate {
-//    NSCalendar* calendar = [NSCalendar currentCalendar];
-//    NSDate *now = [NSDate date];
-//
-//    unsigned unitFlags = NSCalendarUnitDay;
-//    NSDateComponents *comp1 = [calendar components:unitFlags fromDate:currentDate];
-//    NSDateComponents *comp2 = [calendar components:unitFlags fromDate:now];
-//    return [comp1 day] == [comp2 day];
-//}
-
-
-
 - (UITableViewCellEditingStyle)tableView:(UITableView*)tableView
            editingStyleForRowAtIndexPath:(NSIndexPath*)indexPath
 {
@@ -866,11 +881,22 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         int weeklyPaidGuests = [member getPaidGuestsForWeek:self.currentDate];
         int totalGuests = [member getGuestsForYear];
         int totalPaidGuests = [member getPaidGuestsForYear];
-        
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@(%@) Family", member.lastName, member.memberID]
-                     message:[NSString stringWithFormat:@"How many members and guests are you checking in?\n\nNames(%@): %@\n\nTotal Weekly Guests: %d of 5\nTotal Weekly Paid Guests: %d\nTotal Guests: %d\nTotal Paid Guests: %d",
-                              member.familyMembers, member.getNames,weeklyGuests, weeklyPaidGuests, totalGuests, totalPaidGuests]
-              preferredStyle:UIAlertControllerStyleAlert];
+        // create alert message
+        NSString *title = [NSString stringWithFormat:@"%@(%@) Family", member.lastName, member.memberID];
+        NSString *message = [NSString stringWithFormat:@"Names(%@): %@\n\n", member.familyMembers, member.getNames];
+        message = [message stringByAppendingString:[NSString stringWithFormat:@"Weekly Guests: %d/%d\n", weeklyGuests, GUESTS_PER_WEEK]];
+        if(weeklyPaidGuests != 0) {
+            message = [message stringByAppendingString:[NSString stringWithFormat:@"Weekly Paid Guests: %d\n", weeklyPaidGuests]];
+        }
+        if(totalGuests != 0) {
+            message = [message stringByAppendingString:[NSString stringWithFormat:@"Total Guests: %d\n", totalGuests]];
+            if(totalPaidGuests != 0) {
+                message = [message stringByAppendingString:[NSString stringWithFormat:@"Total Paid Guests: %d\n", totalPaidGuests]];
+            }
+        }
+        message = [message stringByAppendingString:@"\n\nHow many members and guests are you checking in?"];
+    
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message: message preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
             textField.placeholder = @"(number of) members";
@@ -887,16 +913,18 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
             textField.borderStyle = UITextBorderStyleRoundedRect;
             [textField setKeyboardType:UIKeyboardTypeNumberPad ];
         }];
-        
+        // the actions
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             NSArray *textfields = alert.textFields;
             UITextField *members = textfields[0];
             UITextField *guests = textfields[1];
             member.checked = YES;
             member.members = [members.text intValue];
-            member.guests = [guests.text intValue];
+            int numGuests = [guests.text intValue];     // record guests today
+            [self writeGuests:numGuests ForRecord:member];
 
             [self writeGuest:member values:member.getSignInValueArray sheetID:ACT_SSHEET_ID sheetRange:@"SignIn!A1"];
+
 
         }]];
         
@@ -905,9 +933,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
             UITextField *members = textfields[0];
             UITextField *guests = textfields[1];
             member.checked = YES;
-            member.members = [members.text intValue];
-            member.guests = [guests.text intValue];
+            member.members = [members.text intValue];// record guests today
             [self getNamesOfKids:(FamilyRec *) member];
+            int numGuests = [guests.text intValue];     // record guests today
+            [self writeGuests:numGuests ForRecord:member];
         }]];
         if (member.didTheyMissReservation) {
             [alert addAction:[UIAlertAction actionWithTitle:@"No Show" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -915,10 +944,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
                 UITextField *members = textfields[0];
                 UITextField *guests = textfields[1];
                 member.checked = YES;
-                member.members = [members.text intValue];
-                member.guests = [guests.text intValue];
+                member.members = [members.text intValue];      // record guests today
                 member.noShow = YES;
+                int numGuests = [guests.text intValue];     // record guests today
+                [self writeGuests:numGuests ForRecord:member];
                 [self writeGuest:member values:member.getSignInValueArray sheetID:ACT_SSHEET_ID sheetRange:@"SignIn!A1"];
+                
+                // ***** here write the member.guests to the accounts sheet, column "X"
             }]];
         }
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -931,6 +963,22 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
         [self writeGuest:member values:member.getSignInValueArray sheetID:ACT_SSHEET_ID sheetRange:@"SignIn!A1"];
     }
 }
+
+// this adds guests to the record and updates the guest value ("X") in account sheet if necessary
+-(void)writeGuests:(int) guests ForRecord:(FamilyRec *)member {
+    int prevPaidGuestsForYear = [member getPaidGuestsForYear];
+    [member addGuests:guests];  // add checked in guests
+    member.guests = guests;     // set the guests checked in today
+    int paidGuestsForYear = [member getPaidGuestsForYear];  // get new yearly total
+    
+    // if paidGuests/year has not changed, do nothing/return
+    if(prevPaidGuestsForYear == paidGuestsForYear) { return; }
+    
+    // else need to update the account sheet
+    [self updateGuestForRecord:member];
+}
+
+
 
 - (void)getNamesOfKids:(FamilyRec *)member {
     NSString *message;
@@ -1009,7 +1057,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
             }
         } else {
             [self readLog];  // already logged in, go read spreadsheet
-            printf("executing readLog\n");
         }
     }
 }

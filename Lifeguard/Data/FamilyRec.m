@@ -40,6 +40,7 @@ MFMailComposeViewControllerDelegate>
         _phone = @"";
         _email2 = @"";
         _phone2 = @"";
+        _row = @"0";  // real record will be 2 or greater
         _landLine = @"";
         _signOut = @"";
         _optPhone = @"";
@@ -295,7 +296,7 @@ MFMailComposeViewControllerDelegate>
     return @[@"lastName", @"memberID", @"memType", @"", @"",
              @"", @"", @"phone", @"phone2",
              @"email", @"email2", @"", @"", @"", @"",
-             @"kidsNames", @"familyMembers", @"eligable", @"", @"landLine",
+             @"kidsNames", @"familyMembers", @"eligable", @"row", @"landLine",
              @"firstName", @"firstName2"];
 }
 
@@ -464,30 +465,22 @@ MFMailComposeViewControllerDelegate>
                 continue;
             }
         }
-        if([self.lastName isEqualToString:@"Ciccone"]) {
-            printf("Ciccone begin\n");
-        }
         if(row.count > 0) {     // date
             // if the name and memberID, then applies to this object
             if([row[1] isEqualToString: self.lastName] &&
                [row[2] isEqualToString:self.memberID]) {
                 if(row.count > 4) {
                     guests = [(NSString *)row[4] intValue]; // get the guest count
-                    if([self.lastName isEqualToString:@"Ciccone"]) {
-                        printf("Ciccone adding %d guests\n", guests);
-                    }
                 }
                 NSDate *date = [NSDate stringToDate:row[0]];  // convert date
                 [self.guestFees addGuests:guests fromDate:date];
-                if([self.lastName isEqualToString:@"Ciccone"]) {
-                    printf("Ciccone adding %d guests to guestFees\n", guests);
-                }
             }
         }
     }
-    if([self.lastName isEqualToString:@"Ciccone"]) {
-        printf("Ciccone end\n");
-    }
+}
+
+-(void)addGuests:(int)guests {
+    [self.guestFees addGuests:guests fromDate:[NSDate date]];
 }
 
 -(int)getGuestsForWeek:(NSDate *)date {
@@ -595,6 +588,7 @@ MFMailComposeViewControllerDelegate>
     copy.missedReservationSaved = self.missedReservationSaved;
     copy.noShow = self.noShow;
     copy.guestFees = self.guestFees;
+    copy.row = self.row;
     
     return copy;
 }

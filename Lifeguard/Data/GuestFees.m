@@ -12,6 +12,7 @@
 #import "GuestFees.h"
 #import "GuestWeek.h"  // this class has a weekDate and a guests property
 #import "NSDateCat.h"
+#import "Constants.h"
 
 @interface GuestFees()
 
@@ -69,7 +70,7 @@
     if([NSDate isThisYear:date]) {
         int week = [NSDate weekOfDate: date];
         GuestWeek *rec = [self getGuestRecFromWeek: week];
-        guests = rec.guests - 5;
+        guests = rec.guests - GUESTS_PER_WEEK;
         if(guests < 0) {
             guests = 0;
         }
@@ -114,7 +115,7 @@
     for(GuestWeek *rec in self.weeksInYear) {
         if(rec.guests != 0) {
             GuestWeek *newRec = [[GuestWeek alloc] init];  // create new record
-            newRec.guests = rec.guests - 5;
+            newRec.guests = rec.guests - GUESTS_PER_WEEK;
             newRec.workWeek = rec.workWeek;
             if(newRec.guests <= 0) {
                 continue;  // if result is zero or less, continue
