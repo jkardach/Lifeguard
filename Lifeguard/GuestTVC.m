@@ -15,6 +15,7 @@
 #import "calObj.h"
 #import "Reservations.h"
 #import "Alert.h"
+#import "NSDateCat.h"
 
 @import PurpleSensor;
 
@@ -210,7 +211,7 @@
     }];
 }
 
-// this writes family record to the signIn
+// this writes family record to the signIn sheet
 - (void)writeGuest:(FamilyRec *)member
             values:(NSArray *)values
            sheetID:(NSString *)sheetID
@@ -231,6 +232,7 @@
                                       GTLRSheets_ValueRange *result,
                                       NSError *error) {
         if (error == nil) {
+            // should write guest values back to the accounts sheet here.
             [self readLog];
     
         } else {
@@ -265,8 +267,9 @@
                     }
                     arrayRow++;
                 }
+                // now the checkedInToday array is filled in, now to fill in the guests/week, for families using row info
             }
-            [self readbatchSheet];
+            [self readbatchSheet:rows];  // rows has the data on the guests that need to be updated in readbatchsheet
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
             [Alert showAlert:@"Error" message:message viewController:self];
@@ -281,7 +284,7 @@
 }
 
 
-- (void)delRow:(int) row  spreadSheetId:(NSString *)spreadsheetId sheetId:(NSNumber *)sheetId {
+- (void)delRow:(int)row spreadSheetId:(NSString *)spreadsheetId sheetId:(NSNumber *)sheetId {
     GTLRSheets_DeleteDimensionRequest *delDimReq = [[GTLRSheets_DeleteDimensionRequest alloc] init];
     GTLRSheets_Request *sheetsRequest = [[GTLRSheets_Request alloc] init];
     sheetsRequest.deleteDimension = delDimReq;
@@ -318,7 +321,7 @@
 
 // defined in Constants.h: ACT_SSHEET_ID = 1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ
 // get values from Members sheet (PM, Lease, Trial)
-- (void)readbatchSheet {
+- (void)readbatchSheet:(NSArray *)rows {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query1 =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
                                                             range:@"Members!A2:V86"];  // PM
@@ -355,6 +358,10 @@
                             }
                         }
                     }
+                }
+                // update the guest values (from signin) in the new family records
+                for(FamilyRec *rec in self.families) {
+                    [rec updateGuests: rows];
                 }
                 [self readTodaysResCal];
 
@@ -711,7 +718,7 @@ viewForHeaderInSection:(NSInteger)section
     cell.detailTextLabel.textColor = [UIColor blackColor];
     [cell.textLabel setFont:[UIFont fontWithName:@"System" size:17]];
     [cell.detailTextLabel setFont:[UIFont fontWithName:@"System" size:17]];
-    if (![self sameDay:self.currentDate]) {
+    if (![NSDate isToday:self.currentDate]) {
         [self clearCheckmarks];
     }
     if (indexPath.section == 0) {
@@ -792,31 +799,25 @@ viewForHeaderInSection:(NSInteger)section
     return cell;
 }
 
-- (NSString *)formatRes:(NSString *) start {
-    NSArray *strings = [start componentsSeparatedByString:@" "];
-    NSString *tempString = strings[1];
-    tempString = [tempString substringToIndex:tempString.length-2];
-    tempString = [NSString stringWithFormat: @"%@0", tempString];
-    return tempString;
-}
+//- (NSString *)formatRes:(NSString *) start {
+//    NSArray *strings = [start componentsSeparatedByString:@" "];
+//    NSString *tempString = strings[1];
+//    tempString = [tempString substringToIndex:tempString.length-2];
+//    tempString = [NSString stringWithFormat: @"%@0", tempString];
+//    return tempString;
+//}
 
-- (BOOL)sameDay:(NSDate *) currentDate {
-    NSCalendar* calendar = [NSCalendar currentCalendar];
-    NSDate *now = [NSDate date];
-    
-    unsigned unitFlags = NSCalendarUnitDay;
-    NSDateComponents *comp1 = [calendar components:unitFlags fromDate:currentDate];
-    NSDateComponents *comp2 = [calendar components:unitFlags fromDate:now];
-    return [comp1 day] == [comp2 day];
-}
+//- (BOOL)sameDay:(NSDate *) currentDate {
+//    NSCalendar* calendar = [NSCalendar currentCalendar];
+//    NSDate *now = [NSDate date];
+//
+//    unsigned unitFlags = NSCalendarUnitDay;
+//    NSDateComponents *comp1 = [calendar components:unitFlags fromDate:currentDate];
+//    NSDateComponents *comp2 = [calendar components:unitFlags fromDate:now];
+//    return [comp1 day] == [comp2 day];
+//}
 
-// takes a string time in, and compares it to the current time.
-// if current time is two hours past resTime, then return YES, else NO
--(BOOL)missedReservation:(NSString *) resTime {
-    BOOL missedRes = NO;
-    
-    return missedRes;
-}
+
 
 - (UITableViewCellEditingStyle)tableView:(UITableView*)tableView
            editingStyleForRowAtIndexPath:(NSIndexPath*)indexPath
@@ -859,11 +860,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     if((indexPath.section == 0) || ((indexPath.section == 1)&&(self.maxSections==3)))
         return;
     FamilyRec *member = self.families[indexPath.row];
-    //member.missedReservation = NO;
+
     if(!(member.lapSwimmerRes && !member.didTheyMissReservation)) {
+        int weeklyGuests = [member getGuestsForWeek:self.currentDate];
+        int weeklyPaidGuests = [member getPaidGuestsForWeek:self.currentDate];
+        int totalGuests = [member getGuestsForYear];
+        int totalPaidGuests = [member getPaidGuestsForYear];
         
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@(%@) Family", member.lastName, member.memberID]
-                     message:[NSString stringWithFormat:@"How many members and guests are you checking in?\n\nNames(%@): %@", member.familyMembers, member.getNames]
+                     message:[NSString stringWithFormat:@"How many members and guests are you checking in?\n\nNames(%@): %@\n\nTotal Weekly Guests: %d of 5\nTotal Weekly Paid Guests: %d\nTotal Guests: %d\nTotal Paid Guests: %d",
+                              member.familyMembers, member.getNames,weeklyGuests, weeklyPaidGuests, totalGuests, totalPaidGuests]
               preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
@@ -1003,6 +1009,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
             }
         } else {
             [self readLog];  // already logged in, go read spreadsheet
+            printf("executing readLog\n");
         }
     }
 }

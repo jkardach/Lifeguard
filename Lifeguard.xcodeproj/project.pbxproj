@@ -49,6 +49,9 @@
 		3D91431922F337020081672A /* getTemps.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D91431822F337020081672A /* getTemps.m */; };
 		3D91A9EE1ED3A55C003348ED /* NannyTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D91A9ED1ED3A55C003348ED /* NannyTVC.m */; };
 		3D92EE2024F2E00F008C7E01 /* CancelTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D92EE1F24F2E00F008C7E01 /* CancelTVC.m */; };
+		3DBFB19C268A3D4F00528CC8 /* NSDateCat.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB196268A3D4E00528CC8 /* NSDateCat.m */; };
+		3DBFB19D268A3D4F00528CC8 /* GuestFees.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB19A268A3D4F00528CC8 /* GuestFees.m */; };
+		3DBFB19E268A3D4F00528CC8 /* GuestWeek.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB19B268A3D4F00528CC8 /* GuestWeek.m */; };
 		3DBFB5B124B78B29001B82BA /* CalTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5B024B78B29001B82BA /* CalTVC.m */; };
 		3DBFB5B424B7BC6E001B82BA /* Reservations.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5B324B7BC6E001B82BA /* Reservations.m */; };
 		3DBFB5B724B7FFBB001B82BA /* CalDetailTVCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5B624B7FFBB001B82BA /* CalDetailTVCTableViewController.m */; };
@@ -127,6 +130,12 @@
 		3D91A9ED1ED3A55C003348ED /* NannyTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NannyTVC.m; sourceTree = "<group>"; };
 		3D92EE1E24F2E00F008C7E01 /* CancelTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CancelTVC.h; sourceTree = "<group>"; };
 		3D92EE1F24F2E00F008C7E01 /* CancelTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CancelTVC.m; sourceTree = "<group>"; };
+		3DBFB196268A3D4E00528CC8 /* NSDateCat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateCat.m; sourceTree = "<group>"; };
+		3DBFB197268A3D4E00528CC8 /* GuestFees.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuestFees.h; sourceTree = "<group>"; };
+		3DBFB198268A3D4F00528CC8 /* GuestWeek.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuestWeek.h; sourceTree = "<group>"; };
+		3DBFB199268A3D4F00528CC8 /* NSDateCat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDateCat.h; sourceTree = "<group>"; };
+		3DBFB19A268A3D4F00528CC8 /* GuestFees.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuestFees.m; sourceTree = "<group>"; };
+		3DBFB19B268A3D4F00528CC8 /* GuestWeek.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuestWeek.m; sourceTree = "<group>"; };
 		3DBFB5AF24B78B29001B82BA /* CalTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CalTVC.h; sourceTree = "<group>"; };
 		3DBFB5B024B78B29001B82BA /* CalTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CalTVC.m; sourceTree = "<group>"; };
 		3DBFB5B224B7BC6E001B82BA /* Reservations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reservations.h; sourceTree = "<group>"; };
@@ -265,6 +274,12 @@
 				3D3531AC22C65862005A3C64 /* PartyRec.m */,
 				3D3531AE22C6935D005A3C64 /* FamilyRec.h */,
 				3D3531AF22C6935D005A3C64 /* FamilyRec.m */,
+				3DBFB197268A3D4E00528CC8 /* GuestFees.h */,
+				3DBFB19A268A3D4F00528CC8 /* GuestFees.m */,
+				3DBFB198268A3D4F00528CC8 /* GuestWeek.h */,
+				3DBFB19B268A3D4F00528CC8 /* GuestWeek.m */,
+				3DBFB199268A3D4F00528CC8 /* NSDateCat.h */,
+				3DBFB196268A3D4E00528CC8 /* NSDateCat.m */,
 				3D91431722F337020081672A /* getTemps.h */,
 				3D91431822F337020081672A /* getTemps.m */,
 				3D1DCD9624A3F051002E1667 /* calObj.h */,
@@ -358,7 +373,6 @@
 				TargetAttributes = {
 					3D0720811EBA3B5600B083EF = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = NMC4QMEM2Y;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -451,6 +465,7 @@
 				3D5061C5264369D80080107D /* DirTVCell.swift in Sources */,
 				3D65A43D22C553F800BA0BF9 /* editRecordTVC.m in Sources */,
 				3DBFB5B124B78B29001B82BA /* CalTVC.m in Sources */,
+				3DBFB19D268A3D4F00528CC8 /* GuestFees.m in Sources */,
 				3D0720871EBA3B5600B083EF /* main.m in Sources */,
 				3DBFB5BF24B903A1001B82BA /* GoToTodayTVCell.m in Sources */,
 				3D5061C126431F820080107D /* CheckListTVC.swift in Sources */,
@@ -462,9 +477,11 @@
 				3D8AEADC2640EB2900E3A6BA /* LifeGuard.swift in Sources */,
 				3D5061BB264234420080107D /* CheckList.swift in Sources */,
 				3D193B7D2639DD8F00B72D09 /* EmergVC.swift in Sources */,
+				3DBFB19C268A3D4F00528CC8 /* NSDateCat.m in Sources */,
 				3D6DBCC622E4FB1F00430264 /* ShowCheckedInTVC.m in Sources */,
 				3D92EE2024F2E00F008C7E01 /* CancelTVC.m in Sources */,
 				3D5061C3264320C90080107D /* WorkerListTVC.swift in Sources */,
+				3DBFB19E268A3D4F00528CC8 /* GuestWeek.m in Sources */,
 				3D65A42D22C5536F00BA0BF9 /* GoogleSheet.m in Sources */,
 				3D65A42F22C5536F00BA0BF9 /* FileRoutines.m in Sources */,
 				3D5061BD264240D60080107D /* ListTVC.swift in Sources */,

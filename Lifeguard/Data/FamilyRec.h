@@ -50,6 +50,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic) BOOL missedReservationSaved;
 @property(nonatomic) BOOL noShow;  // did not make reservation
 
+-(int)getGuestsForWeek:(NSDate *)date;
+-(int)getPaidGuestsForWeek:(NSDate *)date;
+-(int)getGuestsForYear;
+-(int)getPaidGuestsForYear;
+
 -(NSMutableArray *)addEmails:(NSMutableArray *)emails;
 -(NSMutableArray *)addSMSs:(NSMutableArray *)smss;
 -(void)sendEmail:(id)viewController subject:(NSString *)subject body:(NSString *)body ToEmails:(NSArray *)emails;
@@ -71,8 +76,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(FamilyRec *) convertToFamObj: (NSArray *)member;
 +(FamilyRec *)convertToSignIn: (NSArray *)input;
-+(BOOL)isToday:(NSDate *)aDate;
-+(NSDate *)stringToDate:(NSString *)dateStr;
+
+-(void)updateGuests: (NSArray *)rows;
+//+(BOOL)isToday:(NSDate *)aDate;
+//+(NSDate *)stringToDate:(NSString *)dateStr;
 +(BOOL)even:(int)value;
 @end
 

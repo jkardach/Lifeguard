@@ -7,12 +7,17 @@
 //
 
 #import "FamilyRec.h"
+#import "GuestFees.h"
+#import "NSDateCat.h"
 @import MessageUI;
 
 @interface FamilyRec() <MFMessageComposeViewControllerDelegate,
 MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, strong) id viewController;
+@property(nonatomic, strong) GuestFees *guestFees;
+
+
 @end
 
 @implementation FamilyRec
@@ -55,6 +60,13 @@ MFMailComposeViewControllerDelegate>
         _noShow = NO;
     }
     return self;
+}
+
+-(GuestFees *)guestFees {
+    if (!_guestFees) {
+        _guestFees = [[GuestFees alloc] init];
+    }
+    return _guestFees;
 }
 
 -(void)sendSMS:(id)viewController to:(NSArray *)phones withBody:(NSString *)body {
@@ -385,15 +397,19 @@ MFMailComposeViewControllerDelegate>
     // if record is in checkedInToday, then use this record
     return rec; //[self isCheckedInToday: rec];  // can have multiple reservations, can't do it here
 }
-
+// 5/29/21 -- looking to check how many guests in a work week, and put that
+// in a new family int property "guestsInWeek"
 // converts record from sign-in sheet to familyRec
 +(FamilyRec *)convertToSignIn: (NSArray *)input {
     if([input[0] isEqualToString:@""] ||
        [input[0] isEqualToString:@"Date Time"]) {
         return nil;
     }
+    //
+    
     if (input.count > 0) {     // date
-        if (![self isToday:[self stringToDate:input[0]]]) {
+        NSDate *date = [NSDate stringToDate:input[0]];  // convert date
+        if (![NSDate isToday:date]) {
             return nil;   // if not today, return empty
         }
     }
@@ -433,27 +449,114 @@ MFMailComposeViewControllerDelegate>
     return rec;
 }
 
-// indicates if this record is from today (current date)
-+(BOOL)isToday:(NSDate *)aDate {
-    
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *components = [cal components:(NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
-                                          fromDate:[NSDate date]];
-    NSDate *today = [cal dateFromComponents:components];
-    components = [cal components:(NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
-                        fromDate:aDate];
-    NSDate *otherDate = [cal dateFromComponents:components];
-    BOOL isToday = [today isEqualToDate:otherDate];
-    return isToday;
+// new method that will update the guests for yearly and weekly
+// rows is an array of Signin records
+-(void)updateGuests: (NSArray *)rows {
+    int guests = 0;
+    self.guestFees = nil;       // destroy old object if exists
+    for(NSArray *row in rows) {
+        // if not a record, or not the lastName or not the memberID then continue to next record
+        if(row.count > 2) {
+            if([row[0] isEqualToString:@""] ||
+               [row[0] isEqualToString:@"Date Time"] ||
+               ![row[1] isEqualToString: self.lastName] ||
+               ![row[2] isEqualToString:self.memberID]) {
+                continue;
+            }
+        }
+        if([self.lastName isEqualToString:@"Ciccone"]) {
+            printf("Ciccone begin\n");
+        }
+        if(row.count > 0) {     // date
+            // if the name and memberID, then applies to this object
+            if([row[1] isEqualToString: self.lastName] &&
+               [row[2] isEqualToString:self.memberID]) {
+                if(row.count > 4) {
+                    guests = [(NSString *)row[4] intValue]; // get the guest count
+                    if([self.lastName isEqualToString:@"Ciccone"]) {
+                        printf("Ciccone adding %d guests\n", guests);
+                    }
+                }
+                NSDate *date = [NSDate stringToDate:row[0]];  // convert date
+                [self.guestFees addGuests:guests fromDate:date];
+                if([self.lastName isEqualToString:@"Ciccone"]) {
+                    printf("Ciccone adding %d guests to guestFees\n", guests);
+                }
+            }
+        }
+    }
+    if([self.lastName isEqualToString:@"Ciccone"]) {
+        printf("Ciccone end\n");
+    }
 }
 
-// converts a string date to the yyyy-MM-dd HH:mm format
-+(NSDate *)stringToDate:(NSString *)dateStr {
-    // Convert string to date object
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
-    return [dateFormat dateFromString:dateStr];
+-(int)getGuestsForWeek:(NSDate *)date {
+    return [self.guestFees getGuestsForWeekFromDate:date];
+    
 }
+-(int)getPaidGuestsForWeek:(NSDate *)date {
+    return [self.guestFees getPaidGuestsForWeekFromDate:date];
+}
+-(int)getGuestsForYear {
+    return [self.guestFees getTotalGuests];
+}
+-(int)getPaidGuestsForYear {
+    return [self.guestFees getTotalPaidGuests];
+}
+
+//// indicates if this record is from today (current date)
+//+(BOOL)isToday:(NSDate *)aDate {
+//
+//    NSCalendar *cal = [NSCalendar currentCalendar];
+//    NSDateComponents *components = [cal components:(NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
+//                                          fromDate:[NSDate date]];
+//    NSDate *today = [cal dateFromComponents:components];
+//    components = [cal components:(NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay)
+//                        fromDate:aDate];
+//    NSDate *otherDate = [cal dateFromComponents:components];
+//    BOOL isToday = [today isEqualToDate:otherDate];
+//    return isToday;
+//}
+//// indicates if this record is from this year (year from current date)
+//+(BOOL)isThisYear:(NSDate *)aDate {
+//    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay |
+//                                    NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
+//    NSInteger yearToday = [components year];
+//    components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay |
+//                  NSCalendarUnitMonth | NSCalendarUnitYear fromDate: aDate];
+//    NSInteger yearRecord = [components year];
+//
+//    return yearToday == yearRecord;
+//}
+//
+//// compares the passed date to the current date's workweek.  returns true if equal
+//+(BOOL)isThisWeek:(NSDate *)aDate {
+//    NSDate *today = [NSDate date];
+//    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay |
+//                                    kCFCalendarUnitWeekOfYear | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:today];
+//    NSInteger week = [components weekOfYear];
+//    components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay |
+//                  kCFCalendarUnitWeekOfYear | NSCalendarUnitMonth | NSCalendarUnitYear fromDate: aDate];
+//    NSInteger weekRecord = [components weekOfYear];
+//    return weekRecord == week;
+//}
+//
+//// returns the week of the date
+//+(int)weekOfYear:(NSDate*)aDate {
+//    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay |
+//                  kCFCalendarUnitWeekOfYear | NSCalendarUnitMonth | NSCalendarUnitYear fromDate: aDate];
+//    NSInteger weekRecord = [components weekOfYear];
+//    return (int) weekRecord;
+//}
+
+
+// converts a string date to the yyyy-MM-dd HH:mm format
+//+(NSDate *)stringToDate:(NSString *)dateStr {
+//    // Convert string to date object
+//    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+//    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
+//    return [dateFormat dateFromString:dateStr];
+//}
 
 -(id) copyWithZone: (NSZone *) zone
 {
@@ -491,6 +594,7 @@ MFMailComposeViewControllerDelegate>
     copy.lapSwimmers = self.lapSwimmers;
     copy.missedReservationSaved = self.missedReservationSaved;
     copy.noShow = self.noShow;
+    copy.guestFees = self.guestFees;
     
     return copy;
 }
