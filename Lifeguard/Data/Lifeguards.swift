@@ -185,26 +185,28 @@ class Lifeguards: NSObject {
                 vc.present(alert, animated: true, completion: nil)
             } else {
                 let data = result as? GTLRSheets_ValueRange
-                let rows = data?.values as? [[String]] ?? [[""]]
+                let rows = data?.values as? [[String?]] ?? [[""]]
                 if rows.count > 0 {
                     self.list.removeAll()  // empty the array
                     var indent = false
                     for row in rows {
-                        if row[0] != "" {
-                            let item = CheckList()
-                            let itemVal = row[0]
-                            if itemVal == "[Indent]" {
-                                indent = true
-                                continue
+                        if row.count > 0 {
+                            if row[0] != "" {
+                                let item = CheckList()
+                                let itemVal = row[0]
+                                if itemVal == "[Indent]" {
+                                    indent = true
+                                    continue
+                                }
+                                if itemVal == "[/Indent]" {
+                                    indent = false
+                                    continue
+                                }
+                                item.listItem = itemVal ?? " "
+                                item.checked = false
+                                item.indent = indent
+                                self.list.append(item)
                             }
-                            if itemVal == "[/Indent]" {
-                                indent = false
-                                continue
-                            }
-                            item.listItem = itemVal
-                            item.checked = false
-                            item.indent = indent
-                            self.list.append(item)
                         }
                     }
                 }
