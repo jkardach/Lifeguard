@@ -109,6 +109,8 @@ class MemberListTVC: UITableViewController {
         cell.textLabel!.text = member.lastName + "(" + member.type + ", " + member.id + ")"
         cell.textLabel?.textColor = UIColor.black
         cell.textLabel?.font = UIFont(name: "System", size: 18)
+        cell.accessoryView = UIImageView(image: UIImage(systemName: "chevron.right"))
+        cell.imageView?.image = UIImage(named: "SwimClub10mm")
         
         if indexPath.row % 2 == 0 {
             let color = UIColor.init(hex: "#1cc5dc") // light blue
@@ -121,7 +123,6 @@ class MemberListTVC: UITableViewController {
     
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         if segue.identifier == "Show" {

@@ -22,10 +22,6 @@ class CheckListTVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log",
                                                                  style: .plain,
                                                                  target: self,
@@ -104,14 +100,14 @@ class CheckListTVC: UITableViewController {
             cell.accessoryType = .disclosureIndicator
             if lifeguards.onDuty != nil {
                 cell.textLabel!.text = lifeguards.onDuty!.firstName + " " + lifeguards.onDuty!.lastName
-                cell.imageView?.image = UIImage(named: lifeguards.onDuty!.icon)
+                cell.imageView?.image = UIImage(named: lifeguards.onDuty!.icon ?? "lifeguardRing")
             } else {
                 cell.textLabel!.text = "No on-duty lifeguard selected"
                 cell.imageView?.image = nil
             }
             cell.textLabel?.textColor = UIColor.systemRed
         } else {
-            cell.textLabel?.textColor = UIColor.black
+            cell.textLabel?.textColor = UIColor.label
             
                 cell.textLabel!.text = lifeguards.list[indexPath.row].listItem
                 if lifeguards.list[indexPath.row].indent {

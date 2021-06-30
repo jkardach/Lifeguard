@@ -6,7 +6,7 @@
 //  Copyright © 2019 Forkbeardlabs. All rights reserved.
 //
 
-@import Foundation;
+//@import Foundation;
 @import UIKit;
 
 NS_ASSUME_NONNULL_BEGIN

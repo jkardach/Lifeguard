@@ -28,12 +28,12 @@ class LifeGuard: PhoneEmail {
     var title = ""
     var onDuty = false
     
-    var icon: String {
+    var icon: String? {
         get {
             if lifeguard {
                 return "LifeguardRing"
             } else {
-                return "Person"
+                return nil
             }
         }
     }

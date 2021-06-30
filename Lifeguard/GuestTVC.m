@@ -874,17 +874,20 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if((indexPath.section == 0) || ((indexPath.section == 1)&&(self.maxSections==3)))
         return;
-    FamilyRec *member = self.families[indexPath.row];
+    FamilyRec *member = self.families[indexPath.row];  // get family record
 
     if(!(member.lapSwimmerRes && !member.didTheyMissReservation)) {
+        
+        
+        // This is a single alert created
         int weeklyGuests = [member getGuestsForWeek:self.currentDate];
         int weeklyPaidGuests = [member getPaidGuestsForWeek:self.currentDate];
         int totalGuests = [member getGuestsForYear];
         int totalPaidGuests = [member getPaidGuestsForYear];
-        // create alert message
+        
         NSString *title = [NSString stringWithFormat:@"%@(%@) Family", member.lastName, member.memberID];
         NSString *message = [NSString stringWithFormat:@"Names(%@): %@\n\n", member.familyMembers, member.getNames];
-        message = [message stringByAppendingString:[NSString stringWithFormat:@"Weekly Guests: %d/%d\n", weeklyGuests, GUESTS_PER_WEEK]];
+        message = [message stringByAppendingString:[NSString stringWithFormat:@"Weekly Guests: %d/%d\n", weeklyGuests, MAX_GUESTS_PER_WEEK]];
         if(weeklyPaidGuests != 0) {
             message = [message stringByAppendingString:[NSString stringWithFormat:@"Weekly Paid Guests: %d\n", weeklyPaidGuests]];
         }
@@ -894,8 +897,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
                 message = [message stringByAppendingString:[NSString stringWithFormat:@"Total Paid Guests: %d\n", totalPaidGuests]];
             }
         }
-        message = [message stringByAppendingString:@"\n\nHow many members and guests are you checking in?"];
-    
+        NSString *note = [NSString stringWithFormat:@"Note: Members get %d free guests (%d max) per week)\n",
+                          FREE_GUESTS_PER_WEEK, MAX_GUESTS_PER_WEEK];
+        message = [message stringByAppendingString:note];
+        message = [message stringByAppendingString:@"How many members and guests are you checking in?"];
+        ///**** this is a single alert
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message: message preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
@@ -921,11 +927,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
             member.checked = YES;
             member.members = [members.text intValue];
             int numGuests = [guests.text intValue];     // record guests today
-            [self writeGuests:numGuests ForRecord:member];
-
-            [self writeGuest:member values:member.getSignInValueArray sheetID:ACT_SSHEET_ID sheetRange:@"SignIn!A1"];
-
-
+            if([self writeGuests:numGuests ForRecord:member]) {
+                [self writeGuest:member values:member.getSignInValueArray sheetID:ACT_SSHEET_ID sheetRange:@"SignIn!A1"];
+            }
         }]];
         
         [alert addAction:[UIAlertAction actionWithTitle:@"Drop Off Children" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -934,10 +938,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
             UITextField *guests = textfields[1];
             member.checked = YES;
             member.members = [members.text intValue];// record guests today
-            [self getNamesOfKids:(FamilyRec *) member];
             int numGuests = [guests.text intValue];     // record guests today
-            [self writeGuests:numGuests ForRecord:member];
+            if([self writeGuests:numGuests ForRecord:member]) {
+                [self getNamesOfKids:(FamilyRec *) member];  // this kicks off a second alert view controller
+            }
+            
         }]];
+        
         if (member.didTheyMissReservation) {
             [alert addAction:[UIAlertAction actionWithTitle:@"No Show" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 NSArray *textfields = alert.textFields;
@@ -947,12 +954,12 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
                 member.members = [members.text intValue];      // record guests today
                 member.noShow = YES;
                 int numGuests = [guests.text intValue];     // record guests today
-                [self writeGuests:numGuests ForRecord:member];
-                [self writeGuest:member values:member.getSignInValueArray sheetID:ACT_SSHEET_ID sheetRange:@"SignIn!A1"];
-                
-                // ***** here write the member.guests to the accounts sheet, column "X"
+                if([self writeGuests:numGuests ForRecord:member]) {
+                    [self writeGuest:member values:member.getSignInValueArray sheetID:ACT_SSHEET_ID sheetRange:@"SignIn!A1"];
+                }
             }]];
         }
+        
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         }]];
         [self presentViewController:alert animated:YES completion:nil];
@@ -965,17 +972,30 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 }
 
 // this adds guests to the record and updates the guest value ("X") in account sheet if necessary
--(void)writeGuests:(int) guests ForRecord:(FamilyRec *)member {
+-(BOOL)writeGuests:(int) guests ForRecord:(FamilyRec *)member {
     int prevPaidGuestsForYear = [member getPaidGuestsForYear];
+    int paidGuestsPerWeek = [member getGuestsForWeek:[NSDate date]];
+    // check to see if exceeded guests/week limit
+    if(paidGuestsPerWeek + guests > MAX_GUESTS_PER_WEEK) {
+        // do an alert announcing you have exceeded your guests/week quota and abort
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle: @"You have exceeded your weekly guest allowance!"
+                                                                       message: @"Aborting check-in, reduce guests."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+        return false;
+    }
+    
     [member addGuests:guests];  // add checked in guests
     member.guests = guests;     // set the guests checked in today
     int paidGuestsForYear = [member getPaidGuestsForYear];  // get new yearly total
     
     // if paidGuests/year has not changed, do nothing/return
-    if(prevPaidGuestsForYear == paidGuestsForYear) { return; }
+    if(prevPaidGuestsForYear == paidGuestsForYear) { return YES; }
     
     // else need to update the account sheet
     [self updateGuestForRecord:member];
+    return YES;
 }
 
 

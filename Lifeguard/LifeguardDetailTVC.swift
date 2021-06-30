@@ -25,22 +25,17 @@ class LifeguardDetailTVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+
         return 9
     }
 
@@ -53,7 +48,12 @@ class LifeguardDetailTVC: UITableViewController {
             cell?.name?.font = UIFont(name:"System", size: 18.0)
             cell!.name.text = lifeguard.firstName + " " + lifeguard.lastName
             cell!.title.text = "Lifeguard"
-            cell!.imageView!.image = UIImage(named: lifeguard.icon)
+            if let icon = lifeguard.icon {
+                cell!.imageView!.image = UIImage(named: icon)
+            } else {
+                cell!.imageView!.image = UIImage(systemName: "Person.fill")
+            }
+            
             return cell!
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath)
@@ -67,7 +67,7 @@ class LifeguardDetailTVC: UITableViewController {
                 cell.accessoryType = .detailButton
             }
         case 2:
-            cell.textLabel!.text = "Red Cross Certificaiton Experiration: " + lifeguard.redCrossExp
+            cell.textLabel!.text = "Red Cross Certification Expiration: " + lifeguard.redCrossExp
         case 3:
             cell.textLabel!.text = "Birthday: " + lifeguard.birthDay
         case 4:
@@ -79,7 +79,7 @@ class LifeguardDetailTVC: UITableViewController {
         case 7:
             cell.textLabel!.text = "Grade: " + lifeguard.grade
         case 8:
-            cell.textLabel!.text = "Grade: " + lifeguard.major
+            cell.textLabel!.text = "Major: " + lifeguard.major
         default:
             cell.textLabel!.text = "Error, should never reach here"
         }

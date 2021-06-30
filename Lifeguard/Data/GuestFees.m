@@ -70,7 +70,7 @@
     if([NSDate isThisYear:date]) {
         int week = [NSDate weekOfDate: date];
         GuestWeek *rec = [self getGuestRecFromWeek: week];
-        guests = rec.guests - GUESTS_PER_WEEK;
+        guests = rec.guests - FREE_GUESTS_PER_WEEK;
         if(guests < 0) {
             guests = 0;
         }
@@ -115,7 +115,7 @@
     for(GuestWeek *rec in self.weeksInYear) {
         if(rec.guests != 0) {
             GuestWeek *newRec = [[GuestWeek alloc] init];  // create new record
-            newRec.guests = rec.guests - GUESTS_PER_WEEK;
+            newRec.guests = rec.guests - FREE_GUESTS_PER_WEEK;
             newRec.workWeek = rec.workWeek;
             if(newRec.guests <= 0) {
                 continue;  // if result is zero or less, continue

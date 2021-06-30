@@ -15,11 +15,6 @@ class WorkerListTVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
     // if returning from LifeguardDetailTVC, then check if onduty lifeguard
@@ -41,12 +36,10 @@ class WorkerListTVC: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return workerList.members.count
     }
 
@@ -58,7 +51,7 @@ class WorkerListTVC: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath)
             cell.textLabel?.font = UIFont(name:"System", size: 18.0)
             cell.textLabel?.text = workerList.members[indexPath.row].firstName + " " + workerList.members[indexPath.row].lastName
-            cell.textLabel?.textColor = UIColor.black
+            cell.textLabel?.textColor = UIColor.label
             cell.imageView?.image = UIImage(named: workerList.icon)
             // mark the on-duty lifeguard
             if workerList.lifeguard {
@@ -73,10 +66,10 @@ class WorkerListTVC: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell2", for: indexPath) as? DirTVCell
             cell?.name?.font = UIFont(name:"System", size: 18.0)
             cell?.name.text = workerList.members[indexPath.row].firstName + " " + workerList.members[indexPath.row].lastName
-            cell!.name?.textColor = UIColor.black
+            cell!.name?.textColor = UIColor.label
             cell!.title.text = workerList.members[indexPath.row].title
-            cell!.title?.textColor = UIColor.black
-            cell!.icon.image = UIImage(named: workerList.icon)
+            cell!.title?.textColor = UIColor.label
+            cell?.icon.image = UIImage(systemName: "person.fill")
             cell?.smsButton.tag = indexPath.row
             cell?.emailButton.tag = indexPath.row
             return cell!

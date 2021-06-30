@@ -6,7 +6,7 @@
 //  Copyright © 2021 Forkbeardlabs. All rights reserved.
 //
 
-import Foundation
+//import Foundation
 
 class Members: NSObject {
     var start = "A2"

@@ -49,7 +49,8 @@
 #define kKeychainItemName = @"Google Sheets API"
 #define kClientID = @"229185246988-tdt93711nfb3t3cvrn8ooet4ibspnhe9.apps.googleusercontent.com"
 
-#define GUESTS_PER_WEEK 5
+#define FREE_GUESTS_PER_WEEK 5
+#define MAX_GUESTS_PER_WEEK 10
 
 
 

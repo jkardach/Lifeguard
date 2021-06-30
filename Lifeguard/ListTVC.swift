@@ -29,11 +29,17 @@ class ListTVC: UITableViewController {
     let notReadySegueIDs = [nil, nil, "Parties", "Nanny", "Rules",
                             "Emergency", nil, nil]
     var segueIds: [String?]!
-    let readyIcons = ["Checklist", "Checklist", "party", "Nanny", "Rules",
-                      "Emergency", "LifeguardRing", "Person"]
-    let notReadyIcons = ["iu", "iu", "party", "Nanny", "Rules",
-                         "Emergency", "iu", "iu"]
+    let readyIcons = ["list.bullet.rectangle", "list.bullet.rectangle", "gift.fill", "person.2.fill", "list.number",
+                      "exclamationmark.triangle.fill", "LifeguardRing", "person.fill"]
+    let notReadyIcons = ["clock.arrow.circlepath", "clock.arrow.circlepath", "gift.fill", "person.2.fill", "list.number",
+                         "exclamationmark.triangle.fill", "clock.arrow.circlepath", "clock.arrow.circlepath"]
     var icons:[String]!
+    
+    let readyColors = [UIColor.systemBlue, UIColor.systemBlue, UIColor.systemBlue, UIColor.systemBlue, UIColor.systemBlue,
+                                 UIColor.systemRed, nil, UIColor.systemBlue]
+    let notReadyColors = [UIColor.systemRed, UIColor.systemRed, UIColor.systemBlue, UIColor.systemBlue, UIColor.systemBlue,
+                          UIColor.systemRed, nil, UIColor.systemRed]
+    var iconColors: [UIColor?]!
     
     var lifeguards = Lifeguards()                   // creates the lifeguard object
     var boardMembers = Lifeguards(lifeguard: false) // creates the boardMember Object
@@ -45,12 +51,6 @@ class ListTVC: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         lifeguards.delegate = self;                 // set delegate
         boardMembers.delegate = self;                 // set delegate
@@ -60,6 +60,7 @@ class ListTVC: UITableViewController {
     func readLifeguards() {
         segueIds = notReadySegueIDs                 // set segues to not ready
         icons = notReadyIcons                       // set icons to not ready
+        iconColors = notReadyColors                 // set icon colors to not ready
         readyLifeguard = false
         readyBoard = false
         lifeguards.readDB(vc: self)                 // start reading database
@@ -69,12 +70,10 @@ class ListTVC: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return list.count
     }
 
@@ -83,45 +82,20 @@ class ListTVC: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel?.font = UIFont(name:"System", size: 18.0)
         cell.textLabel!.text = list[indexPath.row]
-        cell.imageView!.image = UIImage(named: icons[indexPath.row])
-
+        
+        // imageView will come from system icons, unless nil, the image
+        if let iconColor = iconColors[indexPath.row] {
+            // this is a system icon
+            cell.imageView!.image = UIImage(systemName: icons[indexPath.row],
+                                            withConfiguration: UIImage.SymbolConfiguration(weight: .regular))?
+                .withTintColor(iconColor,
+                               renderingMode: .alwaysOriginal)
+        } else {
+            cell.imageView!.image = UIImage(named: icons[indexPath.row])
+        }
+        
         return cell
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: segueIds[indexPath.row]!, sender: self) // perform the segue pointed to by row
@@ -201,6 +175,7 @@ extension ListTVC: UpdateLifeguardsDelegate {
         if readyLifeguard && readyBoard {
             segueIds = readySegueIds    // set segues to ready segues
             icons = readyIcons      // set icon set to readyIcons
+            iconColors = readyColors  // set colors to readyColors
             tableView.reloadData()
         }
     }
