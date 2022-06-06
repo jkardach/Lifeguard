@@ -75,7 +75,7 @@
 - (void)readSheet {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
-                                                            range:@"Parties!A2:V"];
+                                                            range:@"Parties!A3:V"];
     [self.service executeQuery:query
              completionHandler:^(GTLRServiceTicket *ticket,
                                  GTLRSheets_ValueRange *result,
@@ -217,17 +217,19 @@ heightForHeaderInSection:(NSInteger)section
     
     PartyRec *rec = [[PartyRec alloc] init];
     for (int i = 0; i <= member.count; i++) {
-        if (i == 21) {
+        if (i == 21 || i >= member.count) {
             break;
         }
         if (((i >=11)&&(i <= 13)) || (i == 16) || (i == 20)) {
             if ([member[i] isEqualToString: @""]) {
                 [rec setValue:@"0.00" forKey:rec.keys[i]];
             } else {
-                [rec setValue: [NSString stringWithFormat:@"$%@", member[i]] forKey: rec.keys[i]];
+                [rec setValue: [NSString stringWithFormat:@"%@", member[i]] forKey: rec.keys[i]];
             }
         } else {
-            [rec setValue:member[i] forKey:rec.keys[i]];
+            NSString *val = member[i];
+            NSString *key = rec.keys[i];
+            [rec setValue:val forKey:key];
         }
     }
     if ([rec.memberID isEqualToString:@""] || [rec.memberID isEqualToString:@"0"]) {

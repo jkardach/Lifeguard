@@ -247,7 +247,7 @@
 - (void)readLog {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
-                                                            range:@"SignIn!A2:V"];
+                                                            range:@"SignIn!A2:W"];
     [self.sheetService executeQuery:query
                   completionHandler:^(GTLRServiceTicket *ticket,
                                       GTLRSheets_ValueRange *result,
@@ -269,7 +269,7 @@
                 }
                 // now the checkedInToday array is filled in, now to fill in the guests/week, for families using row info
             }
-            [self readbatchSheet:rows];  // rows has the data on the guests that need to be updated in readbatchsheet
+            [self readMemberSheet:rows];  // read membersheet
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
             [Alert showAlert:@"Error" message:message viewController:self];
@@ -321,16 +321,17 @@
 
 // defined in Constants.h: ACT_SSHEET_ID = 1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ
 // get values from Members sheet (PM, Lease, Trial)
+//ACT_SSHEET_ID @"1AE2j_p2O5e9K_x1-WLiUsZu-SOq5oi5QYsKD6OGMvCQ"
 - (void)readbatchSheet:(NSArray *)rows {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query1 =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
                                                             range:@"Members!A2:V86"];  // PM
     GTLRSheetsQuery_SpreadsheetsValuesGet *query2 =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
-                                                            range:@"Members!A89:V99"];  // Lease
+                                                            range:@"Members!A90:V100"];  // Lease
     GTLRSheetsQuery_SpreadsheetsValuesGet *query3 =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
-                                                            range:@"Members!A127:V139"];  // Trial
+                                                            range:@"Members!A128:V140"];  // Trial
     GTLRBatchQuery *batchQuery = [GTLRBatchQuery batchQuery];
     [batchQuery addQuery:query1];
     [batchQuery addQuery:query2];
@@ -405,7 +406,39 @@
     
 }
 
-
+-(void)readMemberSheet:(NSArray *)rows   {
+    GTLRSheetsQuery_SpreadsheetsValuesGet *query =
+    [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
+                                                            range:@"Members!A2:V140"];
+    [self.sheetService executeQuery:query
+                  completionHandler:^(GTLRServiceTicket *ticket,
+                                      GTLRSheets_ValueRange *result,
+                                      NSError *error) {
+        if (error == nil) {
+            NSArray *rows = result.values;
+            if (rows.count > 0) {
+                self.families = nil;
+                for (NSArray *row in rows) {
+                    if (row.count > 4) {
+                        FamilyRec *rec = [FamilyRec convertToFamObj: row];  // converts to family object
+                        if (rec)
+                            [self.families addObject:rec];  // add to famalies Array
+                    } else {
+                        continue;
+                    }
+                }
+            }
+            // update the guest values (from signin) in the new family records
+            for(FamilyRec *rec in self.families) {
+                [rec updateGuests: rows];
+            }
+            [self readTodaysResCal];
+        } else {
+            NSString *message = [NSString stringWithFormat:@"Error, readMemberSheet: %@\n", error.localizedDescription];
+            [Alert showAlert:@"Error" message:message viewController:self];
+        }
+    }];
+}
 
 - (void)readSheet {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
@@ -664,13 +697,13 @@
     return self.maxSections;
 }
 
-// section 0 is always 3
+// section 0 is always 1 (purple air)
 // if three sections, sec 1 is checkedInToday.count, and sec 2 is families.count
 // if two sections, sec 1 is famlies.count
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 3;
+        return 1;
     } else if (((section == 2)&&(self.maxSections==3)) || ((section == 1)&&(self.maxSections==2))) {
         return self.families.count;
     } else {
@@ -701,9 +734,10 @@ viewForHeaderInSection:(NSInteger)section
     [famMem setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
     
     if (section == 0) {
-        headerTxt.text = @"CL Spa:3-10ppm Pool:2-10ppm";
+        headerTxt.textAlignment = NSTextAlignmentCenter;
+        headerTxt.text = @"Saratoga Swim Club";
         headerTxt.textColor = [self.tools getUIColorObjectFromHexString:@"#e17055" alpha:1];
-        famMem.text = @"pH:7.2-7.8";
+        famMem.text = @"";
         famMem.textColor = [self.tools getUIColorObjectFromHexString:@"#0984e3" alpha:1];
     } else if (((section == 2)&&(self.maxSections==3)) || ((section == 1)&&(self.maxSections==2))) {
         UILabel *center = [[UILabel alloc] initWithFrame:CGRectMake(5, 15,tvWidth, 22)];
@@ -774,14 +808,6 @@ viewForHeaderInSection:(NSInteger)section
                 } else {
                 cell.detailTextLabel.text = @"";
                 }
-                break;
-            case 1:
-                cell.textLabel.text = @"Pool Temperature:";
-                cell.detailTextLabel.text = @"84F";//self.temps.poolTemp;
-                break;
-             case 2:
-                cell.textLabel.text = @"Spa Temperature:";
-                cell.detailTextLabel.text = @"104F";//self.temps.spaTemp;
                 break;
             default:
                 cell.textLabel.text = @"";

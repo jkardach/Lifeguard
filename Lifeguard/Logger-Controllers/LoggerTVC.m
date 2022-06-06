@@ -226,6 +226,9 @@
                         [rec setValue:@NO forKey:rec.keys[i]];
                     }
                 }
+                if(rec.date.length > 8) { // remove the 20 from 2022
+                    rec.date = [rec.date substringFromIndex:2];
+                }
                 
             }
             rec.newRecord = false;
@@ -235,120 +238,6 @@
         }
     }
     
-    [self.poolLogArray sortUsingSelector:@selector(compareDates:)];  // sort array
-    self.displayedPoolLogArray = self.poolLogArray;
-    [self.tableView.refreshControl endRefreshing];
-    [self.tableView reloadData];
-}
-
-// creates records from result array
-- (void)create2Record:(GTLRSheets_ValueRange *) result {
-   
-    NSArray *rows = result.values;
-    if (rows.count > 0) {
-        [self.poolLogArray removeAllObjects];
-        
-        
-        for (NSArray *row in rows) {
-            if (row.count > 1) {
-                // create the object here
-                poolRecord *record = [[poolRecord alloc] init];
-                record.date = row[0];
-                record.time = row[1];
-                if (row.count > 2)
-                    record.poolPh = row[2];
-                if (row.count > 3)
-                    record.poolCl = row[3];
-                if (self.sheet.service) {
-                    if (row.count > 4)
-                        record.poolSensorPh = row[4];
-                    if (row.count > 5)
-                        record.poolSensorCl = row[5];
-                    if (row.count > 6)
-                        record.poolGalAcid = row[6];
-                    if (row.count > 7)
-                        record.poolGalCl = row[7];
-                    if (row.count > 8) {
-                        if ([row[8] isEqualToString:@"TRUE"]) {
-                            record.poolfilterBackwash = true;
-                        } else {
-                            record.poolfilterBackwash = false;
-                        }
-                    }
-                    if (row.count > 9)
-                        record.spaPh = row[9];
-                    
-                    if (row.count > 10)
-                        record.spaCl = row[10];
-                    
-                    if (row.count > 11)
-                        record.spaSensorPh = row[11];
-                    
-                    if (row.count > 12)
-                        record.spaSensorCl = row[12];
-                    
-                    if (row.count > 13)
-                        record.spaGalAcid = row[13];
-                    
-                    if (row.count > 14)
-                        record.spaGalCl = row[14];
-                    
-                    if (row.count > 15) {
-                        if ([row[15] isEqualToString:@"TRUE"]) {
-                            record.spafilterBackwash = true;
-                        } else {
-                            record.spafilterBackwash = false;
-                        }
-                    }
-                    if(row.count > 16) {
-                        record.note = row[16];
-                    }
-                    if(row.count > 17) {
-                        if ([row[17] isEqualToString:@"TRUE"]) {
-                            record.poolWaterLevel = true;
-                        } else {
-                            record.poolWaterLevel = false;
-                        }
-                    }
-                    if(row.count > 18) {
-                        if ([row[18] isEqualToString:@"TRUE"]) {
-                            record.spaWaterLevel = true;
-                        } else {
-                            record.spaWaterLevel = false;
-                        }
-                    }
-                } else {
-                    if (row.count > 4)
-                        record.spaPh = row[4];
-                    if (row.count > 5)
-                        record.spaCl = row[5];
-                    if(row.count > 6) {
-                        record.note = row[6];
-                    }
-                    if(row.count > 7) {
-                        if ([row[7] isEqualToString:@"TRUE"]) {
-                            record.poolWaterLevel = true;
-                        } else {
-                            record.poolWaterLevel = false;
-                        }
-                    }
-                    if(row.count > 8) {
-                        if ([row[8] isEqualToString:@"TRUE"]) {
-                            record.spaWaterLevel = true;
-                        } else {
-                            record.spaWaterLevel = false;
-                        }
-                    }
-                }
-                record.newRecord = false;
-                record.updated = false;
-                record.service = self.sheet.service;
-                [self.poolLogArray addObject:record];  // add to poolLogArray
-            } else {
-                break;
-            }
-        }
-    }
     [self.poolLogArray sortUsingSelector:@selector(compareDates:)];  // sort array
     self.displayedPoolLogArray = self.poolLogArray;
     [self.tableView.refreshControl endRefreshing];
@@ -555,7 +444,7 @@ viewForHeaderInSection:(NSInteger)section
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 3;
+        return 1;
     } else {
         return self.displayedPoolLogArray.count;
     }
@@ -578,6 +467,8 @@ viewForHeaderInSection:(NSInteger)section
         {
             case 0:
                 cell.textLabel.text = @"Ambient:";
+                cell.detailTextLabel.text = @"";
+                break;
 //                if(self.purple) {
 //                    // 87F, 22% hum, AQ 15 (Good)
 //                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@F, %@ hum, AQ %d(%@)",
@@ -608,7 +499,7 @@ viewForHeaderInSection:(NSInteger)section
         poolRecord *record = self.displayedPoolLogArray[indexPath.row];
         NSString *poolTxt;
         NSString *spaTxt;
-        cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", record.date, record.time];
+        cell.textLabel.text = [NSString stringWithFormat:@"%@, %@", record.date, record.time];
         cell.textLabel.textColor = [UIColor blackColor];
         cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
         if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {

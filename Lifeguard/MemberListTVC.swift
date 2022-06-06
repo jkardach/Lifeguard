@@ -136,27 +136,17 @@ class MemberListTVC: UITableViewController {
 
 // converts a hex color to a UIColor, must be "#RRGGBB" hexidecimal
 extension UIColor {
-    public convenience init?(hex: String) {
-        let r, g, b: CGFloat
-
-        if hex.hasPrefix("#") {
-            let start = hex.index(hex.startIndex, offsetBy: 1)
-            let hexColor = String(hex[start...])
-
-            if hexColor.count == 6 {
-                let scanner = Scanner(string: hexColor)
-                var hexNumber: UInt64 = 0
-
-                if scanner.scanHexInt64(&hexNumber) {
-                    r = CGFloat((hexNumber & 0xff000000) >> 16) / 255
-                    g = CGFloat((hexNumber & 0x00ff0000) >> 8) / 255
-                    b = CGFloat((hexNumber & 0x0000ff00) >> 4) / 255
-
-                    self.init(red: r, green: g, blue: b, alpha: 1.0)
-                    return
-                }
-            }
+    convenience init?(hex: String) {
+        var chars = Array(hex.hasPrefix("#") ? hex.dropFirst() : hex[...])
+        switch chars.count {
+        case 3: chars = chars.flatMap { [$0, $0] }; fallthrough
+        case 6: chars.append(contentsOf: ["F","F"])
+        case 8: break
+        default: return nil
         }
-        return nil
+        self.init(red: .init(strtoul(String(chars[0...1]), nil, 16)) / 255,
+                green: .init(strtoul(String(chars[2...3]), nil, 16)) / 255,
+                 blue: .init(strtoul(String(chars[4...5]), nil, 16)) / 255,
+                alpha: .init(strtoul(String(chars[6...7]), nil, 16)) / 255)
     }
 }

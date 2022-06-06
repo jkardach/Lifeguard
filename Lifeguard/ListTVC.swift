@@ -9,6 +9,9 @@
  This will get a list of lifeguards and coordinators and store them in two
  arrays (lifeguards and coordinators).
  
+ This comes from the google sheet lifeguard contact sheet which is embedded
+ in the lifeguard's website.
+ 
  When calling a checklist, the array of lifeguards is passed to it so the lifeguard
  can select their name as doing the checklist.
  
