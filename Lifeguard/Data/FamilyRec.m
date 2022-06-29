@@ -141,18 +141,28 @@ MFMailComposeViewControllerDelegate>
             body:(NSString *)body
         ToEmails:(NSArray *)emails {
     
-    Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
-    if (mailClass != nil) {
-        MFMailComposeViewController *mailView = [[MFMailComposeViewController alloc] init];
-        mailView.mailComposeDelegate = self;  // return to this object to complete delegate methods
-        [mailView setToRecipients:emails];
-        [mailView setSubject:subject];      //Set the subject
-        [mailView setMessageBody:body isHTML:YES];   //Set the mail body
-        //Display Email Composer
-        if([mailClass canSendMail]) {
-            [viewController presentViewController:mailView animated:YES completion:nil];
-        }
+    if([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
+        mailCont.mailComposeDelegate = viewController;
+        
+        [mailCont setSubject:subject];
+        [mailCont setBccRecipients:emails];
+        [mailCont setMessageBody:body isHTML:true];
+        [viewController presentViewController:mailCont animated:YES completion:nil];
     }
+    
+//    Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
+//    if (mailClass != nil) {
+//        MFMailComposeViewController *mailView = [[MFMailComposeViewController alloc] init];
+//        mailView.mailComposeDelegate = self;  // return to this object to complete delegate methods
+//        [mailView setToRecipients:emails];
+//        [mailView setSubject:subject];      //Set the subject
+//        [mailView setMessageBody:body isHTML:YES];   //Set the mail body
+//        //Display Email Composer
+//        if([mailClass canSendMail]) {
+//            [viewController presentViewController:mailView animated:YES completion:nil];
+//        }
+//    }
 }
 
 -(void)sendEmail:(id)viewController
@@ -160,7 +170,7 @@ MFMailComposeViewControllerDelegate>
           email1:(BOOL)email1
 {
     NSString *email = @"";
-    if (email1) {
+    if(email1) {
         email = self.email;
     } else {
         email = self.email2;
@@ -316,13 +326,13 @@ MFMailComposeViewControllerDelegate>
 }
 
 -(UIImage *)getLogo {
-    if (!self.eligable) {
-        return [UIImage imageNamed:@"xSwimClub10mm"];
+    if (self.checked) {
+        return [UIImage imageNamed:@"gSwimClub10mm"];
     } else {
-        if (self.hasRes) {
-            return [UIImage imageNamed:@"gSwimClub10mm"];
-        } else {
+        if (self.eligable) {
             return [UIImage imageNamed:@"SwimClub10mm"];
+        } else {
+            return [UIImage imageNamed:@"xSwimClub10mm"];
         }
     }
 }
@@ -439,7 +449,7 @@ MFMailComposeViewControllerDelegate>
     if (![rec.kidsDroppedOff isEqualToString:@""]) {  // kids dropped off?
         rec.droppedOff = YES;
     }
-    rec.hasRes = YES;  // these are records from signedin array, so have reservation
+    //rec.hasRes = YES;  // these are records from signedin array, so have reservation
     // figure out if normal reservation or lap reservation (lapSwimmerRes YES or NO)
     if ([rec.lapStart isEqualToString:@""]) {
         rec.lapSwimmerRes = NO;

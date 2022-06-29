@@ -17,7 +17,7 @@
 #import "Alert.h"
 #import "NSDateCat.h"
 
-@import PurpleSensor;
+@import PurpleSenser;
 
 
 #pragma clang diagnostic push
@@ -48,8 +48,9 @@
 @property (nonatomic, strong) FamilyRec *recToUpdate;
 @property (nonatomic, strong) Reservations *resSummary;
 @property (nonatomic) bool reservations;
-@property (nonatomic, strong) PurpleModel *purple;
 @property (nonatomic, strong) PurpleManager *purpleManager;
+@property (nonatomic, strong) Purple *purple;
+
 @end
 
 @implementation GuestTVC
@@ -151,6 +152,7 @@
     
     self.purpleManager = [[PurpleManager alloc] init];
     self.purpleManager.delegate = self;
+
     [self refreshPurple];
     
 //    self.temps = [getTemps sharedInstance];
@@ -165,6 +167,7 @@
     
     NSString *appVersionString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     [self.navigationItem setTitle:[NSString stringWithFormat:@"Saratoga Swim Club - SignIn, V%@", appVersionString]];
+    
 }
 
 // When the view appears, ensure that the Google Sheets API service is authorized, and perform API calls.
@@ -269,7 +272,7 @@
                 }
                 // now the checkedInToday array is filled in, now to fill in the guests/week, for families using row info
             }
-            [self readMemberSheet:rows];  // read membersheet
+            [self readMemberSheet]; //:rows];  // read membersheet
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting display result Signin sheet data: %@\n", error.localizedDescription];
             [Alert showAlert:@"Error" message:message viewController:self];
@@ -406,7 +409,8 @@
     
 }
 
--(void)readMemberSheet:(NSArray *)rows   {
+// this reads the membersheet, rows is the array from the signIn sheet
+-(void)readMemberSheet { //}:(NSArray *)rows   {
     GTLRSheetsQuery_SpreadsheetsValuesGet *query =
     [GTLRSheetsQuery_SpreadsheetsValuesGet queryWithSpreadsheetId:ACT_SSHEET_ID
                                                             range:@"Members!A2:V140"];
@@ -675,7 +679,7 @@
                                       GTLRSheets_ValueRange *result,
                                       NSError *error) {
         if (error == nil) {
-            [self readSheet];
+            [self readMemberSheet];   // readsheet is getting the account record; not the member record
         } else {
             NSString *message = [NSString stringWithFormat:@"Error getting update sheet data: %@\n", error.localizedDescription];
             [Alert showAlert:@"Error" message:message viewController:self];
@@ -762,6 +766,7 @@ viewForHeaderInSection:(NSInteger)section
     return headerView;
 }
 
+
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -776,13 +781,13 @@ viewForHeaderInSection:(NSInteger)section
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%D",member.guests + member.members];
         cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
     } else {  // families
-        cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"Celld" forIndexPath:indexPath];
         member = self.families[indexPath.row];
         cell.detailTextLabel.text = member.familyMembers;
         cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
     }
     // default
-
+    cell.textLabel.textAlignment = NSTextAlignmentLeft;
     cell.textLabel.textColor = [UIColor blackColor];
     cell.detailTextLabel.textColor = [UIColor blackColor];
     [cell.textLabel setFont:[UIFont fontWithName:@"System" size:17]];
@@ -793,18 +798,20 @@ viewForHeaderInSection:(NSInteger)section
     if (indexPath.section == 0) {
         cell.backgroundColor = [UIColor systemYellowColor];
         cell.imageView.image = nil;
-        cell.accessoryType = 0;
+        cell.accessoryType = UITableViewCellAccessoryNone;
         switch (indexPath.row)
         {
             case 0:
-                cell.textLabel.text = @"Ambient:";
                 if(self.purple) {
                     // 87F, 22% hum, AQ 15 (Good)
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@℉, %@%% humidity, AQ %d(%@)",
+                    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+                    cell.backgroundColor = self.purple.backgroundColor;
+                    cell.textLabel.textColor = self.purple.textColor;
+                    cell.textLabel.text = [NSString stringWithFormat:@"Ambient: %@, %@ humidity\nAQ:%@ (%@)",
                                                  self.purple.temp,
                                                  self.purple.humidity,
-                                                 (int) self.purple.AQ,
-                                                 self.purple.AQDescription];
+                                                 self.purple.aqi,
+                                                 self.purple.concern];
                 } else {
                 cell.detailTextLabel.text = @"";
                 }
@@ -815,7 +822,7 @@ viewForHeaderInSection:(NSInteger)section
                 break;
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        // make odd rows light blue
+        return cell;
 
     } else {
         cell.imageView.image = [member getLogo];
@@ -898,13 +905,14 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if((indexPath.section == 0) || ((indexPath.section == 1)&&(self.maxSections==3)))
+    
+    // exit if tapping the AQI section
+    if((indexPath.section == 0) || (indexPath.section == 1 && self.maxSections == 3)) {
         return;
+    }
     FamilyRec *member = self.families[indexPath.row];  // get family record
-
+    // check in the selected member
     if(!(member.lapSwimmerRes && !member.didTheyMissReservation)) {
-        
-        
         // This is a single alert created
         int weeklyGuests = [member getGuestsForWeek:self.currentDate];
         int weeklyPaidGuests = [member getPaidGuestsForWeek:self.currentDate];
@@ -1126,6 +1134,10 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     [refreshControl endRefreshing];
 }
 
+-(void)refreshPurple {
+    [self.purpleManager performRequest:@"79963"];            //    performRequest:@"79963"];
+}
+
 - (IBAction)reLogin:(UIBarButtonItem *)sender
 {
     [self.appDelegate reSignInToGoogle:self];
@@ -1137,20 +1149,35 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
     });
 }
 
-- (void)refreshPurple {
-    [self.purpleManager performRequestWithId:@"79963" thinkspeakKey:@"PLAU2B5XC0FSICZR"];
-}
+
 
 - (void)didFailWithError:(NSError * _Nonnull)error {
     NSLog(@"Error: %@", error);
 }
 
-// this gets called when the purple sensor returns with data
-// generate message that temps are updated so they can refresh tableview
-- (void)didUpdatePurple:(PurpleModel * _Nonnull)purple {
+- (void)didUpdatePurple:(Purple * _Nonnull)purple {
     self.purple = purple;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-    });
 }
+
+- (IBAction)sendMemberEmail:(UIBarButtonItem *)sender {
+    NSMutableArray *toEmails = [[NSMutableArray alloc] init];    // create to Email array
+    for(FamilyRec *member in self.families) {
+        [self addEmail: member.email to:toEmails];
+        [self addEmail: member.email2 to: toEmails];
+    }
+    for(FamilyRec *member in self.checkedInToday) {
+        [self addEmail: member.email to:toEmails];
+        [self addEmail: member.email2 to: toEmails];
+    }
+    NSString *emailBody = @"Saratoga Pool Club Members, this is to inform you ";
+    FamilyRec *member = self.families[0];
+    [member sendEmail:self subject:@"Saratoga Swim Club Notice" body: emailBody ToEmails:toEmails];
+}
+
+-(void)addEmail: (NSString *)email to:(NSMutableArray *)emails {
+    if(![email isEqualToString:@""]) {
+        [emails addObject:email];
+    }
+}
+
 @end

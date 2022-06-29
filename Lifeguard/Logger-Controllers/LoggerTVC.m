@@ -24,11 +24,11 @@
 #import "editRecordTVC.h"
 #import "ConfigTVC.h"
 #import "FileRoutines.h"
-//@import PurpleSensor;
+@import PurpleSenser;
 
 #pragma clang diagnostic pop
 
-@interface LoggerTVC () <UISearchBarDelegate, UISearchResultsUpdating>
+@interface LoggerTVC () <UISearchBarDelegate, UISearchResultsUpdating, UpdatePurpleDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *configButton;
 
 @property (nonatomic, strong) NSMutableArray *poolLogArray;
@@ -41,7 +41,9 @@
 // 
 @property (nonatomic, strong) UISearchController *searchController;
 @property (nonatomic, strong) getTemps *particle;
-//@property (nonatomic, strong) PurpleModel *purple;
+
+@property (nonatomic, strong) PurpleManager *purpleManager;
+@property (nonatomic, strong) Purple *purple;
 @end
 
 @implementation LoggerTVC
@@ -83,9 +85,10 @@
     
     self.appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.service = self.appDelegate.sheetService;
-    //self.purple = self.appDelegate.purple;
-    //self.particle = self.appDelegate.particle;
-
+    
+    self.purpleManager = [[PurpleManager alloc] init];
+    self.purpleManager.delegate = self;
+    
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
     self.searchController.searchBar.delegate = self;
@@ -120,7 +123,6 @@
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     self.tableView.refreshControl = refreshControl;
     
-
 }
 
 // When the view appears, ensure that the Google Sheets API service is authorized, and perform API calls.
@@ -129,6 +131,7 @@
     [super viewDidAppear:YES];
     
     if (!self.poolLogArray) return;
+    [self refreshPurple];
 }
 
 
@@ -162,6 +165,7 @@
     [self.tableView reloadData];
     
     [self.poolLogArray sortUsingSelector:@selector(compareDates:)];  // sort array
+    [self refreshPurple];
     [self.tableView reloadData];
 }
 
@@ -466,20 +470,19 @@ viewForHeaderInSection:(NSInteger)section
         switch (indexPath.row)
         {
             case 0:
-                cell.textLabel.text = @"Ambient:";
-                cell.detailTextLabel.text = @"";
+                cell.textLabel.text = @"";
+                if(self.purple) {
+                    // 87F, 22% hum, AQ 15 (Good)
+                    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+                    cell.backgroundColor = self.purple.backgroundColor;
+                    cell.textLabel.textColor = self.purple.textColor;
+                    cell.textLabel.text = [NSString stringWithFormat:@"Ambient: %@, %@ humidity\nAQ:%@ (%@)",
+                                                 self.purple.temp,
+                                                 self.purple.humidity,
+                                                 self.purple.aqi,
+                                                 self.purple.concern];
+                }
                 break;
-//                if(self.purple) {
-//                    // 87F, 22% hum, AQ 15 (Good)
-//                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@F, %@ hum, AQ %d(%@)",
-//                                                 self.purple.temp,
-//                                                 self.purple.humidity,
-//                                                 (int) self.purple.AQ,
-//                                                 self.purple.AQDescription];
-//                } else {
-//                cell.detailTextLabel.text = @"";
-//                }
-//                break;
             case 1:
                 cell.textLabel.text = @"Pool Temperature:";
                 cell.detailTextLabel.text = self.particle.poolTemp;
@@ -707,9 +710,23 @@ canEditRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)refresh:(UIRefreshControl *)refreshControl
 {
     //[self.appDelegate refreshTemps];
-    //[self.appDelegate refreshPurple];   // refresh
+    [self refreshPurple];
     [self readSheet]; //call function you want
 }
+    
+-(void)refreshPurple {
+    [self.purpleManager performRequest: @"79963"];   // refresh
+}
+
+
+- (void)didFailWithError:(NSError * _Nonnull)error {
+    NSLog(@"Error");
+}
+
+- (void)didUpdatePurple:(Purple * _Nonnull)purple {
+    self.purple = purple;
+}
+
 
 
 @end

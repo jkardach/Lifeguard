@@ -42,7 +42,6 @@
 		3D65A43E22C553F800BA0BF9 /* LoggerTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A43722C553F700BA0BF9 /* LoggerTVC.m */; };
 		3D65A43F22C553F800BA0BF9 /* ConfigTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D65A43A22C553F800BA0BF9 /* ConfigTVC.m */; };
 		3D6DBCC622E4FB1F00430264 /* ShowCheckedInTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6DBCC522E4FB1F00430264 /* ShowCheckedInTVC.m */; };
-		3D7AE778263F982F0081EB89 /* PurpleSensor in Frameworks */ = {isa = PBXBuildFile; productRef = 3D7AE777263F982F0081EB89 /* PurpleSensor */; };
 		3D88755222FB3DDB00CB7E15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D88755022FB3DDB00CB7E15 /* Main.storyboard */; };
 		3D8AEADC2640EB2900E3A6BA /* LifeGuard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8AEADB2640EB2900E3A6BA /* LifeGuard.swift */; };
 		3D8AEADE2640EF3200E3A6BA /* PhoneEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8AEADD2640EF3200E3A6BA /* PhoneEmail.swift */; };
@@ -57,6 +56,7 @@
 		3DBFB5B724B7FFBB001B82BA /* CalDetailTVCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5B624B7FFBB001B82BA /* CalDetailTVCTableViewController.m */; };
 		3DBFB5BF24B903A1001B82BA /* GoToTodayTVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5BE24B903A1001B82BA /* GoToTodayTVCell.m */; };
 		3DBFB5C224B903C3001B82BA /* DateSelTVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DBFB5C124B903C3001B82BA /* DateSelTVCell.m */; };
+		3DE0BA24284FABC500B64C07 /* PurpleSenser in Frameworks */ = {isa = PBXBuildFile; productRef = 3DE0BA23284FABC500B64C07 /* PurpleSenser */; };
 		3DF10CF92646EA1E00787F2F /* LifeguardDetailTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF10CF82646EA1E00787F2F /* LifeguardDetailTVC.swift */; };
 		3DFEE28524CC897400B1B37F /* Alert.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DFEE28424CC897400B1B37F /* Alert.m */; };
 /* End PBXBuildFile section */
@@ -164,7 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D7AE778263F982F0081EB89 /* PurpleSensor in Frameworks */,
+				3DE0BA24284FABC500B64C07 /* PurpleSenser in Frameworks */,
 				28D130CDD60D8DCDAEDDB844 /* libPods-Lifeguard.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -356,7 +356,7 @@
 			);
 			name = Lifeguard;
 			packageProductDependencies = (
-				3D7AE777263F982F0081EB89 /* PurpleSensor */,
+				3DE0BA23284FABC500B64C07 /* PurpleSenser */,
 			);
 			productName = googleSheetsTest;
 			productReference = 3D0720821EBA3B5600B083EF /* Lifeguard.app */;
@@ -387,7 +387,7 @@
 			);
 			mainGroup = 3D0720791EBA3B5600B083EF;
 			packageReferences = (
-				3D7AE776263F982F0081EB89 /* XCRemoteSwiftPackageReference "PurpleSensor" */,
+				3DE0BA22284FABC500B64C07 /* XCRemoteSwiftPackageReference "PurpleSenser" */,
 			);
 			productRefGroup = 3D0720831EBA3B5600B083EF /* Products */;
 			projectDirPath = "";
@@ -646,7 +646,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Lifeguard/Lifeguard.entitlements;
-				CURRENT_PROJECT_VERSION = 3.93;
+				CURRENT_PROJECT_VERSION = 4.2;
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
@@ -654,7 +654,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.93;
+				MARKETING_VERSION = 4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -669,7 +669,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Lifeguard/Lifeguard.entitlements;
-				CURRENT_PROJECT_VERSION = 3.93;
+				CURRENT_PROJECT_VERSION = 4.2;
 				DEVELOPMENT_TEAM = NMC4QMEM2Y;
 				INFOPLIST_FILE = Lifeguard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
@@ -677,7 +677,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.93;
+				MARKETING_VERSION = 4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = ForkbeardLabs.com.Lifeguard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -710,21 +710,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3D7AE776263F982F0081EB89 /* XCRemoteSwiftPackageReference "PurpleSensor" */ = {
+		3DE0BA22284FABC500B64C07 /* XCRemoteSwiftPackageReference "PurpleSenser" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jkardach/PurpleSensor.git";
+			repositoryURL = "https://github.com/jkardach/PurpleSenser";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3D7AE777263F982F0081EB89 /* PurpleSensor */ = {
+		3DE0BA23284FABC500B64C07 /* PurpleSenser */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3D7AE776263F982F0081EB89 /* XCRemoteSwiftPackageReference "PurpleSensor" */;
-			productName = PurpleSensor;
+			package = 3DE0BA22284FABC500B64C07 /* XCRemoteSwiftPackageReference "PurpleSenser" */;
+			productName = PurpleSenser;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
