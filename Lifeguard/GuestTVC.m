@@ -781,7 +781,7 @@ viewForHeaderInSection:(NSInteger)section
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%D",member.guests + member.members];
         cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
     } else {  // families
-        cell = [tableView dequeueReusableCellWithIdentifier:@"Celld" forIndexPath:indexPath];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"Celle" forIndexPath:indexPath];
         member = self.families[indexPath.row];
         cell.detailTextLabel.text = member.familyMembers;
         cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
@@ -1093,6 +1093,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"ShowCheckedIn"]) {
         NSIndexPath *path = [self.tableView indexPathForSelectedRow];
+        // this could be a normal check-in, which is
         self.recToUpdate = (FamilyRec *) self.checkedInToday[path.row];  // grab the record being updated
         
         ShowCheckedInTVC *sciTVC = [segue destinationViewController];
