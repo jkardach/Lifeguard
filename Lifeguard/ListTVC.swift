@@ -67,7 +67,7 @@ class ListTVC: UITableViewController {
         readyLifeguard = false
         readyBoard = false
         lifeguards.readDB(vc: self)                 // start reading database
-        boardMembers.readDB(vc: self)               // start readubg database
+        boardMembers.readDB(vc: self)               // start reading database
     }
     
     // MARK: - Table view data source

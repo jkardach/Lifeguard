@@ -467,14 +467,24 @@ MFMailComposeViewControllerDelegate>
     self.guestFees = nil;       // destroy old object if exists
     for(NSArray *row in rows) {
         // if not a record, or not the lastName or not the memberID then continue to next record
+        int rowCount = 0;
         if(row.count > 2) {
+            if(row.count == 3) {
+                NSLog(@"3");
+            }
             if([row[0] isEqualToString:@""] ||
                [row[0] isEqualToString:@"Date Time"] ||
+               [row[0] isEqualToString:@""] ||
+               [row[0] isEqualToString:@"Tester"] ||
+               [row[0] isEqualToString:@"Sold"] ||
                ![row[1] isEqualToString: self.lastName] ||
                ![row[2] isEqualToString:self.memberID]) {
                 continue;
             }
+        } else {        // 7/30/2023 evict record if less than 2
+            continue;
         }
+        printf("rowCount: %i", rowCount);
         if(row.count > 0) {     // date
             // if the name and memberID, then applies to this object
             if([row[1] isEqualToString: self.lastName] &&

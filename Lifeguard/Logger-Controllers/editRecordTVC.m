@@ -117,12 +117,13 @@
     
     // initialize textfields
     self.poolPhTF.text = [self updateValue:self.precord.poolPh];
-
     self.poolClTF.text = [self updateValue:self.precord.poolCl];
     self.spaPhTF.text = [self updateValue:self.precord.spaPh];
     self.spaClTF.text = [self updateValue:self.precord.spaCl];
     //
     self.noteTV.text = [self updateValue:self.precord.note];
+    self.precord.spaWaterLevel = TRUE;
+    self.precord.poolWaterLevel = TRUE;
     
     // initialize checkmarks for water level
     if (self.precord.poolWaterLevel) {
@@ -365,14 +366,22 @@
 }
 
 - (IBAction)EnterRecord:(UIButton *)sender {
+    // check to make sure no values are being left in the text fields
+    self.precord.poolPh = self.poolPhTF.text;
+    self.precord.poolCl = self.poolClTF.text;
+    self.precord.spaPh = self.spaPhTF.text;
+    self.precord.spaCl = self.spaClTF.text;
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
     // check if water level was checked, if not send alert and exit
-    if(!self.precord.poolWaterLevel || !self.precord.spaWaterLevel) {
-        [Alert showAlert:@"Check the water level!"
-                 message:@"The pool or spa water level was not checked.  Check the water level, and if it is ok, put a checkmark on the record!"
-          viewController:self];
-    } else {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+//    if(!self.precord.poolWaterLevel || !self.precord.spaWaterLevel) {
+//        [Alert showAlert:@"Check the water level!"
+//                 message:@"The pool or spa water level was not checked.  Check the water level, and if it is ok, put a checkmark on the record!"
+//          viewController:self];
+//    } else {
+//        [self.navigationController popViewControllerAnimated:YES];
+//    }
 }
 
 

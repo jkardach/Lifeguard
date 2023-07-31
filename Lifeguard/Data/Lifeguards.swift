@@ -30,8 +30,10 @@ class Lifeguards: NSObject {
     var activeList = ActiveList.open
     var onDuty: LifeGuard?          // this is the onduty lifeguard
     var members = [LifeGuard]()
-    private var open = [CheckList]()
-    private var close = [CheckList]()
+     var open = [CheckList]()
+     var close = [CheckList]()
+//    private var open = [CheckList]()
+//    private var close = [CheckList]()
     var list: [CheckList]
     var lifeguard: Bool    // indicates if lifeguards or board members
     var ready = false;
@@ -43,33 +45,43 @@ class Lifeguards: NSObject {
         lifeguard = true
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         sheetService = appDelegate.sheetService
-        list = open
+        self.list = self.open
     }
     init(lifeguard: Bool) {
 
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         sheetService = appDelegate.sheetService
         self.lifeguard = lifeguard
-        list = open
+        self.list = self.open
         if !lifeguard {
             icon = "Person"
         }
     }
     
-    func setActiveList(list: ActiveList) {
-        if list == .open {
-            self.list = open
-        } else if list == .close {
-            self.list = close
-        }
-    }
+//    func setActiveList(taskList: ActiveList) {
+//        if taskList == .open {
+//            self.list = self.open
+//        } else if taskList == .close {
+//            self.list = self.close
+//        } else { print("Error, no taskList") }
+//    }
     
     // swaps the lists
     func switchList() {
         if activeList == .close {
-            list = open
+            activeList = .open
+//            list = open
         } else {
-            list = close
+//            list = close
+            activeList = .close
+        }
+    }
+    
+    func getActiveList() -> [CheckList] {
+        if activeList == .close {
+            return self.close
+        } else {
+            return self.open
         }
     }
     
@@ -100,7 +112,7 @@ class Lifeguards: NSObject {
     // reads members, then lifeguard lists
     func readDB(vc: UIViewController) {
         readMembers(vc: vc)
-        // if lifeguard, also get the checklists
+        // if lifeguard, also get the checklists [?, open, close]
         if lifeguard {
             self.getList(vc: vc, final: [false, true, false])  // get checklists
             self.switchList()
@@ -160,12 +172,17 @@ class Lifeguards: NSObject {
         }
     }
     
+    // This gets the list from the OpeningClosingCheckLists sheet, either the
+    //  OpenRules or CloseRules tab, think final is an array of booleans to
+    //  indicate that the list has been read
     func getList(vc: UIViewController, final: [Bool]) {
         let query: GTLRSheetsQuery_SpreadsheetsValuesGet
         if activeList == .open {
+            print("OpenRules")
             query = GTLRSheetsQuery_SpreadsheetsValuesGet.query(withSpreadsheetId: CHK_SSHEET_ID,
                                                                         range: "OpenRules!A1:A")
         } else {
+            print("CloseRules")
             query = GTLRSheetsQuery_SpreadsheetsValuesGet.query(withSpreadsheetId: CHK_SSHEET_ID,
                                                                         range: "CloseRules!A1:A")
         }
@@ -187,7 +204,13 @@ class Lifeguards: NSObject {
                 let data = result as? GTLRSheets_ValueRange
                 let rows = data?.values as? [[String?]] ?? [[""]]
                 if rows.count > 0 {
-                    self.list.removeAll()  // empty the array
+                    if final[1] {
+                        self.open.removeAll()
+                    } else {
+                        self.close.removeAll()
+                    }
+
+//                    theList.removeAll()  // empty the array
                     var indent = false
                     for row in rows {
                         if row.count > 0 {
@@ -196,6 +219,14 @@ class Lifeguards: NSObject {
                                 let itemVal = row[0]
                                 if itemVal == "[Indent]" {
                                     indent = true
+                                    // this is also indcates previous guy is header
+                                    if final[1] {
+                                        var lastItem = self.open.last
+                                        lastItem?.header = true
+                                    } else {
+                                        var lastItem = self.close.last
+                                        lastItem?.header = true
+                                    }
                                     continue
                                 }
                                 if itemVal == "[/Indent]" {
@@ -205,7 +236,12 @@ class Lifeguards: NSObject {
                                 item.listItem = itemVal ?? " "
                                 item.checked = false
                                 item.indent = indent
-                                self.list.append(item)
+                                if final[1] {
+                                    self.open.append(item)
+                                } else {
+                                    self.close.append(item)
+                                }
+//                                theList.append(item)
                             }
                         }
                     }

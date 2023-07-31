@@ -17,35 +17,49 @@ import UIKit
 
 class CheckListTVC: UITableViewController {
     var lifeguards: Lifeguards!
+    var list: [CheckList]!
     //var open: Bool!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log",
-                                                                 style: .plain,
-                                                                 target: self,
-                                                                 action: #selector(logCheckList))
+//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log",
+//                                                                 style: .plain,
+//                                                                 target: self,
+//                                                                 action: #selector(logCheckList))
         
         lifeguards.clearLists() // clears the bools, all unchecked
+        list = lifeguards.getActiveList()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // execute if pressed backbutton
+        if self.isMovingFromParent {
+            
+        }
     }
     
     @objc func logCheckList() {
         // make sure everything is checked
-        for item in lifeguards.list {
+//        var list = lifeguards.getActiveList()
+        var allChecked = true
+        for item in list {
             if !item.checked {
-                // have not checked everything
-                let alert = UIAlertController(title: "Finish Checking Items",
-                                              message: "Have you checked all items on the list?",
-                                              preferredStyle: .alert)
-                let ok = UIAlertAction.init(title: "OK",
-                                            style: UIAlertAction.Style.default) {
-                    (action: UIAlertAction) in
-                    alert.dismiss(animated: true, completion: nil)
-                }
-                alert.addAction(ok)
-                self.present(alert, animated: true, completion: nil)
-                return
+                allChecked = false
+//                // have not checked everything
+//                let alert = UIAlertController(title: "Finish Checking Items",
+//                                              message: "Have you checked all items on the list?",
+//                                              preferredStyle: .alert)
+//                let ok = UIAlertAction.init(title: "OK",
+//                                            style: UIAlertAction.Style.default) {
+//                    (action: UIAlertAction) in
+//                    alert.dismiss(animated: true, completion: nil)
+//                }
+//                alert.addAction(ok)
+//                self.present(alert, animated: true, completion: nil)
+//                return
             }
         }
         if lifeguards.onDuty == nil {
@@ -60,8 +74,11 @@ class CheckListTVC: UITableViewController {
             alert.addAction(ok)
             self.present(alert, animated: true, completion: nil)
         }
-        lifeguards.logList(vc: self)  // write log
-        self.navigationController?.popViewController(animated: true) // exit screen
+        if allChecked {
+            lifeguards.logList(vc: self)  // write log
+        }
+//        lifeguards.logList(vc: self)  // write log
+//        self.navigationController?.popViewController(animated: true) // exit screen
     }
     
     // if coming back reloadData as a new on-duty lifeguard might be selected
@@ -84,7 +101,8 @@ class CheckListTVC: UITableViewController {
         if section == 0 {
             return 1
         } else {
-            return lifeguards.list.count
+            var list = lifeguards.getActiveList()
+            return list.count
         }
     }
 
@@ -107,15 +125,15 @@ class CheckListTVC: UITableViewController {
             }
             cell.textLabel?.textColor = UIColor.systemRed
         } else {
+            cell.imageView?.image = nil
             cell.textLabel?.textColor = UIColor.label
-            
-                cell.textLabel!.text = lifeguards.list[indexPath.row].listItem
-                if lifeguards.list[indexPath.row].indent {
+                cell.textLabel!.text = list[indexPath.row].listItem
+                if list[indexPath.row].indent {
                     cell.indentationLevel = 1;
                 } else {
                     cell.indentationLevel = 0;
                 }
-                if lifeguards.list[indexPath.row].checked {
+                if list[indexPath.row].checked {
                     cell.accessoryType = .checkmark
                 } else {
                     cell.accessoryType = .none
@@ -167,8 +185,10 @@ class CheckListTVC: UITableViewController {
         if indexPath.section == 0 {
             performSegue(withIdentifier: "Lifeguards", sender: self)
         } else {
-            lifeguards.list[indexPath.row].checked = !lifeguards.list[indexPath.row].checked
-            self.tableView.reloadData()
+            if !list[indexPath.row].header {
+                list[indexPath.row].checked = !list[indexPath.row].checked
+                self.tableView.reloadData()
+            }
         }
     }
 

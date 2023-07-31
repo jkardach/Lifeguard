@@ -12,4 +12,5 @@ class CheckList: NSObject {
     var listItem = ""
     var checked = false
     var indent = false
+    var header = false
 }

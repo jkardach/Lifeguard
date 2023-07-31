@@ -22,7 +22,7 @@ class EmergVC: UIViewController, WKUIDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Emergency Action Plan"
-        let myURL = URL(string:"https://sites.google.com/site/saratogaswimclub/emergency-action-plan?authuser=0")
+        let myURL = URL(string:"https://sites.google.com/view/ssclifeguards/emergency-action-plan?authuser=1")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }

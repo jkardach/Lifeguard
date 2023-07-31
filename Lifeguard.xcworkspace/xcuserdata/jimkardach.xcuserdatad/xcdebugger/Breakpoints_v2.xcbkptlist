@@ -259,22 +259,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D3B153B4-095B-4116-8712-1EB20B797842"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Lifeguard/GuestTVC.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "363"
-            endingLineNumber = "363"
-            landmarkName = "-readbatchSheet:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "A3E96C3B-3EA1-42F9-BE8E-CF247AA7548C"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -803,22 +787,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D49EC55D-8BF3-4487-99EA-7A7DF563CC7B"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Lifeguard/GuestTVC.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "370"
-            endingLineNumber = "370"
-            landmarkName = "-readbatchSheet:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "4FAC67C2-3723-4395-BC5F-04CCE40A825F"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -890,8 +858,8 @@
             filePath = "Lifeguard/Logger-Controllers/editRecordTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "307"
-            endingLineNumber = "307"
+            startingLineNumber = "308"
+            endingLineNumber = "308"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -906,8 +874,8 @@
             filePath = "Lifeguard/Logger-Controllers/editRecordTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "309"
-            endingLineNumber = "309"
+            startingLineNumber = "310"
+            endingLineNumber = "310"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1574,8 +1542,8 @@
             filePath = "Lifeguard/Logger-Controllers/editRecordTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "369"
-            endingLineNumber = "369"
+            startingLineNumber = "378"
+            endingLineNumber = "378"
             landmarkName = "-EnterRecord:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1590,8 +1558,8 @@
             filePath = "Lifeguard/Logger-Controllers/editRecordTVC.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "374"
-            endingLineNumber = "374"
+            startingLineNumber = "383"
+            endingLineNumber = "383"
             landmarkName = "-EnterRecord:"
             landmarkType = "7">
          </BreakpointContent>
@@ -1958,25 +1926,9 @@
             filePath = "Lifeguard/Data/Lifeguards.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
             landmarkName = "getList(vc:final:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "CA39B37D-0E0B-41FE-80D8-FA5B1CBE07C3"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Lifeguard/CheckListTVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2047,22 +1999,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "BB4053AE-820F-4DC0-9612-ECEF60E64E51"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Lifeguard/GuestTVC.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "382"
-            endingLineNumber = "382"
-            landmarkName = "-updateGuestForRecord:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "944B650A-A189-417D-B90D-E1CAC6A75BAB"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -2079,38 +2015,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D5ED5FBC-383F-46EE-BD96-31945B95D18F"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Lifeguard/GuestTVC.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "367"
-            endingLineNumber = "367"
-            landmarkName = "-readbatchSheet:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "82525E0E-631E-4334-B4D2-5F53D1CB5A12"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Lifeguard/GuestTVC.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "405"
-            endingLineNumber = "405"
-            landmarkName = "-updateGuestForRecord:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "34FEDCEC-AD7F-4503-8F67-453432234FC4"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -2118,8 +2022,8 @@
             filePath = "Lifeguard/Data/Lifeguards.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "192"
-            endingLineNumber = "192"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
             landmarkName = "getList(vc:final:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2207,22 +2111,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "04C24C12-A8D1-42B6-82DE-F64EF7069C14"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Lifeguard/GuestTVC.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "368"
-            endingLineNumber = "368"
-            landmarkName = "-readbatchSheet:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "544ACA56-6C90-4573-B57D-D4AF64025333"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -2239,38 +2127,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "07726F22-6192-454E-9468-16BF9A2D74A4"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Lifeguard/GuestTVC.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "423"
-            endingLineNumber = "423"
-            landmarkName = "-readMemberSheet"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "916C5489-6EA6-4B53-9856-4F306763388D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Lifeguard/GuestTVC.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "436"
-            endingLineNumber = "436"
-            landmarkName = "-readMemberSheet"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "6A0AF77E-6197-4AD4-BEC4-6FCCEC7B303B"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -2281,22 +2137,6 @@
             startingLineNumber = "526"
             endingLineNumber = "526"
             landmarkName = "-readTodaysResCal"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "D5FFC7B6-6F29-43F7-87A4-9554AADC0715"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Lifeguard/GuestTVC.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "427"
-            endingLineNumber = "427"
-            landmarkName = "-readMemberSheet"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2464,7 +2304,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "44386AB1-A38F-4C9F-A5CD-EB0B2E7C4197"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lifeguard/GuestTVC.m"
@@ -2669,7 +2509,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "BFFC455C-1BBD-4745-9621-D1713F3B78A4"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Lifeguard/GuestTVC.m"
@@ -2678,6 +2518,1010 @@
             startingLineNumber = "1135"
             endingLineNumber = "1135"
             landmarkName = "-refresh:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C410CD6A-9FAD-4DF0-90D0-2E2C509CDA53"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/ListTVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
+            landmarkName = "prepare(for:sender:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "49C25794-945D-4C87-824F-04BE2736687B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/CheckListTVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2FE8FE5B-DC8E-48B7-B9E2-849D14003480"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
+            landmarkName = "readDB(vc:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5DE16742-295B-46EE-B71A-E44DD5806588"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
+            landmarkName = "readDB(vc:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1EB512F0-2083-48A3-A5C0-9C9B214C998F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/ListTVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "prepare(for:sender:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E3BFBE6A-BF70-4A71-BBF6-608F5E3CBB59"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/ListTVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
+            landmarkName = "prepare(for:sender:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F2459B2F-5279-4A5A-A6B9-E37D4EC8EBD7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
+            landmarkName = "getList(vc:final:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F2459B2F-5279-4A5A-A6B9-E37D4EC8EBD7 - 238b2928b71916d5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "186"
+                  endingLineNumber = "186"
+                  offsetFromSymbolStart = "548">
+               </Location>
+               <Location
+                  uuid = "F2459B2F-5279-4A5A-A6B9-E37D4EC8EBD7 - 54a2e24b6c1c9773"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "186"
+                  endingLineNumber = "186"
+                  offsetFromSymbolStart = "704">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "668F90A7-26CE-46D7-9625-314F805BB73C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
+            landmarkName = "getList(vc:final:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "668F90A7-26CE-46D7-9625-314F805BB73C - 238b2928b719170f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "192"
+                  endingLineNumber = "192"
+                  offsetFromSymbolStart = "1456">
+               </Location>
+               <Location
+                  uuid = "668F90A7-26CE-46D7-9625-314F805BB73C - 238b2928b719170f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "192"
+                  endingLineNumber = "192"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "668F90A7-26CE-46D7-9625-314F805BB73C - 238b2928b719170f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "192"
+                  endingLineNumber = "192"
+                  offsetFromSymbolStart = "768">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9C5D07C1-BE0B-4090-9EBA-F02C3763F731"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/ListTVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "179"
+            endingLineNumber = "179"
+            landmarkName = "didUpdateLifeguard(lifeguard:finished:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D3AFEBDD-223D-43E3-9E2A-14DE5B0028C7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
+            landmarkName = "getList(vc:final:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D3AFEBDD-223D-43E3-9E2A-14DE5B0028C7 - 238b2928b719130e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "223"
+                  endingLineNumber = "223"
+                  offsetFromSymbolStart = "3884">
+               </Location>
+               <Location
+                  uuid = "D3AFEBDD-223D-43E3-9E2A-14DE5B0028C7 - 238b2928b71910c4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "233"
+                  endingLineNumber = "233"
+                  offsetFromSymbolStart = "3884">
+               </Location>
+               <Location
+                  uuid = "D3AFEBDD-223D-43E3-9E2A-14DE5B0028C7 - 238b2928b71910c4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "233"
+                  endingLineNumber = "233"
+                  offsetFromSymbolStart = "3792">
+               </Location>
+               <Location
+                  uuid = "D3AFEBDD-223D-43E3-9E2A-14DE5B0028C7 - 238b2928b7196e19"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "246"
+                  endingLineNumber = "246"
+                  offsetFromSymbolStart = "4496">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F23D1651-2F69-418B-BFA8-7A3A56BBFB97"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "Lifeguards"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "F23D1651-2F69-418B-BFA8-7A3A56BBFB97 - db973c3328ce3bb6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.Lifeguards.setActiveList(list: Lifeguard.Lifeguards.ActiveList) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "188">
+               </Location>
+               <Location
+                  uuid = "F23D1651-2F69-418B-BFA8-7A3A56BBFB97 - db973c3328ce3bb6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.Lifeguards.setActiveList(list: Lifeguard.Lifeguards.ActiveList) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "172">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8B3898A0-0CEC-404E-8180-FC8EAB088563"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "207"
+            endingLineNumber = "207"
+            landmarkName = "getList(vc:final:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "8B3898A0-0CEC-404E-8180-FC8EAB088563 - 238b2928b71917a8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "1616">
+               </Location>
+               <Location
+                  uuid = "8B3898A0-0CEC-404E-8180-FC8EAB088563 - 238b2928b71917a8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "1532">
+               </Location>
+               <Location
+                  uuid = "8B3898A0-0CEC-404E-8180-FC8EAB088563 - 238b2928b71917a8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "1524">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BB1AD54D-8D47-401B-B71B-D8530A49CEDE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "readDB(vc:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F1FDA373-C031-4399-931F-F666D5FE8FCA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
+            landmarkName = "readDB(vc:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CB1B166A-D11A-477B-8BB6-8BD846DD113A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "switchList()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "888BB550-DE58-402E-A749-7B8CDFCB02B5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
+            landmarkName = "getList(vc:final:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "888BB550-DE58-402E-A749-7B8CDFCB02B5 - 238b2928b7191466"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "199"
+                  endingLineNumber = "199"
+                  offsetFromSymbolStart = "1744">
+               </Location>
+               <Location
+                  uuid = "888BB550-DE58-402E-A749-7B8CDFCB02B5 - 238b2928b7191466"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.GTLRServiceTicket, Swift.Optional&lt;Any&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Lifeguard.Lifeguards.getList(vc: __C.UIViewController, final: Swift.Array&lt;Swift.Bool&gt;) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "199"
+                  endingLineNumber = "199"
+                  offsetFromSymbolStart = "1892">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E35502C2-062E-457C-9C6E-680C3FB8778B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
+            landmarkName = "getList(vc:final:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D084C92D-0354-45A1-95C2-8D7A9C168640"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "Lifeguards"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "D084C92D-0354-45A1-95C2-8D7A9C168640 - db973c3328ce3bf4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.Lifeguards.setActiveList(list: Lifeguard.Lifeguards.ActiveList) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "63"
+                  endingLineNumber = "63"
+                  offsetFromSymbolStart = "60">
+               </Location>
+               <Location
+                  uuid = "D084C92D-0354-45A1-95C2-8D7A9C168640 - 3ee73444863b387c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.Lifeguards.setActiveList(taskList: Lifeguard.Lifeguards.ActiveList) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "62"
+                  endingLineNumber = "62"
+                  offsetFromSymbolStart = "76">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CD90FD35-6F55-4513-98DB-99AC91855249"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "init(lifeguard:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CD90FD35-6F55-4513-98DB-99AC91855249 - 3e8940bf247cf2bc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.Lifeguards.init(lifeguard: Swift.Bool) -&gt; Lifeguard.Lifeguards"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "55"
+                  endingLineNumber = "55"
+                  offsetFromSymbolStart = "1028">
+               </Location>
+               <Location
+                  uuid = "CD90FD35-6F55-4513-98DB-99AC91855249 - 3e8940bf247cf2bc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.Lifeguards.init(lifeguard: Swift.Bool) -&gt; Lifeguard.Lifeguards"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/Lifeguards.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "55"
+                  endingLineNumber = "55"
+                  offsetFromSymbolStart = "1012">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D2D02826-3060-4F54-8DE8-4321F851822C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/Lifeguards.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "getActiveList()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "93D9D9BA-8F65-478C-A299-C04DD72135E9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/CheckListTVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "logCheckList()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "93D9D9BA-8F65-478C-A299-C04DD72135E9 - 572c517dfd18e59b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.CheckListTVC.logCheckList() -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/CheckListTVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "39"
+                  endingLineNumber = "39"
+                  offsetFromSymbolStart = "512">
+               </Location>
+               <Location
+                  uuid = "93D9D9BA-8F65-478C-A299-C04DD72135E9 - 572c517dfd18e57a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.CheckListTVC.logCheckList() -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/CheckListTVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "132">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F2D3071E-D6F6-4652-8C18-9D02A9A0F587"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/CheckListTVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "logCheckList()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F2D3071E-D6F6-4652-8C18-9D02A9A0F587 - 572c517dfd18e55d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.CheckListTVC.logCheckList() -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/CheckListTVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "476">
+               </Location>
+               <Location
+                  uuid = "F2D3071E-D6F6-4652-8C18-9D02A9A0F587 - 572c517dfd18e57a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.CheckListTVC.logCheckList() -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/CheckListTVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "132">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "713A6BB5-5A15-4839-B78F-E31F84B427C4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/CheckListTVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
+            landmarkName = "tableView(_:didSelectRowAt:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "713A6BB5-5A15-4839-B78F-E31F84B427C4 - 7f2151eebdf49145"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.CheckListTVC.tableView(_: __C.UITableView, didSelectRowAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/CheckListTVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "189"
+                  endingLineNumber = "189"
+                  offsetFromSymbolStart = "1188">
+               </Location>
+               <Location
+                  uuid = "713A6BB5-5A15-4839-B78F-E31F84B427C4 - 7f2151eebdf49145"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Lifeguard.CheckListTVC.tableView(_: __C.UITableView, didSelectRowAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/CheckListTVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "189"
+                  endingLineNumber = "189"
+                  offsetFromSymbolStart = "924">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A85C4A19-7180-4B89-AAF6-7408FC26D933"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/GuestTVC.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1144"
+            endingLineNumber = "1144"
+            landmarkName = "-reLogin:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "25E29597-02F4-4767-8CCE-BE8378C22381"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/GuestTVC.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1134"
+            endingLineNumber = "1134"
+            landmarkName = "-refresh:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "263C54A1-09BD-4640-9649-94E883D5DAF5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/GuestTVC.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1114"
+            endingLineNumber = "1114"
+            landmarkName = "-receiveGuestAuthUINotification:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5DFE74BD-CC95-422E-9F9B-1641083B7AD9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/GuestTVC.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "261"
+            endingLineNumber = "261"
+            landmarkName = "-readLog"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "84D145A4-FF73-4463-A7E4-78A338C62A5B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/GuestTVC.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "260"
+            endingLineNumber = "260"
+            landmarkName = "-readLog"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D3720360-A757-4F3B-98CC-5991B1FCA687"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/GuestTVC.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "439"
+            endingLineNumber = "439"
+            landmarkName = "-readMemberSheet"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "87F01F35-1971-4764-9698-3E6355453137"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/FamilyRec.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "488"
+            endingLineNumber = "488"
+            landmarkName = "-updateGuests:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "87F01F35-1971-4764-9698-3E6355453137 - 1e403932394b2025"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[FamilyRec updateGuests:]"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/FamilyRec.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "488"
+                  endingLineNumber = "488"
+                  offsetFromSymbolStart = "1388">
+               </Location>
+               <Location
+                  uuid = "87F01F35-1971-4764-9698-3E6355453137 - 1e403932394b2025"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[FamilyRec updateGuests:]"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/FamilyRec.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "488"
+                  endingLineNumber = "488"
+                  offsetFromSymbolStart = "1364">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DB7AC86E-5CCC-4025-AF26-1E8E39B49B1D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/FamilyRec.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "496"
+            endingLineNumber = "496"
+            landmarkName = "-updateGuests:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "DB7AC86E-5CCC-4025-AF26-1E8E39B49B1D - 1e403932394b2082"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[FamilyRec updateGuests:]"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/FamilyRec.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "491"
+                  endingLineNumber = "491"
+                  offsetFromSymbolStart = "1748">
+               </Location>
+               <Location
+                  uuid = "DB7AC86E-5CCC-4025-AF26-1E8E39B49B1D - 1e403932394b2082"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[FamilyRec updateGuests:]"
+                  moduleName = "Lifeguard"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jimkardach/Documents/Code/2021%20Code/Lifeguard/Lifeguard/Data/FamilyRec.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "491"
+                  endingLineNumber = "491"
+                  offsetFromSymbolStart = "1728">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D43BEEC4-9A49-40B6-93A1-6FEFE5BE0FC7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/Data/FamilyRec.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "473"
+            endingLineNumber = "473"
+            landmarkName = "-updateGuests:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BA02C3C4-D281-441A-B595-86862B7D3DB8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Lifeguard/GuestTVC.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "437"
+            endingLineNumber = "437"
+            landmarkName = "-readMemberSheet"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
